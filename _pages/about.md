@@ -19,18 +19,30 @@ redirect_from:
 <div id="homepage" class="tab-content active">
   <h2>About Me</h2>
   
-  <p>I am a Master of Science student in Data Science at Harvard University (September 2025 - December 2026) and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University (September 2022 - May 2025). My research interests focus on artificial intelligence, computer vision, and medical image analysis. Currently, I work as a Deep Learning Researcher at Harvard & MIT AI and Robotics Lab, NYU Tandon AI4CE Lab, and NYU Langone Health Radiology Research Department, where I contribute to projects in 3D reconstruction, assembly, and medical imaging analysis.</p>
+  <p>I am a Master of Science student in Data Science at Harvard University (September 2025 - December 2026) and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University (September 2022 - May 2025). My research interests focus on artificial intelligence, computer vision, and medical image analysis. Currently, I work as a Deep Learning Researcher at Harvard & MIT AI and Robotics Lab, where I contribute to projects in 3D reconstruction, assembly, and medical imaging analysis.</p>
 
   <h2>🔥 News</h2>
   
   <ul>
     <li><em>2025.06</em>: 🎉🏝️ <strong>GARF accepted to ICCV 2025</strong>! See you in Hawaii! 🌺</li>
-    <li><em>2025.06</em>: 📝 <strong>PAGE-4D submitted to ICLR 2026</strong> (Under Review)</li>
     <li><em>2025.02</em>: 🎉🎉 Accepted to Harvard University's Master of Science program in Data Science!</li>
   </ul>
 
   <h2>📝 Publications</h2>
   
+  <div class='paper-box'>
+    <div class='paper-box-image'>
+      <div>
+        <div class="badge">Arxiv 2025</div>
+        <img src='images/PAGE-4D.gif' alt="PAGE-4D Project" width="100%">
+      </div>
+    </div>
+    <div class='paper-box-text'>
+      <p><strong><a href="https://page-4d.github.io/anonymous-submission/">PAGE-4D: Disentangled Pose and Geometry Estimation for 4D Perception</a></strong></p>
+      <p>Kaichen Zhou, <strong>Grace Chen</strong>, et al. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
+    </div>
+  </div>
+
   <div class='paper-box'>
     <div class='paper-box-image'>
       <div>
@@ -41,19 +53,6 @@ redirect_from:
     <div class='paper-box-text'>
       <p><strong><a href="https://ai4ce.github.io/GARF/">GARF: Learning Generalizable 3D Reassembly for Real-World Fractures</a></strong></p>
       <p>Chen Feng, <strong>Grace Chen</strong>, et al. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a> / <a href="https://arxiv.org/abs/2504.05400">Paper</a></p>
-    </div>
-  </div>
-
-  <div class='paper-box'>
-    <div class='paper-box-image'>
-      <div>
-        <div class="badge">ICLR 2026</div>
-        <img src='images/PAGE-4D.gif' alt="PAGE-4D Project" width="100%">
-      </div>
-    </div>
-    <div class='paper-box-text'>
-      <p><strong><a href="https://page-4d.github.io/anonymous-submission/">PAGE-4D: Disentangled Pose and Geometry Estimation for 4D Perception</a></strong></p>
-      <p>Kaichen Zhou, <strong>Grace Chen</strong>, et al. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
     </div>
   </div>
 </div>
