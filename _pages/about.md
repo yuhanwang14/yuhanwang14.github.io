@@ -19,7 +19,7 @@ redirect_from:
 <div id="homepage" class="tab-content active">
   <h2>About Me</h2>
   
-  <p>I am a Master of Science student in Data Science at Harvard University (September 2025 - December 2026) and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University (September 2022 - May 2025). My research interests focus on artificial intelligence, computer vision, and medical image analysis. Currently, I work as a Deep Learning Researcher at Harvard & MIT AI and Robotics Lab, where I contribute to projects in 3D reconstruction, assembly, and medical imaging analysis.</p>
+  <p>I am a Master of Science student in Data Science at Harvard University (September 2025 - December 2026) and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University (September 2022 - May 2025). My research interests focus on artificial intelligence, computer vision, and medical image analysis. Previously, I worked as a Deep Learning Researcher at NYU Tandon AI4CE Lab and as a Data Science Researcher at NYU Langone Health Radiology Research Department, where I contributed to projects in 3D reconstruction, assembly, and medical imaging analysis. Currently, I work as a Deep Learning Researcher at Harvard & MIT AI and Robotics Lab.</p>
 
   <h2>🔥 News</h2>
   
