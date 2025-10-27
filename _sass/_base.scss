@@ -59,7 +59,8 @@ small, .small {
 }
 
 p {
-  margin-bottom: 0.5em;
+  margin-bottom: 1.25em;
+  line-height: 1.7;
 }
 
 u,
@@ -73,7 +74,8 @@ ins {
 
 ul {
   padding-inline-start: 2em;
-  margin-block-start: 0.5em;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 }
 
 del a {
@@ -171,12 +173,13 @@ hr {
 
 ul li,
 ol li {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.75em;
+  line-height: 1.6;
 }
 
 li ul,
 li ol {
-  margin-top: 0.5em;
+  margin-top: 0.75em;
 }
 
 /*

@@ -107,3 +107,34 @@ h1:before, .anchor:before {
     background-color: #00369f;
     font-size: .8em;
 }
+
+/* Better spacing for main content */
+.page__content {
+    p, li, dl, dt, dd {
+        font-size: 1em;
+        line-height: 1.7;
+    }
+    
+    p {
+        margin-bottom: 1.25em;
+    }
+    
+    ul, ol {
+        margin-top: 0.75em;
+        margin-bottom: 1.25em;
+    }
+    
+    li {
+        margin-bottom: 0.5em;
+    }
+    
+    h2 {
+        margin-top: 2em;
+        margin-bottom: 1em;
+    }
+    
+    h3 {
+        margin-top: 1.5em;
+        margin-bottom: 0.75em;
+    }
+}

@@ -27,7 +27,7 @@ redirect_from:
 <div id="about-me" class="custom-tab-content active">
   <span class='anchor' id='about-me'></span>
   
-  I am an undergraduate student majoring in Mathematics and Computer Science at New York University, and an incoming Master of Science student in Data Science at Harvard University (September 2025). My research interests focus on artificial intelligence, computer vision, and medical image analysis. Currently, I work as a research assistant at the AI4CE Lab at NYU Tandon and the Radiology Research Department at NYU Langone Health, where I contribute to projects in 3D reconstruction, assembly, and medical imaging analysis.
+  <p>I am an undergraduate student majoring in Mathematics and Computer Science at New York University, and an incoming Master of Science student in Data Science at Harvard University (September 2025). My research interests focus on artificial intelligence, computer vision, and medical image analysis. Currently, I work as a research assistant at the AI4CE Lab at NYU Tandon and the Radiology Research Department at NYU Langone Health, where I contribute to projects in 3D reconstruction, assembly, and medical imaging analysis.</p>
 
   ## 🔥 News
   - *2025.02*: &nbsp;🎉🎉 Accepted to Harvard University's Master of Science program in Data Science! 
@@ -146,12 +146,56 @@ redirect_from:
 .custom-tab-content {
   display: none !important;
   animation: fadeIn 0.3s ease-in;
-  padding: 20px 0;
+  padding: 30px 0;
 }
 
 /* CRITICAL: Only show active tab content */
 .custom-tab-content.active {
   display: block !important;
+}
+
+/* Add proper spacing within tab content */
+.custom-tab-content {
+  max-width: 100%;
+}
+
+.custom-tab-content p {
+  margin-bottom: 1.5em;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.custom-tab-content h2 {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-size: 1.4em;
+}
+
+.custom-tab-content h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+  font-size: 1.2em;
+}
+
+.custom-tab-content ul {
+  margin-top: 1em;
+  margin-bottom: 1.5em;
+  padding-left: 2em;
+}
+
+.custom-tab-content li {
+  margin-bottom: 0.75em;
+  line-height: 1.7;
+}
+
+.custom-tab-content > *:first-child {
+  margin-top: 0;
+}
+
+/* Ensure proper spacing for the main content area */
+.page__content {
+  padding-right: 1rem;
+  padding-left: 1rem;
 }
 
 /* Force hide non-active tabs */
