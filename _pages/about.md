@@ -191,36 +191,19 @@ redirect_from:
 
 /* Highlight styles */
 .highlight-research {
-  background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
-  padding: 0.2em 0.4em;
-  border-radius: 4px;
-  font-weight: 600;
-  color: #2c3e50;
+  font-weight: 700;
 }
 
 .highlight-skills {
-  background: linear-gradient(120deg, #ffecd2 0%, #fcb69f 100%);
-  padding: 0.2em 0.4em;
-  border-radius: 4px;
-  font-weight: 600;
-  color: #2c3e50;
+  font-weight: 700;
 }
 
 .highlight-achievement {
-  background: linear-gradient(120deg, #d299c2 0%, #fef9d7 100%);
-  padding: 0.2em 0.4em;
-  border-radius: 4px;
-  font-weight: 600;
-  color: #2c3e50;
+  font-weight: 700;
 }
 
 .highlight-job {
-  background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
-  padding: 0.3em 0.6em;
-  border-radius: 6px;
   font-weight: 700;
-  color: #1a365d;
-  border: 2px solid #4299e1;
   display: inline-block;
   margin: 0.5em 0;
 }
