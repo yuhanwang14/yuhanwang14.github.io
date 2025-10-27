@@ -1,2 +1,5 @@
-# Navigation disabled - using custom tab navigation
-main: []
+main:
+  - title: "Homepage"
+    url: /
+  - title: "About"
+    url: /about/
