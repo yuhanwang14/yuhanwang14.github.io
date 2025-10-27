@@ -41,6 +41,19 @@ redirect_from:
       <p>Chen Feng, <strong>Grace Chen</strong>, et al. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a></p>
     </div>
   </div>
+
+  <div class='paper-box'>
+    <div class='paper-box-image'>
+      <div>
+        <div class="badge">Arxiv 2025</div>
+        <img src='images/PAGE-4D.png' alt="PAGE-4D Project" width="100%">
+      </div>
+    </div>
+    <div class='paper-box-text'>
+      <p><strong><a href="https://page-4d.github.io/anonymous-submission/">PAGE-4D: Disentangled Pose and Geometry Estimation for 4D Perception</a></strong></p>
+      <p>Anonymous Authors, <strong>Grace Chen</strong>, et al. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a></p>
+    </div>
+  </div>
 </div>
 
 <div id="research" class="tab-content">
