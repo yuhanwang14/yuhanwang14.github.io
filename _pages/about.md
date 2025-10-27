@@ -24,8 +24,8 @@ redirect_from:
   <div class="highlight-job">
     <strong>🎯 Internship Opportunity</strong><br>
     <em>Available: May 26th, 2026 - August 30th, 2026</em><br>
-    <strong>Target Roles:</strong> ML Engineer, Computer Vision Engineer, 3D Reconstruction Specialist, Data Scientist, Software Development Engineer (SDE), Quant Researcher<br>
-    <strong>My Edge:</strong> My interdisciplinary background in Mathematics, Computer Science, and Data Science, coupled with hands-on experience in 3D reconstruction, generative models, and robust MLOps infrastructure, positions me uniquely for challenging roles in AI and robotics. I excel in developing and deploying scalable, high-performance machine learning solutions, demonstrated through my research at top institutions and published work at leading conferences.
+    <strong>Target Roles:</strong> ML Engineer, Computer Vision Engineer, Data Scientist, Software Development Engineer, Quant Researcher<br>
+    <strong>My Edge:</strong> My interdisciplinary background in Mathematics, Computer Science, and Data Science provides a strong foundation for technical problem-solving across domains. I bring extensive experience in deep learning frameworks (PyTorch, TensorFlow), cloud infrastructure (GCP, AWS), and production ML systems, along with proven research capabilities demonstrated through publications at leading conferences (ICCV, ICLR). Whether optimizing model performance, building scalable data pipelines, or developing financial models, I thrive in translating complex technical concepts into impactful solutions.
   </div>
 
   <h2>🔥 News</h2>
