@@ -19,12 +19,13 @@ redirect_from:
 <div id="homepage" class="tab-content active">
   <h2>About Me</h2>
   
-  <p>I am a Master of Science student in Data Science at Harvard University and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University. My research interests focus on artificial intelligence, computer vision, and medical image analysis. Currently, I work as a research assistant at the AI4CE Lab at NYU Tandon and the Radiology Research Department at NYU Langone Health, where I contribute to projects in 3D reconstruction, assembly, and medical imaging analysis.</p>
+  <p>I am a Master of Science student in Data Science at Harvard University (September 2025 - December 2026) and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University (September 2022 - May 2025). My research interests focus on artificial intelligence, computer vision, and medical image analysis. Currently, I work as a Deep Learning Researcher at Harvard & MIT AI and Robotics Lab, NYU Tandon AI4CE Lab, and NYU Langone Health Radiology Research Department, where I contribute to projects in 3D reconstruction, assembly, and medical imaging analysis.</p>
 
   <h2>🔥 News</h2>
   
   <ul>
     <li><em>2025.06</em>: 🎉🏝️ <strong>GARF accepted to ICCV 2025</strong>! See you in Hawaii! 🌺</li>
+    <li><em>2025.06</em>: 📝 <strong>PAGE-4D submitted to ICLR 2026</strong> (Under Review)</li>
     <li><em>2025.02</em>: 🎉🎉 Accepted to Harvard University's Master of Science program in Data Science!</li>
   </ul>
 
@@ -46,13 +47,13 @@ redirect_from:
   <div class='paper-box'>
     <div class='paper-box-image'>
       <div>
-        <div class="badge">Arxiv 2025</div>
+        <div class="badge">ICLR 2026</div>
         <img src='images/PAGE-4D.gif' alt="PAGE-4D Project" width="100%">
       </div>
     </div>
     <div class='paper-box-text'>
       <p><strong><a href="https://page-4d.github.io/anonymous-submission/">PAGE-4D: Disentangled Pose and Geometry Estimation for 4D Perception</a></strong></p>
-      <p>Anonymous Authors, <strong>Grace Chen</strong>, et al. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
+      <p>Kaichen Zhou, <strong>Grace Chen</strong>, et al. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
     </div>
   </div>
 </div>
@@ -60,31 +61,31 @@ redirect_from:
 <div id="research" class="tab-content">
   <h2>💻 Research Experience</h2>
   
-  <h3>AI4CE Lab, NYU Tandon</h3>
-  <p><em>2024.08 - Present</em> (supervised by Prof. Chen Feng)</p>
+  <h3>Harvard & MIT, AI and Robotics Lab</h3>
+  <p><em>June 2025 - Present</em>, Deep Learning Researcher</p>
   <ul>
-    <li>3D Assembly Project: Contributed to GARF model for generalizable 3D reassembly</li>
-    <li>3D Reconstruction Project: Implemented Dust3R geometric 3D vision model for archaeological fragment reconstruction</li>
+    <li>Co-developed selective layer fine-tuning approach for VGGT transformer optimizing hyperparameters</li>
+    <li>Implemented evaluation metrics including DTU accuracy, ATE/RPE for pose, and Occlusion Accuracy tracking</li>
+    <li>Enhanced SFTTrainer developing custom classification loss functions improving prediction accuracy by 75%</li>
+    <li>Evaluated performance using confusion matrix analysis improving class-wise precision with F1-score metrics</li>
+  </ul>
+
+  <h3>NYU Tandon, AI4CE Lab</h3>
+  <p><em>August 2024 - Present</em>, Deep Learning Researcher</p>
+  <ul>
+    <li>Processed 7 archaeopteryx thoracic and spinal bone fragments achieving assembly using PuzzleFusion and models</li>
+    <li>Fine-tuned model parameters on archaeological datasets using PyTorch achieving 25% improvement in accuracy</li>
+    <li>Developed BreakingGood simulation pipeline using PyTorch and trimesh for training data generation processes</li>
+    <li>Created 50% more varied training datasets for model robustness handling mesh processing and fragmentation</li>
   </ul>
 
   <h3>NYU Langone Health, Radiology Research Department</h3>
-  <p><em>2024.02 - Present</em> (supervised by Dr. Yiqiu Shen)</p>
+  <p><em>February 2024 - May 2025</em>, Data Science Researcher</p>
   <ul>
-    <li>Pancreatic Cancer Project: Processed data for 1200+ patients, used LLMs to analyze radiology reports</li>
-    <li>Breast Cancer Project: Conducted statistical analysis on radiology reports using Cohen's Kappa hypothesis test, improved GPT training prompt template for BI-RADS score ratings by 10%</li>
-  </ul>
-
-  <h3>Chongqing University of Technology</h3>
-  <p><em>2023.11 - Present</em> (supervised by Prof. Dongyang Qiu)</p>
-  <ul>
-    <li>Implemented machine learning algorithms for financial risk early warning models</li>
-    <li>Developed data preprocessing tools, reducing processing time by 15%</li>
-  </ul>
-
-  <h3>NYU Savin's Lab</h3>
-  <p><em>2023.11 - 2024.05</em> (supervised by Prof. Cristina Savin)</p>
-  <ul>
-    <li>Conducted research on dimensionality reduction and Gaussian Models for data analysis</li>
+    <li>Built analysis framework for 1.2K+ patient datasets supporting clinical research workflows with pipelines</li>
+    <li>Developed data cleaning pipelines using Python, Pandas, and NumPy for radiology report processing</li>
+    <li>Deployed Large Language Models for radiology report processing and cyst characteristic extraction from records</li>
+    <li>Conducted statistical analysis on 200 radiology reports using Cohen's Kappa hypothesis test with R</li>
   </ul>
 </div>
 
@@ -92,27 +93,40 @@ redirect_from:
   <h2>💼 Professional Experience</h2>
   
   <h3>Guotai Jun'an Securities</h3>
-  <p><em>2023.05 - 2023.07</em>, Investment Banking Intern, Shanghai, China</p>
+  <p><em>May 2023 - July 2023</em>, Investment Banking Intern, Shanghai, China</p>
   <ul>
-    <li>Developed project proposals focused on market research and financial assessments</li>
-    <li>Contributed to 10+ high-profile roadshows for client company offerings (project resulted in successful IPO)</li>
-    <li>Produced financial offering-related documents including due diligence and client interviews</li>
+    <li>Built data engineering pipelines for 10+ client financial analysis projects with ETL processes automation</li>
+    <li>Set up MySQL databases automatically pulling data from multi-source financial systems for deal evaluation</li>
+    <li>Conducted data analysis and preprocessing using Python, Pandas, and NumPy for market research</li>
+    <li>Implemented data cleaning procedures and missing value imputation processing financial statements for pitch books</li>
   </ul>
 
-  <h2>💬 Teaching Experience</h2>
+  <h2>🎓 Course Project</h2>
   
-  <h3>Courant Institute of Mathematical Sciences</h3>
-  <p><em>2024.02 - Present</em>, Teaching Assistant for Linear Algebra and Calculus III</p>
+  <h3>StyleMe: AI-Powered Fashion Styling Assistant</h3>
+  <p><em>Technologies:</em> Python, Docker, MLflow, FashionCLIP, GCP, MLOps</p>
   <ul>
-    <li>Provided one-on-one tutoring and detailed feedback, and graded assignments for classes of 50+ students</li>
+    <li>Built MLOps infrastructure using Docker containers streamlining deployment model reproducibility for production</li>
+    <li>Developed GPU-accelerated training pipelines for FashionCLIP models on NVIDIA V100 GPU in GCP</li>
+    <li>Integrated MLflow tracking improving model convergence speed by 60% through hyperparameter tuning</li>
+    <li>Implemented automated model versioning monitoring achieving 98% uptime for fashion recommendation service</li>
   </ul>
 </div>
 
 <div id="skills" class="tab-content">
   <h2>🛠 Skills</h2>
   
-  <h3>Technical Proficiency</h3>
-  <p>R, Java, Python, C, SPSS Statistics, SQL, CSS, HTML, GIS</p>
+  <h3>Programming Languages</h3>
+  <p>Python, SQL, Java, R, Spark, C, Bash, Shell, HTML, CSS, JavaScript</p>
+  
+  <h3>Machine Learning</h3>
+  <p>PyTorch, TensorFlow, Scikit-learn, Hugging Face, Transformers, OpenCV, XGBoost, MLOps</p>
+  
+  <h3>Data Analysis</h3>
+  <p>Pandas, NumPy, Scipy, Matplotlib, Seaborn, A/B Testing, Statistical Analysis, Hypothesis Testing</p>
+  
+  <h3>Tools & Technologies</h3>
+  <p>Docker, Git, Jupyter, Tableau, Looker, Airflow, DBT, ETL Pipelines, GCP, AWS</p>
   
   <h3>Languages</h3>
   <p>Mandarin Chinese (Native), English (Fluent)</p>
