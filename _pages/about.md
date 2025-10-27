@@ -70,28 +70,28 @@ redirect_from:
   <h3>Harvard & MIT, AI and Robotics Lab</h3>
   <p><em>June 2025 - Present</em>, Deep Learning Researcher</p>
   <ul>
-    <li>Co-developed <span class="highlight-achievement">selective layer fine-tuning approach for VGGT transformer</span> optimizing hyperparameters</li>
-    <li>Implemented evaluation metrics including <span class="highlight-skills">DTU accuracy, ATE/RPE for pose, and Occlusion Accuracy tracking</span></li>
-    <li>Enhanced SFTTrainer developing custom classification loss functions <span class="highlight-achievement">improving prediction accuracy by 75%</span></li>
-    <li>Evaluated performance using confusion matrix analysis improving class-wise precision with F1-score metrics</li>
+    <li>Co-developed selective layer fine-tuning approach for <strong>VGGT transformer</strong> optimizing hyperparameters</li>
+    <li>Implemented evaluation metrics including <strong>DTU accuracy, ATE/RPE for pose, and Occlusion Accuracy tracking</strong></li>
+    <li>Enhanced <strong>SFTTrainer</strong> developing custom classification loss functions improving prediction accuracy by <strong>75%</strong></li>
+    <li>Evaluated performance using confusion matrix analysis improving class-wise precision with <strong>F1-score</strong> metrics</li>
   </ul>
 
   <h3>NYU Tandon, AI4CE Lab</h3>
   <p><em>August 2024 - Present</em>, Deep Learning Researcher</p>
   <ul>
-    <li>Processed <span class="highlight-achievement">7 archaeopteryx thoracic and spinal bone fragments</span> achieving assembly using PuzzleFusion and models</li>
-    <li>Fine-tuned model parameters on archaeological datasets using PyTorch <span class="highlight-achievement">achieving 25% improvement in accuracy</span></li>
-    <li>Developed <span class="highlight-skills">BreakingGood simulation pipeline</span> using PyTorch and trimesh for training data generation processes</li>
-    <li>Created <span class="highlight-achievement">50% more varied training datasets</span> for model robustness handling mesh processing and fragmentation</li>
+    <li>Processed <strong>7 archaeopteryx thoracic and spinal bone fragments</strong> achieving assembly using <strong>PuzzleFusion</strong> and models</li>
+    <li>Fine-tuned model parameters on archaeological datasets using <strong>PyTorch</strong> achieving <strong>25%</strong> improvement in accuracy</li>
+    <li>Developed <strong>BaggingGrid</strong> simulation pipeline using <strong>PyTorch</strong> and trimesh for training data generation processes</li>
+    <li>Created <strong>50% more varied training datasets</strong> for model robustness handling mesh processing and fragmentation</li>
   </ul>
 
   <h3>NYU Langone Health, Radiology Research Department</h3>
   <p><em>February 2024 - May 2025</em>, Data Science Researcher</p>
   <ul>
-    <li>Built analysis framework for <span class="highlight-achievement">1.2K+ patient datasets</span> supporting clinical research workflows with pipelines</li>
-    <li>Developed data cleaning pipelines using <span class="highlight-skills">Python, Pandas, and NumPy</span> for radiology report processing</li>
-    <li>Deployed <span class="highlight-skills">Large Language Models</span> for radiology report processing and cyst characteristic extraction from records</li>
-    <li>Conducted statistical analysis on <span class="highlight-achievement">200 radiology reports</span> using Cohen's Kappa hypothesis test with R</li>
+    <li>Built analysis framework for <strong>1.2K+ patient datasets</strong> supporting clinical research workflows with pipelines</li>
+    <li>Developed data cleaning pipelines using <strong>Python, Pandas, and NumPy</strong> for radiology report processing</li>
+    <li>Deployed <strong>Large Language Models</strong> for radiology report processing and cyst characteristic extraction from records</li>
+    <li>Conducted statistical analysis on <strong>200 radiology reports</strong> using <strong>Cohen's Kappa</strong> hypothesis test with <strong>R</strong></li>
   </ul>
 </div>
 
@@ -101,21 +101,21 @@ redirect_from:
   <h3>Guotai Jun'an Securities</h3>
   <p><em>May 2023 - July 2023</em>, Investment Banking Intern, Shanghai, China</p>
   <ul>
-    <li>Built <span class="highlight-achievement">data engineering pipelines for 10+ client financial analysis projects</span> with ETL processes automation</li>
-    <li>Set up <span class="highlight-achievement">MySQL databases automatically pulling data from multi-source financial systems</span> for deal evaluation</li>
-    <li>Conducted <span class="highlight-achievement">data analysis and preprocessing using Python, Pandas, and NumPy</span> for market research</li>
-    <li>Implemented <span class="highlight-achievement">data cleaning procedures and missing value imputation</span> processing financial statements for pitch books</li>
+    <li>Built data engineering pipelines for <strong>10+ client financial analysis projects</strong> with <strong>ETL</strong> processes automation</li>
+    <li>Set up <strong>MySQL</strong> databases automatically pulling data from multi-source financial systems for deal evaluation</li>
+    <li>Conducted data analysis and preprocessing using <strong>Python, Pandas, and NumPy</strong> for market research</li>
+    <li>Implemented data cleaning procedures and missing value imputation processing financial statements for pitch books</li>
   </ul>
 
   <h2>🎓 Course Project</h2>
   
   <h3>StyleMe: AI-Powered Fashion Styling Assistant</h3>
-  <p><em>Technologies:</em> Python, Docker, MLflow, FashionCLIP, GCP, MLOps</p>
+  <p><em>Technologies:</em> Python, <strong>Docker</strong>, <strong>MLflow</strong>, <strong>FashionCLIP</strong>, <strong>GCP</strong>, <strong>MLOps</strong></p>
   <ul>
-    <li>Built <span class="highlight-achievement">MLOps infrastructure using Docker containers</span> streamlining deployment model reproducibility for production</li>
-    <li>Developed <span class="highlight-achievement">GPU-accelerated training pipelines for FashionCLIP models on NVIDIA V100 GPU in GCP</span></li>
-    <li>Integrated <span class="highlight-achievement">MLflow tracking improving model convergence speed by 60%</span> through hyperparameter tuning</li>
-    <li>Implemented <span class="highlight-achievement">automated model versioning monitoring achieving 98% uptime</span> for fashion recommendation service</li>
+    <li>Built <strong>MLOps infrastructure</strong> using <strong>Docker</strong> containers streamlining deployment model reproducibility for production</li>
+    <li>Developed <strong>GPU-accelerated training pipelines</strong> for <strong>FashionCLIP</strong> models on <strong>NVIDIA V100 GPU</strong> in <strong>GCP</strong></li>
+    <li>Integrated <strong>MLflow</strong> tracking improving model convergence speed by <strong>60%</strong> through hyperparameter tuning</li>
+    <li>Implemented automated model versioning monitoring achieving <strong>98% uptime</strong> for fashion recommendation service</li>
   </ul>
 </div>
 
