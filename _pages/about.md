@@ -24,6 +24,7 @@ redirect_from:
   <h2>🔥 News</h2>
   
   <ul>
+    <li><em>2025.06</em>: 🎉🏝️ <strong>GARF accepted to ICCV 2025</strong>! See you in Hawaii! 🌺</li>
     <li><em>2025.02</em>: 🎉🎉 Accepted to Harvard University's Master of Science program in Data Science!</li>
   </ul>
 
@@ -32,13 +33,13 @@ redirect_from:
   <div class='paper-box'>
     <div class='paper-box-image'>
       <div>
-        <div class="badge">Arxiv 2025</div>
+        <div class="badge">ICCV 2025</div>
         <img src='images/GARF.gif' alt="GARF Project" width="100%">
       </div>
     </div>
     <div class='paper-box-text'>
       <p><strong><a href="https://ai4ce.github.io/GARF/">GARF: Learning Generalizable 3D Reassembly for Real-World Fractures</a></strong></p>
-      <p>Chen Feng, <strong>Grace Chen</strong>, et al. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a></p>
+      <p>Chen Feng, <strong>Grace Chen</strong>, et al. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a> / <a href="https://arxiv.org/abs/2504.05400">Paper</a></p>
     </div>
   </div>
 
@@ -51,7 +52,7 @@ redirect_from:
     </div>
     <div class='paper-box-text'>
       <p><strong><a href="https://page-4d.github.io/anonymous-submission/">PAGE-4D: Disentangled Pose and Geometry Estimation for 4D Perception</a></strong></p>
-      <p>Anonymous Authors, <strong>Grace Chen</strong>, et al. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a></p>
+      <p>Anonymous Authors, <strong>Grace Chen</strong>, et al. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
     </div>
   </div>
 </div>
