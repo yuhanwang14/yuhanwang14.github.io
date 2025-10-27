@@ -39,7 +39,7 @@ redirect_from:
     </div>
     <div class='paper-box-text'>
       <p><strong><a href="https://page-4d.github.io/anonymous-submission/">PAGE-4D: Disentangled Pose and Geometry Estimation for 4D Perception</a></strong></p>
-      <p>Kaichen Zhou, Yuhan Wang, <strong>Grace Chen</strong>, Xinhai Chang, Gaspard Beaudouin, Fangneng Zhan, Paul Pu Liang, Mengyu Wang. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
+      <p>Kaichen Zhou, Yuhan Wang, <strong>Grace Chen</strong> (3rd author), Xinhai Chang, Gaspard Beaudouin, Fangneng Zhan, Paul Pu Liang, Mengyu Wang. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
     </div>
   </div>
 
@@ -52,7 +52,7 @@ redirect_from:
     </div>
     <div class='paper-box-text'>
       <p><strong><a href="https://ai4ce.github.io/GARF/">GARF: Learning Generalizable 3D Reassembly for Real-World Fractures</a></strong></p>
-      <p>Chen Feng, <strong>Grace Chen</strong>, et al. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a> / <a href="https://arxiv.org/abs/2504.05400">Paper</a></p>
+      <p>Chen Feng, <strong>Grace Chen</strong> (2nd author), et al. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a> / <a href="https://arxiv.org/abs/2504.05400">Paper</a></p>
     </div>
   </div>
 </div>
