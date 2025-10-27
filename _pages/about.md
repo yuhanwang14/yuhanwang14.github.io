@@ -19,7 +19,7 @@ redirect_from:
 <div id="homepage" class="tab-content active">
   <h2>About Me</h2>
   
-  <p>I am a Master of Science student in Data Science at Harvard University (September 2025 - December 2026) and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University (September 2022 - May 2025). My research interests focus on artificial intelligence, computer vision, and medical image analysis. Previously, I worked as a Deep Learning Researcher at NYU Tandon AI4CE Lab and as a Data Science Researcher at NYU Langone Health Radiology Research Department, where I contributed to projects in 3D reconstruction, assembly, and medical imaging analysis. Currently, I work as a Deep Learning Researcher at Harvard & MIT AI and Robotics Lab.</p>
+  <p>I am a Master of Science student in Data Science at Harvard University (September 2025 - December 2026) and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University (September 2022 - May 2025). My research interests focus on 3D reconstruction, rendering-induced intelligence, and generative 3D models, particularly in applications to computer vision and robotic systems. Previously, I worked as a Deep Learning Researcher at NYU Tandon AI4CE Lab and as a Data Science Researcher at NYU Langone Health Radiology Research Department, where I contributed to projects in 3D reconstruction, assembly, and medical imaging analysis. Currently, I work as a Deep Learning Researcher at Harvard & MIT AI and Robotics Lab.</p>
 
   <h2>🔥 News</h2>
   
@@ -39,7 +39,7 @@ redirect_from:
     </div>
     <div class='paper-box-text'>
       <p><strong><a href="https://page-4d.github.io/anonymous-submission/">PAGE-4D: Disentangled Pose and Geometry Estimation for 4D Perception</a></strong></p>
-      <p>Kaichen Zhou, Yuhan Wang, <strong>Grace Chen</strong> (3rd author), Xinhai Chang, Gaspard Beaudouin, Fangneng Zhan, Paul Pu Liang, Mengyu Wang. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
+      <p>Kaichen Zhou, Yuhan Wang, <strong>Grace Chen</strong> (2nd author), Xinhai Chang, Gaspard Beaudouin, Fangneng Zhan, Paul Pu Liang, Mengyu Wang. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
     </div>
   </div>
 
@@ -52,7 +52,7 @@ redirect_from:
     </div>
     <div class='paper-box-text'>
       <p><strong><a href="https://ai4ce.github.io/GARF/">GARF: Learning Generalizable 3D Reassembly for Real-World Fractures</a></strong></p>
-      <p>Sihang Li, Zeyu Jiang, <strong>Grace Chen</strong> (3rd author), Chenyang Xu, Siqi Tan, Xue Wang, Irving Fang, Kristof Zyskowski, Shannon P. McPherron, Radu Iovita, Chen Feng, Jing Zhang. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a> / <a href="https://arxiv.org/abs/2504.05400">Paper</a></p>
+      <p>Sihang Li, Zeyu Jiang, <strong>Grace Chen</strong> (2nd author), Chenyang Xu, Siqi Tan, Xue Wang, Irving Fang, Kristof Zyskowski, Shannon P. McPherron, Radu Iovita, Chen Feng, Jing Zhang. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a> / <a href="https://arxiv.org/abs/2504.05400">Paper</a></p>
     </div>
   </div>
 </div>
