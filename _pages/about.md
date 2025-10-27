@@ -17,16 +17,18 @@ redirect_from:
 
 <!-- Tab Content Sections -->
 <div id="homepage" class="tab-content active">
-  ## About Me
+  <h2>About Me</h2>
+  
+  <p>I am a Master of Science student in Data Science at Harvard University and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University. My research interests focus on artificial intelligence, computer vision, and medical image analysis. Currently, I work as a research assistant at the AI4CE Lab at NYU Tandon and the Radiology Research Department at NYU Langone Health, where I contribute to projects in 3D reconstruction, assembly, and medical imaging analysis.</p>
 
-  <p>I am an undergraduate student majoring in Mathematics and Computer Science at New York University, and an incoming Master of Science student in Data Science at Harvard University (September 2025). My research interests focus on artificial intelligence, computer vision, and medical image analysis. Currently, I work as a research assistant at the AI4CE Lab at NYU Tandon and the Radiology Research Department at NYU Langone Health, where I contribute to projects in 3D reconstruction, assembly, and medical imaging analysis.</p>
+  <h2>🔥 News</h2>
+  
+  <ul>
+    <li><em>2025.02</em>: 🎉🎉 Accepted to Harvard University's Master of Science program in Data Science!</li>
+  </ul>
 
-  ## 🔥 News
-
-  - *2025.02*: 🎉🎉 Accepted to Harvard University's Master of Science program in Data Science!
-
-  ## 📝 Publications 
-
+  <h2>📝 Publications</h2>
+  
   <div class='paper-box'>
     <div class='paper-box-image'>
       <div>
@@ -39,60 +41,67 @@ redirect_from:
       <p>Chen Feng, <strong>Grace Chen</strong>, et al. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a></p>
     </div>
   </div>
-
-  ## 📖 Education
-
-  - *2025.09 - 2026.12 (incoming)*, Master of Science in Data Science, Harvard University
-  - *2022.09 - 2025.05*, Bachelor of Art in Mathematics and Computer Science, New York University
 </div>
 
 <div id="research" class="tab-content">
-  ## 💻 Research Experience
+  <h2>💻 Research Experience</h2>
   
-  ### AI4CE Lab, NYU Tandon
-  *2024.08 - Present* (supervised by Prof. Chen Feng)
-  - 3D Assembly Project: Contributed to GARF model for generalizable 3D reassembly 
-  - 3D Reconstruction Project: Implemented Dust3R geometric 3D vision model for archaeological fragment reconstruction
+  <h3>AI4CE Lab, NYU Tandon</h3>
+  <p><em>2024.08 - Present</em> (supervised by Prof. Chen Feng)</p>
+  <ul>
+    <li>3D Assembly Project: Contributed to GARF model for generalizable 3D reassembly</li>
+    <li>3D Reconstruction Project: Implemented Dust3R geometric 3D vision model for archaeological fragment reconstruction</li>
+  </ul>
 
-  ### NYU Langone Health, Radiology Research Department
-  *2024.02 - Present* (supervised by Dr. Yiqiu Shen)
-  - Pancreatic Cancer Project: Processed data for 1200+ patients, used LLMs to analyze radiology reports
-  - Breast Cancer Project: Conducted statistical analysis on radiology reports using Cohen's Kappa hypothesis test, improved GPT training prompt template for BI-RADS score ratings by 10%
+  <h3>NYU Langone Health, Radiology Research Department</h3>
+  <p><em>2024.02 - Present</em> (supervised by Dr. Yiqiu Shen)</p>
+  <ul>
+    <li>Pancreatic Cancer Project: Processed data for 1200+ patients, used LLMs to analyze radiology reports</li>
+    <li>Breast Cancer Project: Conducted statistical analysis on radiology reports using Cohen's Kappa hypothesis test, improved GPT training prompt template for BI-RADS score ratings by 10%</li>
+  </ul>
 
-  ### Chongqing University of Technology
-  *2023.11 - Present* (supervised by Prof. Dongyang Qiu)
-  - Implemented machine learning algorithms for financial risk early warning models
-  - Developed data preprocessing tools, reducing processing time by 15%
+  <h3>Chongqing University of Technology</h3>
+  <p><em>2023.11 - Present</em> (supervised by Prof. Dongyang Qiu)</p>
+  <ul>
+    <li>Implemented machine learning algorithms for financial risk early warning models</li>
+    <li>Developed data preprocessing tools, reducing processing time by 15%</li>
+  </ul>
 
-  ### NYU Savin's Lab
-  *2023.11 - 2024.05* (supervised by Prof. Cristina Savin)
-  - Conducted research on dimensionality reduction and Gaussian Models for data analysis
+  <h3>NYU Savin's Lab</h3>
+  <p><em>2023.11 - 2024.05</em> (supervised by Prof. Cristina Savin)</p>
+  <ul>
+    <li>Conducted research on dimensionality reduction and Gaussian Models for data analysis</li>
+  </ul>
 </div>
 
 <div id="professional" class="tab-content">
-  ## 💼 Professional Experience
+  <h2>💼 Professional Experience</h2>
   
-  ### Guotai Jun'an Securities
-  *2023.05 - 2023.07*, Investment Banking Intern, Shanghai, China
-  - Developed project proposals focused on market research and financial assessments
-  - Contributed to 10+ high-profile roadshows for client company offerings (project resulted in successful IPO)
-  - Produced financial offering-related documents including due diligence and client interviews
+  <h3>Guotai Jun'an Securities</h3>
+  <p><em>2023.05 - 2023.07</em>, Investment Banking Intern, Shanghai, China</p>
+  <ul>
+    <li>Developed project proposals focused on market research and financial assessments</li>
+    <li>Contributed to 10+ high-profile roadshows for client company offerings (project resulted in successful IPO)</li>
+    <li>Produced financial offering-related documents including due diligence and client interviews</li>
+  </ul>
 
-  ## 💬 Teaching Experience
+  <h2>💬 Teaching Experience</h2>
   
-  ### Courant Institute of Mathematical Sciences
-  *2024.02 - Present*, Teaching Assistant for Linear Algebra and Calculus III
-  - Provided one-on-one tutoring and detailed feedback, and graded assignments for classes of 50+ students
+  <h3>Courant Institute of Mathematical Sciences</h3>
+  <p><em>2024.02 - Present</em>, Teaching Assistant for Linear Algebra and Calculus III</p>
+  <ul>
+    <li>Provided one-on-one tutoring and detailed feedback, and graded assignments for classes of 50+ students</li>
+  </ul>
 </div>
 
 <div id="skills" class="tab-content">
-  ## 🛠 Skills
+  <h2>🛠 Skills</h2>
   
-  ### Technical Proficiency
-  R, Java, Python, C, SPSS Statistics, SQL, CSS, HTML, GIS
+  <h3>Technical Proficiency</h3>
+  <p>R, Java, Python, C, SPSS Statistics, SQL, CSS, HTML, GIS</p>
   
-  ### Languages
-  Mandarin Chinese (Native), English (Fluent)
+  <h3>Languages</h3>
+  <p>Mandarin Chinese (Native), English (Fluent)</p>
 </div>
 
 <style>
@@ -109,6 +118,42 @@ redirect_from:
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Content spacing */
+.tab-content h2 {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-size: 1.5em;
+  border-bottom: 2px solid #e1e4e8;
+  padding-bottom: 0.5em;
+}
+
+.tab-content h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-size: 1.2em;
+  color: #0366d6;
+}
+
+.tab-content p {
+  margin-bottom: 1em;
+  line-height: 1.6;
+}
+
+.tab-content ul {
+  margin-bottom: 1.5em;
+  padding-left: 2em;
+}
+
+.tab-content li {
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+
+.tab-content em {
+  font-style: italic;
+  color: #586069;
 }
 
 /* Paper box styling */
