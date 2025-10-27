@@ -19,7 +19,13 @@ redirect_from:
 <div id="homepage" class="tab-content active">
   <h2>About Me</h2>
   
-  <p>I am a Master of Science student in Data Science at Harvard University (September 2025 - December 2026) and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University (September 2022 - May 2025). My research interests focus on 3D reconstruction, rendering-induced intelligence, and generative 3D models, particularly in applications to computer vision and robotic systems. Previously, I worked as a Deep Learning Researcher at NYU Tandon AI4CE Lab and as a Data Science Researcher at NYU Langone Health Radiology Research Department, where I contributed to projects in 3D reconstruction, assembly, and medical imaging analysis. Currently, I work as a Deep Learning Researcher at Harvard & MIT AI and Robotics Lab.</p>
+  <p>I am a Master of Science student in Data Science at Harvard University (September 2025 - December 2026) and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University (September 2022 - May 2025). My research interests focus on <span class="highlight-research">3D reconstruction</span>, <span class="highlight-research">rendering-induced intelligence</span>, and <span class="highlight-research">generative 3D models</span>, particularly in applications to computer vision and robotic systems. Previously, I worked as a Deep Learning Researcher at NYU Tandon AI4CE Lab and as a Data Science Researcher at NYU Langone Health Radiology Research Department, where I contributed to projects in 3D reconstruction, assembly, and medical imaging analysis. Currently, I work as a Deep Learning Researcher at Harvard & MIT AI and Robotics Lab.</p>
+
+  <div class="highlight-job">
+    <strong>🎯 Seeking Full-Time Opportunities</strong><br>
+    <em>Available: May 26th, 2026 - August 30th, 2026</em><br>
+    <strong>Target Roles:</strong> Research Scientist, ML Engineer, Computer Vision Engineer, 3D Reconstruction Specialist
+  </div>
 
   <h2>🔥 News</h2>
   
@@ -63,28 +69,28 @@ redirect_from:
   <h3>Harvard & MIT, AI and Robotics Lab</h3>
   <p><em>June 2025 - Present</em>, Deep Learning Researcher</p>
   <ul>
-    <li>Co-developed selective layer fine-tuning approach for VGGT transformer optimizing hyperparameters</li>
-    <li>Implemented evaluation metrics including DTU accuracy, ATE/RPE for pose, and Occlusion Accuracy tracking</li>
-    <li>Enhanced SFTTrainer developing custom classification loss functions improving prediction accuracy by 75%</li>
+    <li>Co-developed <span class="highlight-achievement">selective layer fine-tuning approach for VGGT transformer</span> optimizing hyperparameters</li>
+    <li>Implemented evaluation metrics including <span class="highlight-skills">DTU accuracy, ATE/RPE for pose, and Occlusion Accuracy tracking</span></li>
+    <li>Enhanced SFTTrainer developing custom classification loss functions <span class="highlight-achievement">improving prediction accuracy by 75%</span></li>
     <li>Evaluated performance using confusion matrix analysis improving class-wise precision with F1-score metrics</li>
   </ul>
 
   <h3>NYU Tandon, AI4CE Lab</h3>
   <p><em>August 2024 - Present</em>, Deep Learning Researcher</p>
   <ul>
-    <li>Processed 7 archaeopteryx thoracic and spinal bone fragments achieving assembly using PuzzleFusion and models</li>
-    <li>Fine-tuned model parameters on archaeological datasets using PyTorch achieving 25% improvement in accuracy</li>
-    <li>Developed BreakingGood simulation pipeline using PyTorch and trimesh for training data generation processes</li>
-    <li>Created 50% more varied training datasets for model robustness handling mesh processing and fragmentation</li>
+    <li>Processed <span class="highlight-achievement">7 archaeopteryx thoracic and spinal bone fragments</span> achieving assembly using PuzzleFusion and models</li>
+    <li>Fine-tuned model parameters on archaeological datasets using PyTorch <span class="highlight-achievement">achieving 25% improvement in accuracy</span></li>
+    <li>Developed <span class="highlight-skills">BreakingGood simulation pipeline</span> using PyTorch and trimesh for training data generation processes</li>
+    <li>Created <span class="highlight-achievement">50% more varied training datasets</span> for model robustness handling mesh processing and fragmentation</li>
   </ul>
 
   <h3>NYU Langone Health, Radiology Research Department</h3>
   <p><em>February 2024 - May 2025</em>, Data Science Researcher</p>
   <ul>
-    <li>Built analysis framework for 1.2K+ patient datasets supporting clinical research workflows with pipelines</li>
-    <li>Developed data cleaning pipelines using Python, Pandas, and NumPy for radiology report processing</li>
-    <li>Deployed Large Language Models for radiology report processing and cyst characteristic extraction from records</li>
-    <li>Conducted statistical analysis on 200 radiology reports using Cohen's Kappa hypothesis test with R</li>
+    <li>Built analysis framework for <span class="highlight-achievement">1.2K+ patient datasets</span> supporting clinical research workflows with pipelines</li>
+    <li>Developed data cleaning pipelines using <span class="highlight-skills">Python, Pandas, and NumPy</span> for radiology report processing</li>
+    <li>Deployed <span class="highlight-skills">Large Language Models</span> for radiology report processing and cyst characteristic extraction from records</li>
+    <li>Conducted statistical analysis on <span class="highlight-achievement">200 radiology reports</span> using Cohen's Kappa hypothesis test with R</li>
   </ul>
 </div>
 
@@ -116,16 +122,16 @@ redirect_from:
   <h2>🛠 Skills</h2>
   
   <h3>Programming Languages</h3>
-  <p>Python, SQL, Java, R, Spark, C, Bash, Shell, HTML, CSS, JavaScript</p>
+  <p><span class="highlight-skills">Python</span>, <span class="highlight-skills">SQL</span>, <span class="highlight-skills">Java</span>, <span class="highlight-skills">R</span>, <span class="highlight-skills">Spark</span>, C, Bash, Shell, HTML, CSS, JavaScript</p>
   
   <h3>Machine Learning</h3>
-  <p>PyTorch, TensorFlow, Scikit-learn, Hugging Face, Transformers, OpenCV, XGBoost, MLOps</p>
+  <p><span class="highlight-skills">PyTorch</span>, <span class="highlight-skills">TensorFlow</span>, <span class="highlight-skills">Scikit-learn</span>, <span class="highlight-skills">Hugging Face</span>, <span class="highlight-skills">Transformers</span>, <span class="highlight-skills">OpenCV</span>, XGBoost, MLOps</p>
   
   <h3>Data Analysis</h3>
-  <p>Pandas, NumPy, Scipy, Matplotlib, Seaborn, A/B Testing, Statistical Analysis, Hypothesis Testing</p>
+  <p><span class="highlight-skills">Pandas</span>, <span class="highlight-skills">NumPy</span>, <span class="highlight-skills">Scipy</span>, Matplotlib, Seaborn, A/B Testing, Statistical Analysis, Hypothesis Testing</p>
   
   <h3>Tools & Technologies</h3>
-  <p>Docker, Git, Jupyter, Tableau, Looker, Airflow, DBT, ETL Pipelines, GCP, AWS</p>
+  <p><span class="highlight-skills">Docker</span>, <span class="highlight-skills">Git</span>, Jupyter, Tableau, Looker, Airflow, DBT, ETL Pipelines, <span class="highlight-skills">GCP</span>, <span class="highlight-skills">AWS</span></p>
   
   <h3>Languages</h3>
   <p>Mandarin Chinese (Native), English (Fluent)</p>
@@ -181,6 +187,42 @@ redirect_from:
 .tab-content em {
   font-style: italic;
   color: #586069;
+}
+
+/* Highlight styles */
+.highlight-research {
+  background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.highlight-skills {
+  background: linear-gradient(120deg, #ffecd2 0%, #fcb69f 100%);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.highlight-achievement {
+  background: linear-gradient(120deg, #d299c2 0%, #fef9d7 100%);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.highlight-job {
+  background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+  padding: 0.3em 0.6em;
+  border-radius: 6px;
+  font-weight: 700;
+  color: #1a365d;
+  border: 2px solid #4299e1;
+  display: inline-block;
+  margin: 0.5em 0;
 }
 
 /* Paper box styling */
