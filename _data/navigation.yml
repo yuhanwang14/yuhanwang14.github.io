@@ -1,5 +1,13 @@
 main:
   - title: "Homepage"
-    url: /
-  - title: "About"
-    url: /about/
+    url: "javascript:void(0)"
+    onclick: "showTab('homepage'); return false;"
+  - title: "Research Experience"
+    url: "javascript:void(0)"
+    onclick: "showTab('research'); return false;"
+  - title: "Professional Experience"
+    url: "javascript:void(0)"
+    onclick: "showTab('professional'); return false;"
+  - title: "Skills"
+    url: "javascript:void(0)"
+    onclick: "showTab('skills'); return false;"
