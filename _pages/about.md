@@ -52,7 +52,7 @@ redirect_from:
     </div>
     <div class='paper-box-text'>
       <p><strong><a href="https://ai4ce.github.io/GARF/">GARF: Learning Generalizable 3D Reassembly for Real-World Fractures</a></strong></p>
-      <p>Chen Feng, <strong>Grace Chen</strong> (2nd author), et al. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a> / <a href="https://arxiv.org/abs/2504.05400">Paper</a></p>
+      <p>Sihang Li, Zeyu Jiang, <strong>Grace Chen</strong> (3rd author), Chenyang Xu, Siqi Tan, Xue Wang, Irving Fang, Kristof Zyskowski, Shannon P. McPherron, Radu Iovita, Chen Feng, Jing Zhang. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a> / <a href="https://arxiv.org/abs/2504.05400">Paper</a></p>
     </div>
   </div>
 </div>
