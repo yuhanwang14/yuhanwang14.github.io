@@ -18,21 +18,25 @@ redirect_from:
 <!-- Tab Content Sections -->
 <div id="homepage" class="tab-content active">
   <h2>About Me</h2>
-  
-  <p>I am a Master of Science student in Data Science at Harvard University (September 2025 - December 2026) and a recent graduate with a Bachelor of Arts in Mathematics and Computer Science from New York University (September 2022 - May 2025). My research interests focus on <span class="highlight-research">3D reconstruction</span>, <span class="highlight-research">rendering-induced intelligence</span>, and <span class="highlight-research">generative 3D models</span>, particularly in applications to computer vision and robotic systems. Previously, I worked as a Deep Learning Researcher at NYU Tandon AI4CE Lab and as a Data Science Researcher at NYU Langone Health Radiology Research Department, where I contributed to projects in 3D reconstruction, assembly, and medical imaging analysis. Currently, I work as a Deep Learning Researcher at Harvard & MIT AI and Robotics Lab.</p>
 
-  <div class="highlight-job">
+  <p>
+  I am a master student in Joint Mathematics and Computer Science at Imperial College and a visiting graduate researcher at MIT Media Lab. My research interests focus on <span class="highlight-research">3D and 4D foundation models</span>, <span class="highlight-research">active vision and robotics</span>, and <span class="highlight-research">VLA (Visual-Language-Action)</span>, particularly in applications to computer vision, robotics, etc. 
+  <br>
+  Previously, I worked as an undergraduate researcher and full-stack developer at Imperial College, where I contributed to R&D platforms and computational backends for mechanical engineering modules. Currently, I work as a deep learning researcher in the Multisensory Intelligence Group at MIT Media Lab, and I will join Millennium Management's Equity IT Team as an AI Engineer Intern in summer 2026.
+  </p>
+
+  <!-- <div class="highlight-job">
     <strong>🎯 Internship Opportunity</strong><br>
     <em>Available: May 26th, 2026 - August 30th, 2026</em><br>
     <strong>Target Roles:</strong> ML Engineer, Computer Vision Engineer, Data Scientist, Software Development Engineer, Quant Researcher<br>
     <strong>My Edge:</strong> My interdisciplinary background in Mathematics, Computer Science, and Data Science provides a strong foundation for technical problem-solving across domains. I bring extensive experience in deep learning frameworks (PyTorch, TensorFlow), cloud infrastructure (GCP, AWS), and production ML systems, along with proven research capabilities demonstrated through publications at leading conferences. Whether optimizing model performance, building scalable data pipelines, or developing financial models, I thrive in translating complex technical concepts into impactful solutions.
-  </div>
+  </div> -->
 
   <h2>🔥 News</h2>
   
   <ul>
-    <li><em>2025.06</em>: 🎉🏝️ <strong>GARF accepted to ICCV 2025</strong>! See you in Hawaii! 🌺</li>
-    <li><em>2025.02</em>: 🎉🎉 Accepted to Harvard University's Master of Science program in Data Science!</li>
+    <li><em>2025.11</em>: 💼 Accepted an offer from <strong>Millennium</strong>'s Equity IT Team as an AI Engineer Intern!</li>
+    <li><em>2025.06</em>: 🎓 Joined <strong>MIT Media Lab</strong> as a Visiting Graduate Researcher!</li>
   </ul>
 
   <h2>📝 Publications</h2>
@@ -46,11 +50,11 @@ redirect_from:
     </div>
     <div class='paper-box-text'>
       <p><strong><a href="https://page-4d.github.io/anonymous-submission/">PAGE-4D: Disentangled Pose and Geometry Estimation for 4D Perception</a></strong></p>
-      <p>Kaichen Zhou, Yuhan Wang, <strong>Grace Chen</strong> (2nd author), Xinhai Chang, Gaspard Beaudouin, Fangneng Zhan, Paul Pu Liang, Mengyu Wang. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
+      <p>Kaichen Zhou, <strong>Yuhan Wang</strong>, Grace Chen, Xinhai Chang, Gaspard Beaudouin, Fangneng Zhan, Paul Pu Liang, Mengyu Wang. <a href="https://page-4d.github.io/anonymous-submission/"><strong>Project</strong></a> / <a href="https://arxiv.org/pdf/2510.17568">Paper</a></p>
     </div>
   </div>
 
-  <div class='paper-box'>
+  <!-- <div class='paper-box'>
     <div class='paper-box-image'>
       <div>
         <div class="badge">ICCV 2025</div>
@@ -61,81 +65,102 @@ redirect_from:
       <p><strong><a href="https://ai4ce.github.io/GARF/">GARF: Learning Generalizable 3D Reassembly for Real-World Fractures</a></strong></p>
       <p>Sihang Li, Zeyu Jiang, <strong>Grace Chen</strong> (2nd author), Chenyang Xu, Siqi Tan, Xue Wang, Irving Fang, Kristof Zyskowski, Shannon P. McPherron, Radu Iovita, Chen Feng, Jing Zhang. <a href="https://arxiv.org/abs/2504.05400"><strong>Project</strong></a> / <a href="https://arxiv.org/abs/2504.05400">Paper</a></p>
     </div>
-  </div>
+  </div> -->
 </div>
 
 <div id="research" class="tab-content">
   <h2>💻 Research Experience</h2>
   
-  <h3>Harvard & MIT, AI and Robotics Lab</h3>
-  <p><em>June 2025 - Present</em>, Deep Learning Researcher</p>
+  <h3>MIT Media Lab, Multisensory Intelligence Group</h3>
+  <p><em>June 2025 – Present</em>, Graduate Visiting Researcher</p>
   <ul>
-    <li>Co-developed selective layer fine-tuning approach for <strong>VGGT transformer</strong> optimizing hyperparameters</li>
-    <li>Implemented evaluation metrics including <strong>DTU accuracy, ATE/RPE for pose, and Occlusion Accuracy tracking</strong></li>
-    <li>Enhanced <strong>SFTTrainer</strong> developing custom classification loss functions improving prediction accuracy by <strong>75%</strong></li>
-    <li>Evaluated performance using confusion matrix analysis improving class-wise precision with <strong>F1-score</strong> metrics</li>
+    <li>Co-developed <strong>PAGE-4D</strong>, a feedforward 4D perception framework extending <strong>VGGT</strong> with a dynamics-aware aggregator for static–dynamic disentanglement</li>
+    <li>Introduced mask-guided attention to suppress motion for pose tokens while exploiting dynamics for geometry tokens</li>
+    <li>Applied selective fine-tuning on the middle <strong>10 VGGT layers (~30% parameters)</strong>, matching full fine-tuning performance with no runtime or memory overhead</li>
+    <li>Achieved <strong>state-of-the-art results</strong> on Sintel, DyCheck, and TUM benchmarks, improving depth, pose accuracy, and rendering quality (PSNR/SSIM, LPIPS)</li>
   </ul>
 
-  <h3>NYU Tandon, AI4CE Lab</h3>
-  <p><em>August 2024 - Present</em>, Deep Learning Researcher</p>
+  <h3>Imperial College, Department of Mechanical Engineering</h3>
+  <p><em>July 2024 - October 2024</em>, Undergraduate Researcher, Full-Stack Developer</p>
   <ul>
-    <li>Processed <strong>7 archaeopteryx thoracic and spinal bone fragments</strong> achieving assembly using <strong>PuzzleFusion</strong> and models</li>
-    <li>Fine-tuned model parameters on archaeological datasets using <strong>PyTorch</strong> achieving <strong>25%</strong> improvement in accuracy</li>
-    <li>Developed <strong>BaggingGrid</strong> simulation pipeline using <strong>PyTorch</strong> and trimesh for training data generation processes</li>
-    <li>Created <strong>50% more varied training datasets</strong> for model robustness handling mesh processing and fragmentation</li>
+    <li>Designed and developed a modern, data-driven web platform called <strong>Smart-Forming</strong> that enables engineers to discover, evaluate, and share manufacturing knowledge modules.</li>
+    <li>Focused on intuitive UX, modular architecture, and seamless integration of metadata analytics (e.g. heatmap, word cloud supported by python and matlab) to support <strong>industrial R&D</strong>.</li>
   </ul>
 
-  <h3>NYU Langone Health, Radiology Research Department</h3>
-  <p><em>February 2024 - May 2025</em>, Data Science Researcher</p>
+  <h3>UESTC, School of Computer Science and Engineering</h3>
+  <p><em>January 2022 - December 2022</em>, High School Researcher</p>
   <ul>
-    <li>Built analysis framework for <strong>1.2K+ patient datasets</strong> supporting clinical research workflows with pipelines</li>
-    <li>Developed data cleaning pipelines using <strong>Python, Pandas, and NumPy</strong> for radiology report processing</li>
-    <li>Deployed <strong>Large Language Models</strong> for radiology report processing and cyst characteristic extraction from records</li>
-    <li>Conducted statistical analysis on <strong>200 radiology reports</strong> using <strong>Cohen's Kappa</strong> hypothesis test with <strong>R</strong></li>
+    <li>Research on <strong>Open World Object Detection</strong> for classifying known and unknown objects.</li>
+    <li>Improved a <strong>Detectron2-based model ORE</strong> for incremental object detection using contrastive clustering and auto-labeling RPN.</li>
   </ul>
 </div>
 
-<div id="professional" class="tab-content">
-  <h2>💼 Professional Experience</h2>
+<div id="industry" class="tab-content">
+  <h2>💼 Industry Experience</h2>
   
-  <h3>Guotai Jun'an Securities</h3>
-  <p><em>May 2023 - July 2023</em>, Investment Banking Intern, Shanghai, China</p>
+  <h3>Millennium Management Global Investment</h3>
+  <p><em>June 2026 - August 2026</em>, AI Enginneer Intern, London, United Kingdom</p>
   <ul>
-    <li>Built data engineering pipelines for <strong>10+ client financial analysis projects</strong> with <strong>ETL</strong> processes automation</li>
-    <li>Set up <strong>MySQL</strong> databases automatically pulling data from multi-source financial systems for deal evaluation</li>
-    <li>Conducted data analysis and preprocessing using <strong>Python, Pandas, and NumPy</strong> for market research</li>
-    <li>Implemented data cleaning procedures and missing value imputation processing financial statements for pitch books</li>
+    <li>Incoming <strong>AI Enginner Intern</strong> at Millennium Equity IT Team</li>
+    <li>Building AI solutions for MLP's equity investment teams around the globe, focusing on applying AI / LLM's to research process augmentation</li>
   </ul>
 
-  <h2>🎓 Course Project</h2>
-  
-  <h3>StyleMe: AI-Powered Fashion Styling Assistant</h3>
-  <p><em>Technologies:</em> Python, <strong>Docker</strong>, <strong>MLflow</strong>, <strong>FashionCLIP</strong>, <strong>GCP</strong>, <strong>MLOps</strong></p>
+  <h2>🎓 Personal Projects</h2>
+
+  <h3>Spatial Historical Intelligence, Interactive AI-driven Map</h3>
+  <p><em>Technologies:</em> <strong>React.js</strong>, <strong>Perplexity API</strong></p>
   <ul>
-    <li>Built <strong>MLOps infrastructure</strong> using <strong>Docker</strong> containers streamlining deployment model reproducibility for production</li>
-    <li>Developed <strong>GPU-accelerated training pipelines</strong> for <strong>FashionCLIP</strong> models on <strong>NVIDIA V100 GPU</strong> in <strong>GCP</strong></li>
-    <li>Integrated <strong>MLflow</strong> tracking improving model convergence speed by <strong>60%</strong> through hyperparameter tuning</li>
-    <li>Implemented automated model versioning monitoring achieving <strong>98% uptime</strong> for fashion recommendation service</li>
+    <li>Built an interactive <strong>AI-driven map</strong> that reveals on-click historical, cultural, and contextual narratives for any location (<strong>Perplexity API</strong>)</li>
+    <li>Engineered a structured-query <strong>backend to Perplexity</strong> and parsed responses into geospatial entities for real-time visualization.</li>
+    <li>Developed correlation mapping and cross-region connections, including life-journey pathing for notable figures across the globe</li>
+    <li>Implemented dynamic country comparisons on AI-derived metrics (<strong>economy, culture, innovation</strong>) with responsive data visualizations</li>
+  </ul>
+
+  <h3>Zencraft, AI-Powered Personal Growth Platform</h3>
+  <p><em>Technologies:</em> <strong>Flutter</strong>, <strong>Go</strong>, <strong>gPRC</strong>, <strong>PostgreSQL</strong></p>
+  <ul>
+    <li>Built an AI-powered <strong>personal growth app</strong> delivering context-aware insights and reflection guidance</li>
+    <li>Ran iterative user testing to refine prompts and UX for clearer, measurable progress</li>
+    <li>Implemented interview-style flows, skills tracking, and personalized storytelling via a <strong>Go/gRPC backend</strong></li>
+  </ul>
+  
+  <h3>Pre-Market Opening Price Anomaly Detector</h3>
+  <p><em>Technologies:</em> <strong>Python</strong>, <strong>Quant Finance</strong>, <strong>Backtesting</strong>, <strong>Gradient Boosting</strong></p>
+  <ul>
+    <li>Built a leakage-safe <strong>pre-open forecasting pipeline</strong> for opening prices using prior-day and benchmark signals.</li>
+    <li>Calibrated detection with a <strong>3σ residual threshold</strong>, flagging 1.6% of test days with significant open deviations.</li>
+    <li>Ensured reproducibility with strict pre-open feature shifts, a chronological split (372 train / 125 test), and diagnostic plots (residual histograms and time-series with alert markers).</li>
+  </ul>
+
+  <h3>WACC Compiler</h3>
+  <p><em>Technologies:</em> <strong>Scala</strong>, <strong>Compiler Design</strong></p>
+  <ul>
+    <li>Built a compiler for the <strong>WACC language</strong> targeting AArch64 (ARMv8-A), supporting full compilation from source to executable.</li>
+    <li>Implemented lexical, syntactic, and semantic analysis, ensuring language correctness before code generation.</li>
+    <li>Developed a code generator that produces <strong>AArch64 assembly</strong>, enabling execution via GCC and QEMU.</li>
+    <li>Supported language features such as variables, expressions, control flow, functions, and heap memory management.</li>
+    <li>Integrated robust error detection and type checking to prevent runtime failures.</li>
   </ul>
 </div>
 
 <div id="skills" class="tab-content">
   <h2>🛠 Skills</h2>
   
+
   <h3>Programming Languages</h3>
-  <p>Python, SQL, Java, R, Spark, C, Bash, Shell, HTML, CSS, JavaScript</p>
+  <p>Python, Java, C++, C, TypeScript, Go, SQL, Haskell, Scala, Kotlin, Ruby</p>
   
-  <h3>Machine Learning</h3>
-  <p>PyTorch, TensorFlow, Scikit-learn, Hugging Face, Transformers, OpenCV, XGBoost, MLOps</p>
+  <h3>Frameworks</h3>
+  <p>React.js, gRPC, PostgreSQL, Flutter, Docker, Git, Linux</p>
   
-  <h3>Data Analysis</h3>
-  <p>Pandas, NumPy, Scipy, Matplotlib, Seaborn, A/B Testing, Statistical Analysis, Hypothesis Testing</p>
-  
+  <h3>Deep Learning & Machine Learning</h3>
+  <p>PyTorch, TensorFlow, Scikit-learn, Hugging Face, Transformers, OpenCV, XGBoost, MLOps, Detectron2</p>
+    
   <h3>Tools & Technologies</h3>
-  <p>Docker, Git, Jupyter, Tableau, Looker, Airflow, DBT, ETL Pipelines, GCP, AWS</p>
+  <p>Docker, Git, Jupyter Notebook, PostgreSQL, AWS, Azure</p>
   
   <h3>Languages</h3>
-  <p>Mandarin Chinese (Native), English (Fluent)</p>
+  <p>Mandarin Chinese (Native), English (Bilingual)</p>
 </div>
 
 <style>

@@ -1,0 +1,18 @@
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251216-65374-qqaacw sitelibdir\=./.gem.20251216-65374-qqaacw clean
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251216-65374-qqaacw sitelibdir\=./.gem.20251216-65374-qqaacw
+compiling cparse.c
+linking shared-object racc/cparse.bundle
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251216-65374-qqaacw sitelibdir\=./.gem.20251216-65374-qqaacw install
+/usr/bin/install -c -m 0755 cparse.bundle ./.gem.20251216-65374-qqaacw/racc
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251216-65374-qqaacw sitelibdir\=./.gem.20251216-65374-qqaacw clean

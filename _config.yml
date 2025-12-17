@@ -1,4 +1,3 @@
-
 # Welcome to Jekyll!
 #
 # This config file is meant for settings that affect your entire site, values
@@ -7,9 +6,9 @@
 # `jekyll serve`. If you change this file, please restart the server process.
 
 # Site Settings
-title: Grace Chen
-description: 
-repository               : "gracee-chen.github.io"
+title                    : "Yuhan Wang's Portfolio"
+# description              : "Imperial College Math and CS | MIT Media Lab Visiting Researcher"
+repository               : "yuhanwang14/yuhanwang14.github.io"
 google_scholar_stats_use_cdn : true
 
 # google analytics
@@ -22,14 +21,14 @@ baidu_site_verification  :  # get baidu_site_verification from https://ziyuan.ba
 
 # Site Author
 author:
-  name             : "Grace Chen"
-  avatar           : "images/Grace.png"
-  bio              : "Harvard MS Data Science | New York University BA Math & CS"
-  location         : "Cambridge, United States"
+  name             : "Yuhan Wang"  
+  avatar           : "images/Yuhan.png"
+  bio              : "Imperial College Math and CS | MIT Visiting Researcher | Millennium AI Engineer"
+  location         : "London, United Kingdom"
   employer         :
   pubmed           : 
-  googlescholar    : 
-  email            : "gc3022@nyu.edu"
+  googlescholar    : "https://scholar.google.com/citations?user=gYhZ614AAAAJ&hl=en&authuser=1"
+  email            : "yuhanwangwork14@gmail.com"
   researchgate     :  # e.g., "https://www.researchgate.net/profile/yourprofile"
   uri              :
   bitbucket        :
@@ -38,13 +37,13 @@ author:
   flickr           :
   facebook         :
   foursquare       :
-  github           : "gracee-chen"
+  github           : "yuhanwang14"
   google_plus      :
   keybase          :
   instagram        :
   impactstory      : # e.g., "https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
-  linkedin         : "https://www.linkedin.com/in/grace-chen-37a974293/"
+  linkedin         : "https://www.linkedin.com/in/yuhan-wang-5546832a2/"
   dblp             : # e.g., "https://dblp.org/pid/xx/xxxx.html"
   orcid            : # e.g., "https://orcid.org/xxxx"
   pinterest        :
