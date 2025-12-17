@@ -22,7 +22,7 @@ baidu_site_verification  :  # get baidu_site_verification from https://ziyuan.ba
 # Site Author
 author:
   name             : "Yuhan Wang"  
-  avatar           : "images/Yuhan.png"
+  avatar           : "images/yuhan.png"
   bio              : "Imperial College Math and CS | MIT Visiting Researcher | Millennium AI Engineer"
   location         : "London, United Kingdom"
   employer         :
