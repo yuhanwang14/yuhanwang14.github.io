@@ -123,6 +123,16 @@ redirect_from:
     <li>Ran iterative user testing to refine prompts and UX for clearer, measurable progress</li>
     <li>Implemented interview-style flows, skills tracking, and personalized storytelling via a <strong>Go/gRPC backend</strong></li>
   </ul>
+
+  <h3>NPC Trading System (npcTrading)</h3>
+  <p><em>Technologies:</em> <strong>C++</strong>, <strong>WebSocket/REST</strong>, <strong>Boost.Beast</strong>, <strong>OpenSSL</strong>, <strong>Binance Spot API</strong>, <strong>GoogleTest</strong></p>
+  <ul>
+    <li>Built a message-driven <strong>crypto spot trading engine</strong> with a central <strong>MessageBus</strong> (async send/publish, sync request/response, topic subscriptions, bounded queues, run-loop dispatch)</li>
+    <li>Implemented core runtime state: component lifecycle FSM and an in-memory <strong>cache</strong> for orders/positions/instruments plus latest quote/bar/book with ring-buffer history</li>
+    <li>Exposed <strong>Actor/Strategy APIs</strong> for subscriptions, market-data callbacks, and order helpers; emits order lifecycle events (submitted/accepted/rejected/filled)</li>
+    <li>Integrated Binance Spot market data (WS + REST) and maintained per-instrument <strong>local order books</strong> via depth snapshots + incremental updates</li>
+    <!-- <li>Added safety + tests: testnet-first CLI with an explicit live-trading risk flag; 6 GoogleTest suites for MessageBus routing and subscription semantics</li> -->
+  </ul>
   
   <h3>Pre-Market Opening Price Anomaly Detector</h3>
   <p><em>Technologies:</em> <strong>Python</strong>, <strong>Quant Finance</strong>, <strong>Backtesting</strong>, <strong>Gradient Boosting</strong></p>

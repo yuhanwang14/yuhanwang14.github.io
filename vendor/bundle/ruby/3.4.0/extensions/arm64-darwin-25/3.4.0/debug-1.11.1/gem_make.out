@@ -1,0 +1,19 @@
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251218-13371-l8e8jk sitelibdir\=./.gem.20251218-13371-l8e8jk clean
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251218-13371-l8e8jk sitelibdir\=./.gem.20251218-13371-l8e8jk
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.bundle
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251218-13371-l8e8jk sitelibdir\=./.gem.20251218-13371-l8e8jk install
+/usr/bin/install -c -m 0755 debug.bundle ./.gem.20251218-13371-l8e8jk/debug
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251218-13371-l8e8jk sitelibdir\=./.gem.20251218-13371-l8e8jk clean

@@ -1,0 +1,19 @@
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/stringio-3.2.0/ext/stringio
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+checking for rb_io_mode_t in ruby/io.h... no
+creating Makefile
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/stringio-3.2.0/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20251218-13371-8079j6 sitelibdir\=./.gem.20251218-13371-8079j6 clean
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/stringio-3.2.0/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20251218-13371-8079j6 sitelibdir\=./.gem.20251218-13371-8079j6
+compiling stringio.c
+linking shared-object stringio.bundle
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/stringio-3.2.0/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20251218-13371-8079j6 sitelibdir\=./.gem.20251218-13371-8079j6 install
+/usr/bin/install -c -m 0755 stringio.bundle ./.gem.20251218-13371-8079j6
+
+current directory: /Users/yuhanwang/Programming/Personal Page/yuhanwang14.github.io/vendor/bundle/ruby/3.4.0/gems/stringio-3.2.0/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20251218-13371-8079j6 sitelibdir\=./.gem.20251218-13371-8079j6 clean
