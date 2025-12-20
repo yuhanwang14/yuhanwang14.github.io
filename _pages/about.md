@@ -22,7 +22,7 @@ redirect_from:
   <p>
   I am a master student in Joint Mathematics and Computer Science at Imperial College and a visiting graduate researcher at MIT Media Lab. My research interests focus on <span class="highlight-research">3D and 4D foundation models</span>, <span class="highlight-research">active vision and robotics</span>, and <span class="highlight-research">VLA (Visual-Language-Action)</span>, particularly in applications to computer vision, robotics, etc. 
   <br>
-  Previously, I worked as an undergraduate researcher and full-stack developer at Imperial College, where I contributed to R&D platforms and computational backends for mechanical engineering modules. Currently, I work as a deep learning researcher in the Multisensory Intelligence Group at MIT Media Lab, and I will join Millennium Management's Equity IT Team as an AI Engineer Intern in summer 2026.
+  Previously, I worked as an undergraduate researcher and full-stack developer at Imperial College, where I contributed to R&D platforms and computational backends for mechanical engineering modules. Currently, I work as a deep learning researcher in the Multisensory Intelligence Group at MIT Media Lab, and I will join Millennium Management's Equity Technology Team as an AI Engineer Intern in summer 2026.
   </p>
 
   <!-- <div class="highlight-job">
@@ -35,7 +35,7 @@ redirect_from:
   <h2>🔥 News</h2>
   
   <ul>
-    <li><em>2025.11</em>: 💼 Accepted an offer from <strong>Millennium</strong>'s Equity IT Team as an AI Engineer Intern!</li>
+    <li><em>2025.11</em>: 💼 Accepted an offer from <strong>Millennium</strong>'s Equity Technology Team as an AI Engineer Intern!</li>
     <li><em>2025.06</em>: 🎓 Joined <strong>MIT Media Lab</strong> as a Visiting Graduate Researcher!</li>
   </ul>
 
@@ -98,10 +98,10 @@ redirect_from:
 <div id="industry" class="tab-content">
   <h2>💼 Industry Experience</h2>
   
-  <h3>Millennium Management Global Investment</h3>
+  <h3>Millennium Management LLC</h3>
   <p><em>June 2026 - August 2026</em>, AI Enginneer Intern, London, United Kingdom</p>
   <ul>
-    <li>Incoming <strong>AI Enginner Intern</strong> at Millennium Equity IT Team</li>
+    <li>Incoming <strong>AI Enginner Intern</strong> at Millennium Equity Technology Team</li>
     <li>Building AI solutions for MLP's equity investment teams around the globe, focusing on applying AI / LLM's to research process augmentation</li>
   </ul>
 
