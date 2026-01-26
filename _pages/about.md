@@ -35,6 +35,7 @@ redirect_from:
   <h2>🔥 News</h2>
   
   <ul>
+    <li><em>2026.01</em>: 🎓 Page4D paper has been successfully accepted by ICLR 2026! See you guys in Brazil!</li>
     <li><em>2025.11</em>: 💼 Accepted an offer from <strong>Millennium</strong>'s Equity Technology Team as an AI Engineer Intern!</li>
     <li><em>2025.06</em>: 🎓 Joined <strong>MIT Media Lab</strong> as a Visiting Graduate Researcher!</li>
   </ul>
