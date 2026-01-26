@@ -45,7 +45,7 @@ redirect_from:
   <div class='paper-box'>
     <div class='paper-box-image'>
       <div>
-        <div class="badge">Arxiv 2025</div>
+        <div class="badge">ICLR 2026</div>
         <img src='images/PAGE-4D.gif' alt="PAGE-4D Project" width="100%">
       </div>
     </div>
