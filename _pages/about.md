@@ -20,9 +20,11 @@ redirect_from:
   <h2>About Me</h2>
 
   <p>
-  I am a master student in Joint Mathematics and Computer Science at Imperial College and a visiting graduate researcher at MIT Media Lab. My research interests focus on <span class="highlight-research">3D and 4D foundation models</span>, <span class="highlight-research">active vision and robotics</span>, and <span class="highlight-research">VLA (Visual-Language-Action)</span>, particularly in applications to computer vision, robotics, etc. 
+  I am the Founder & CTO of <strong>Engram</strong>, where we are building a local-first <span class="highlight-research">cognitive alignment layer</span> for AI systems. I hold a Master's in Joint Mathematics and Computer Science from Imperial College and was a visiting researcher at MIT Media Lab.
   <br>
-  Previously, I worked as an undergraduate researcher and full-stack developer at Imperial College, where I contributed to R&D platforms and computational backends for mechanical engineering modules. Currently, I work as a deep learning researcher in the Multisensory Intelligence Group at MIT Media Lab, and I will join Millennium Management's Equity Technology Team as an AI Engineer Intern in summer 2026.
+  My work spans <span class="highlight-research">machine learning</span>, <span class="highlight-research">agent engineering</span>, and <span class="highlight-research">full-stack development</span>, bridging theory with deployable infrastructure. My research interests include <span class="highlight-research">3D/4D foundation models</span>, <span class="highlight-research">cognitive AI</span>, and <span class="highlight-research">agentic systems</span>.
+  <br>
+  Previously, I conducted research at MIT Media Lab on 4D perception (PAGE-4D, ICLR 2026), and I will join Millennium's Equity Technology Team as an AI Engineer Intern in Summer 2026.
   </p>
 
   <!-- <div class="highlight-job">
@@ -35,7 +37,9 @@ redirect_from:
   <h2>🔥 News</h2>
   
   <ul>
-    <li><em>2026.01</em>: 🎓 Page4D paper has been successfully accepted by ICLR 2026! See you guys in Brazil!</li>
+    <li><em>2026.03</em>: 🚀 PAGE-4D training + evaluation code fully <strong>open-sourced</strong>! Check it out on <a href="https://github.com/yuhanwang14/PAGE-4D">GitHub</a>.</li>
+    <li><em>2026.02</em>: 🏗️ Founded <strong>Engram</strong> — building a local-first cognitive alignment layer for AI systems.</li>
+    <li><em>2026.01</em>: 🎓 PAGE-4D paper accepted by <strong>ICLR 2026</strong>!</li>
     <li><em>2025.11</em>: 💼 Accepted an offer from <strong>Millennium</strong>'s Equity Technology Team as an AI Engineer Intern!</li>
     <li><em>2025.06</em>: 🎓 Joined <strong>MIT Media Lab</strong> as a Visiting Graduate Researcher!</li>
   </ul>
@@ -73,7 +77,7 @@ redirect_from:
   <h2>💻 Research Experience</h2>
   
   <h3>MIT Media Lab, Multisensory Intelligence Group</h3>
-  <p><em>June 2025 – Present</em>, Graduate Visiting Researcher</p>
+  <p><em>June 2025 – September 2025</em>, Graduate Visiting Researcher</p>
   <ul>
     <li>Co-developed <strong>PAGE-4D</strong>, a feedforward 4D perception framework extending <strong>VGGT</strong> with a dynamics-aware aggregator for static–dynamic disentanglement</li>
     <li>Introduced mask-guided attention to suppress motion for pose tokens while exploiting dynamics for geometry tokens</li>
@@ -98,15 +102,54 @@ redirect_from:
 
 <div id="industry" class="tab-content">
   <h2>💼 Industry Experience</h2>
-  
-  <h3>Millennium Management LLC</h3>
-  <p><em>June 2026 - August 2026</em>, AI Enginneer Intern, London, United Kingdom</p>
+
+  <h3>Engram</h3>
+  <p><em>January 2026 – Present</em>, Founder & CTO, London, United Kingdom</p>
   <ul>
-    <li>Incoming <strong>AI Enginner Intern</strong> at Millennium Equity Technology Team</li>
+    <li>Building cognitive AI infrastructure for identity-aligned, long-horizon reasoning</li>
+    <li>Architecting a dual-process cognition system combining causal knowledge graphs, contextual bandits, and local-first cognitive models</li>
+    <li>Designing a runtime alignment layer that operates before model inference, treating reasoning as system infrastructure</li>
+    <li>Working with early design partners and VCs to deploy scalable, alignment-first AI systems</li>
+  </ul>
+
+  <h3>Millennium Management LLC</h3>
+  <p><em>June 2026 - August 2026</em>, AI Engineer Intern, London, United Kingdom</p>
+  <ul>
+    <li>Incoming <strong>AI Engineer Intern</strong> at Millennium Equity Technology Team, mentored by Andrei-Octavian Brabete</li>
     <li>Building AI solutions for MLP's equity investment teams around the globe, focusing on applying AI / LLM's to research process augmentation</li>
   </ul>
 
+  <h3>Five Stars Education</h3>
+  <p><em>September 2024 - March 2025</em>, Founder Engineer, London, United Kingdom</p>
+  <ul>
+    <li>Built an education platform focused on training international students through pre-recorded videos and online sessions</li>
+    <li>Collaborated with educators across diverse STEM fields to deliver an optimised learning experience</li>
+  </ul>
+
   <h2>🎓 Personal Projects</h2>
+
+  <h3>ASR-Pipeline, Local GPU-Accelerated Speech Transcription</h3>
+  <p><em>Technologies:</em> <strong>Python</strong>, <strong>Whisper</strong>, <strong>Speaker Diarization</strong>, <strong>LLM Post-Processing</strong></p>
+  <ul>
+    <li>Built a fully local speech transcription pipeline with <strong>speaker diarization</strong> and LLM post-processing, optimized for RTX 4070 Laptop (8GB VRAM)</li>
+    <li>Handles multilingual meetings (Chinese/English code-switching) with reliable timestamps and speaker separation</li>
+    <li>126+ tests with full CI/CD pipeline. <a href="https://github.com/yuhanwang14/ASR-Pipeline">GitHub</a></li>
+  </ul>
+
+  <h3>Obsidian-Operator, AI-Native Workflow Operator</h3>
+  <p><em>Technologies:</em> <strong>Shell</strong>, <strong>Claude Code</strong>, <strong>Obsidian</strong></p>
+  <ul>
+    <li>Built an AI-native operator on <strong>Obsidian + Claude Code</strong> with 17 skills for daily briefings, weekly reviews, strategic planning, and knowledge synthesis</li>
+    <li>Single <code>/daily-init</code> command triggers AI workflows that pull vault context, review ongoing work, surface deadlines, and structure the day</li>
+    <li>Transforms Obsidian from documentation into a personal OS for thinking and execution. <a href="https://github.com/yuhanwang14/Obsidian-Operator">GitHub</a></li>
+  </ul>
+
+  <h3>Claude-Usage-TUI, Terminal Usage Dashboard</h3>
+  <p><em>Technologies:</em> <strong>Rust</strong></p>
+  <ul>
+    <li>Built a <strong>btop-style terminal dashboard</strong> for monitoring Claude.ai usage limits in real time</li>
+    <li>Provides live tracking of token consumption and rate limits. <a href="https://github.com/yuhanwang14/Claude-Usage-TUI">GitHub</a></li>
+  </ul>
 
   <h3>Spatial Historical Intelligence, Interactive AI-driven Map</h3>
   <p><em>Technologies:</em> <strong>React.js</strong>, <strong>Perplexity API</strong></p>
@@ -159,16 +202,16 @@ redirect_from:
   
 
   <h3>Programming Languages</h3>
-  <p>Python, Java, C++, C, TypeScript, Go, SQL, Haskell, Scala, Kotlin, Ruby</p>
+  <p>Python, Java, C++, C, TypeScript, Go, Rust, SQL, Haskell, Scala, Kotlin, Ruby, Shell</p>
   
-  <h3>Frameworks</h3>
-  <p>React.js, gRPC, PostgreSQL, Flutter, Docker, Git, Linux</p>
+  <h3>Frameworks & Infrastructure</h3>
+  <p>React.js, gRPC, PostgreSQL, Flutter, Docker, Git, Linux, LangGraph, Pydantic</p>
   
   <h3>Deep Learning & Machine Learning</h3>
   <p>PyTorch, TensorFlow, Scikit-learn, Hugging Face, Transformers, OpenCV, XGBoost, MLOps, Detectron2</p>
     
   <h3>Tools & Technologies</h3>
-  <p>Docker, Git, Jupyter Notebook, PostgreSQL, AWS, Azure</p>
+  <p>Docker, Git, Jupyter Notebook, PostgreSQL, AWS, Azure, Claude Code, Obsidian</p>
   
   <h3>Languages</h3>
   <p>Mandarin Chinese (Native), English (Bilingual)</p>
