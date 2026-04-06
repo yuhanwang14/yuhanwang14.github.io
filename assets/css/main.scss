@@ -138,3 +138,14 @@ h1:before, .anchor:before {
         margin-bottom: 0.75em;
     }
 }
+
+// Blog post image sizing
+.page__content img.img-hero {
+    width: 100%;
+    max-width: 100%;
+}
+.page__content img.img-medium {
+    max-width: 60%;
+    display: block;
+    margin: 1em auto;
+}

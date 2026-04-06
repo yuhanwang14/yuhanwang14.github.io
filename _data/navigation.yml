@@ -11,3 +11,6 @@ main:
   - title: "Skills"
     url: "javascript:void(0)"
     onclick: "showTab('skills'); return false;"
+  - title: "Blog"
+    url: "/blog/"
+    onclick: ""
