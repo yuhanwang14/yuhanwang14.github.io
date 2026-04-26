@@ -14,8 +14,6 @@ export interface SiteData {
   url: string;
   twitterHandle: string;
   social: SocialLink[];
-  scholarShieldRepoBranch: string;
-  scholarShieldFile: string;
 }
 
 export const site: SiteData = {
@@ -36,10 +34,4 @@ export const site: SiteData = {
     { label: 'Email',    href: 'mailto:yuhanwangwork14@gmail.com' },
     { label: 'RSS',      href: '/rss.xml' },
   ],
-  // The crawler workflow pushes its results dir to the `google-scholar-stats`
-  // BRANCH at root, so the JSON lives at <branch>/gs_data_shieldsio.json
-  // (not inside a google-scholar-stats/ subfolder, which is what the upstream
-  // academicpages template's main-branch layout assumed).
-  scholarShieldRepoBranch: 'yuhanwang14/yuhanwang14.github.io@google-scholar-stats',
-  scholarShieldFile: 'gs_data_shieldsio.json',
 };
