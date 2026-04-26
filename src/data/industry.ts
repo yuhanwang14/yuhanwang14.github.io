@@ -16,10 +16,9 @@ export const industry: IndustryItem[] = [
     startDate: '2026-01',
     endDate: 'present',
     bullets: [
-      'Building cognitive AI infrastructure for identity-aligned, long-horizon reasoning.',
-      'Architecting a dual-process cognition system combining causal knowledge graphs, contextual bandits, and local-first cognitive models.',
-      'Designing a runtime alignment layer that operates before model inference, treating reasoning as system infrastructure.',
-      'Working with early design partners and VCs to deploy scalable, alignment-first AI systems.',
+      'Building <strong>Engram</strong> — the cognition alignment layer that gives AI agents <em>judgment</em>, not just <em>memory</em>.',
+      'Extracts a structured <strong>CognitiveProfile</strong> from reasoning artifacts (memos, decision logs) and renders agent outputs through that cognitive lens.',
+      'Local-first by design: profiles stay on the user\'s machine, never the model provider\'s.',
     ],
   },
   {
