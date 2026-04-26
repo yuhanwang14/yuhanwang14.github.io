@@ -33,22 +33,23 @@
 @tailwind utilities;
 
 :root {
-  --bg:        #FAF7F1;
-  --bg-alt:    #F1EDE3;
-  --ink:       #1B1A17;
-  --muted:     #6B6760;
-  --hairline:  #D4CFC4;
-  --accent:    #7A1F2B;
+  /* RGB triplets so Tailwind's <alpha-value> placeholder works (bg-accent/20 etc) */
+  --bg:        250 247 241;   /* warm cream      #FAF7F1 */
+  --bg-alt:    241 237 227;   /* code background #F1EDE3 */
+  --ink:        27  26  23;   /* deep ink        #1B1A17 */
+  --muted:    107 103  96;    /* warm gray       #6B6760 */
+  --hairline: 212 207 196;    /*                 #D4CFC4 */
+  --accent:   122  31  43;    /* oxblood         #7A1F2B */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg:        #1A1714;
-    --bg-alt:    #24201B;
-    --ink:       #ECE7DA;
-    --muted:     #9A9388;
-    --hairline:  #3A352E;
-    --accent:    #C97D85;
+    --bg:         26  23  20;  /* warm graphite #1A1714 */
+    --bg-alt:     36  32  27;  /*               #24201B */
+    --ink:       236 231 218;  /* parchment     #ECE7DA */
+    --muted:     154 147 136;  /*               #9A9388 */
+    --hairline:   58  53  46;  /*               #3A352E */
+    --accent:    201 125 133;  /* dusty rose    #C97D85 */
   }
 }
 
@@ -114,25 +115,25 @@
   }
   .prose-academic p { @apply my-5; }
   .prose-academic a {
-    color: var(--accent);
+    color: rgb(var(--accent));
     text-decoration: underline;
     text-underline-offset: 3px;
   }
   .prose-academic strong { @apply font-semibold text-ink; }
   .prose-academic em { @apply italic; }
   .prose-academic blockquote {
-    border-left: 2px solid var(--accent);
+    border-left: 2px solid rgb(var(--accent));
     @apply pl-5 my-6 italic text-muted;
   }
   .prose-academic ul, .prose-academic ol { @apply my-5 pl-6; }
   .prose-academic ul li { @apply list-disc mb-2; }
   .prose-academic ol li { @apply list-decimal mb-2; }
   .prose-academic code:not(pre code) {
-    background: var(--bg-alt);
+    background: rgb(var(--bg-alt));
     @apply px-1.5 py-0.5 rounded text-[0.92em] font-mono;
   }
   .prose-academic pre {
-    background: var(--bg-alt);
+    background: rgb(var(--bg-alt));
     @apply p-4 rounded my-6 overflow-x-auto text-sm;
   }
   .prose-academic img {

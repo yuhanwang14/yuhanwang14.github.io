@@ -6,9 +6,8 @@ import PostCard from '../../components/blog/PostCard.astro';
 import Pagination from '../../components/blog/Pagination.astro';
 import { estimateReadingTime } from '../../lib/blog';
 
-const POSTS_PER_PAGE = 10;
-
 export async function getStaticPaths() {
+  const POSTS_PER_PAGE = 10;
   const all = (await getCollection('blog', ({ data }) => !data.draft))
     .filter((p) => !p.data.pinned)
     .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());

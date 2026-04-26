@@ -51,5 +51,5 @@ const fullOgImage = ogImage ? new URL(ogImage, site.url).toString() : undefined;
 {fullOgImage && <meta name="twitter:image" content={fullOgImage} />}
 
 {jsonLd && (
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 )}

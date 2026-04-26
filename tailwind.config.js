@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg:        'var(--bg)',
-        'bg-alt':  'var(--bg-alt)',
-        ink:       'var(--ink)',
-        muted:     'var(--muted)',
-        hairline:  'var(--hairline)',
-        accent:    'var(--accent)',
+        bg:        'rgb(var(--bg) / <alpha-value>)',
+        'bg-alt':  'rgb(var(--bg-alt) / <alpha-value>)',
+        ink:       'rgb(var(--ink) / <alpha-value>)',
+        muted:     'rgb(var(--muted) / <alpha-value>)',
+        hairline:  'rgb(var(--hairline) / <alpha-value>)',
+        accent:    'rgb(var(--accent) / <alpha-value>)',
       },
       fontFamily: {
         serif: ['Newsreader', 'Georgia', 'serif'],
