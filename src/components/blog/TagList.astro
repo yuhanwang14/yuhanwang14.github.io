@@ -1,0 +1,28 @@
+---
+// src/components/blog/TagList.astro
+import { slugify } from '../../lib/blog';
+
+interface Props {
+  tags: string[];
+  size?: 'sm' | 'md';
+}
+const { tags, size = 'sm' } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <ul class:list={['flex flex-wrap', size === 'md' ? 'gap-3' : 'gap-2']}>
+    {tags.map((tag) => (
+      <li>
+        <a
+          href={`/blog/tags/${slugify(tag)}/`}
+          class:list={[
+            'label-smallcaps border border-hairline rounded-full hover:text-ink hover:border-accent/40 transition-colors',
+            size === 'md' ? 'px-3 py-1' : 'px-2.5 py-0.5',
+          ]}
+        >
+          {tag}
+        </a>
+      </li>
+    ))}
+  </ul>
+)}

@@ -1,0 +1,41 @@
+---
+// src/components/shared/Navbar.astro
+import { site } from '../../data/site';
+
+interface Props {
+  active?: 'home' | 'research' | 'industry' | 'skills' | 'blog';
+}
+const { active = 'home' } = Astro.props;
+
+const links: { label: string; href: string; key: NonNullable<Props['active']> }[] = [
+  { label: 'Research', href: '/research/', key: 'research' },
+  { label: 'Industry', href: '/industry/', key: 'industry' },
+  { label: 'Skills',   href: '/skills/',   key: 'skills'   },
+  { label: 'Blog',     href: '/blog/',     key: 'blog'     },
+];
+---
+
+<nav class="border-b border-hairline">
+  <div class="max-w-reading mx-auto px-6 flex items-center justify-between h-14">
+    <a href="/" class="font-serif font-semibold text-ink hover:text-accent transition-colors duration-200">
+      {site.shortName}
+    </a>
+    <ul class="flex items-center gap-6">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class:list={[
+              'label-smallcaps transition-colors duration-200',
+              link.key === active
+                ? 'text-accent border-b-2 border-accent pb-1 -mb-1'
+                : 'hover:text-ink',
+            ]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>

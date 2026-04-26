@@ -1,0 +1,50 @@
+---
+// src/pages/blog/tags/[tag].astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import PostCard from '../../../components/blog/PostCard.astro';
+import { estimateReadingTime, slugify } from '../../../lib/blog';
+
+export async function getStaticPaths() {
+  const all = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+
+  const tagMap = new Map<string, { displayName: string; posts: CollectionEntry<'blog'>[] }>();
+  for (const post of all) {
+    for (const tag of post.data.tags) {
+      const key = slugify(tag);
+      const existing = tagMap.get(key);
+      if (existing) {
+        existing.posts.push(post);
+      } else {
+        tagMap.set(key, { displayName: tag, posts: [post] });
+      }
+    }
+  }
+
+  return Array.from(tagMap.entries()).map(([slug, { displayName, posts }]) => ({
+    params: { tag: slug },
+    props: { displayName, posts },
+  }));
+}
+
+const { displayName, posts } = Astro.props;
+---
+
+<PageLayout
+  title={`Posts tagged ${displayName} — Yuhan Wang`}
+  description={`All blog posts tagged with ${displayName}.`}
+  active="blog"
+  eyebrow="Tag"
+  heading={displayName}
+  intro={`${posts.length} ${posts.length === 1 ? 'post' : 'posts'}`}
+>
+  <div class="space-y-0">
+    {posts.map((p) => (
+      <PostCard post={p} readingTime={estimateReadingTime(p.body ?? '')} />
+    ))}
+  </div>
+  <p class="mt-12">
+    <a href="/blog/" class="label-smallcaps hover:text-ink transition-colors">← All posts</a>
+  </p>
+</PageLayout>

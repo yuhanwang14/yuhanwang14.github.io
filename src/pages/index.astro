@@ -1,0 +1,77 @@
+---
+// src/pages/index.astro
+import { Image } from 'astro:assets';
+import PageLayout from '../layouts/PageLayout.astro';
+import ProfileCard from '../components/shared/ProfileCard.astro';
+import { news } from '../data/news';
+import { publications } from '../data/publications';
+import { site } from '../data/site';
+---
+
+<PageLayout
+  title={`${site.name} — ${site.role}`}
+  description={site.description}
+  active="home"
+  eyebrow="About"
+  heading={site.name}
+  intro={site.role}
+>
+  <section>
+    <p class="text-ink leading-[1.75] text-base">
+      I am the Founder &amp; CTO of <strong>Engram</strong>, where we are building a local-first
+      <em>cognitive alignment layer</em> for AI systems. I hold a Master's in Joint Mathematics
+      and Computer Science from Imperial College and was a visiting researcher at MIT Media Lab.
+    </p>
+    <p class="text-ink leading-[1.75] text-base mt-4">
+      My work spans <em>machine learning</em>, <em>agent engineering</em>, and
+      <em>full-stack development</em>, bridging theory with deployable infrastructure. My research
+      interests include <em>3D/4D foundation models</em>, <em>cognitive AI</em>, and
+      <em>agentic systems</em>.
+    </p>
+    <p class="text-ink leading-[1.75] text-base mt-4">
+      Previously, I conducted research at MIT Media Lab on 4D perception (PAGE-4D, ICLR 2026),
+      and I will join Millennium's Equity Technology Team as an AI Engineer Intern in Summer 2026.
+    </p>
+  </section>
+
+  <section class="mt-16">
+    <p class="label-smallcaps mb-4">News</p>
+    <ul class="space-y-3">
+      {news.map((item) => (
+        <li class="flex gap-4 text-ink leading-relaxed">
+          <span class="font-mono text-sm text-muted shrink-0 w-20 pt-0.5">{item.date}</span>
+          <span class="text-base">
+            <span class="mr-1">{item.emoji}</span>
+            <span set:html={item.htmlBody} />
+          </span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="mt-16">
+    <p class="label-smallcaps mb-4">Publications</p>
+    <ul class="space-y-10">
+      {publications.map((p) => (
+        <li class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 hairline pt-8">
+          <div class="relative">
+            <span class="absolute top-2 left-2 bg-accent text-bg font-mono text-xs px-2 py-0.5 z-10">
+              {p.badge}
+            </span>
+            <Image src={p.image} alt={p.title} widths={[200, 400]} sizes="200px" class="w-full h-auto rounded" />
+          </div>
+          <div>
+            <a href={p.href} class="font-serif font-semibold text-ink hover:text-accent transition-colors">{p.title}</a>
+            <p class="text-muted text-sm mt-2 leading-relaxed" set:html={p.authorsHtml} />
+            <p class="mt-3 text-sm flex gap-4">
+              <a href={p.href} class="label-smallcaps hover:text-ink transition-colors">Project</a>
+              {p.paperHref && <a href={p.paperHref} class="label-smallcaps hover:text-ink transition-colors">Paper</a>}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <ProfileCard />
+</PageLayout>
