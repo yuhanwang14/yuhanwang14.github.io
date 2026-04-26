@@ -20,7 +20,7 @@ export const site: SiteData = {
   name: 'Yuhan Wang',
   shortName: 'Yuhan',
   role: 'Founder & CTO @ Engram · MIT Researcher · Imperial College',
-  location: 'London + Boston',
+  location: 'London & Boston',
   email: 'yuhanwangwork14@gmail.com',
   description:
     'Founder & CTO @ Engram. Research on cognitive AI, agentic systems, and 4D foundation models. Imperial College mathematics & computer science.',
