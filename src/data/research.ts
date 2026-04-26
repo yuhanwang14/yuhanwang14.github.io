@@ -12,6 +12,16 @@ export const research: ResearchItem[] = [
   {
     org: 'MIT Media Lab',
     group: 'Multisensory Intelligence Group',
+    role: 'Graduate Researcher',
+    startDate: '2025-09',
+    endDate: 'present',
+    bullets: [
+      'Working on a new research direction in <strong>Vision-Language-Action (VLA)</strong> models and <strong>robotics</strong>.',
+    ],
+  },
+  {
+    org: 'MIT Media Lab',
+    group: 'Multisensory Intelligence Group',
     role: 'Graduate Visiting Researcher',
     startDate: '2025-06',
     endDate: '2025-09',
