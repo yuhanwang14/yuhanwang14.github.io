@@ -18,11 +18,24 @@ export function formatDateShort(date: Date): string {
   return date.toLocaleDateString('en-US', { ...DATE_FMT_SHORT, timeZone: 'UTC' });
 }
 
-const WORDS_PER_MINUTE = 200;
+const WORDS_PER_MINUTE = 200;       // typical silent-read speed for English prose
+const CJK_CHARS_PER_MINUTE = 400;   // typical silent-read speed for Han characters
 
+/**
+ * Estimates reading time in minutes. Counts Han ideographs and non-CJK
+ * whitespace-delimited words separately, so that a Chinese essay isn't
+ * mis-measured as ~50 words just because Chinese doesn't use word spacing.
+ */
 export function estimateReadingTime(content: string): number {
-  const words = content.trim() === '' ? 0 : content.trim().split(/\s+/).length;
-  return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
+  const trimmed = content.trim();
+  if (trimmed === '') return 1;
+
+  const cjkChars = (trimmed.match(/\p{Script=Han}/gu) ?? []).length;
+  const nonCjk = trimmed.replace(/\p{Script=Han}/gu, ' ').trim();
+  const words = nonCjk === '' ? 0 : nonCjk.split(/\s+/).length;
+
+  const minutes = cjkChars / CJK_CHARS_PER_MINUTE + words / WORDS_PER_MINUTE;
+  return Math.max(1, Math.round(minutes));
 }
 
 export function slugify(input: string): string {

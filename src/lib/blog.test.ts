@@ -18,7 +18,7 @@ describe('estimateReadingTime', () => {
   it('returns at least 1 minute for empty input', () => {
     expect(estimateReadingTime('')).toBe(1);
   });
-  it('returns 1 for ≤ 200 words', () => {
+  it('returns 1 for ≤ 200 English words', () => {
     const words = Array(150).fill('word').join(' ');
     expect(estimateReadingTime(words)).toBe(1);
   });
@@ -26,9 +26,20 @@ describe('estimateReadingTime', () => {
     const words = Array(400).fill('word').join(' ');
     expect(estimateReadingTime(words)).toBe(2);
   });
-  it('handles long content', () => {
+  it('handles long English content', () => {
     const words = Array(1900).fill('word').join(' ');
     expect(estimateReadingTime(words)).toBe(10);
+  });
+  it('counts Han characters at ~400/min, not as one word per paragraph', () => {
+    // 800 Han chars ÷ 400 = 2 min. With the old word-split logic this would
+    // have been 1 word → 1 min, badly under-counting Chinese content.
+    const han = '生'.repeat(800);
+    expect(estimateReadingTime(han)).toBe(2);
+  });
+  it('combines Han chars and English words additively', () => {
+    // 400 Han (1 min) + 200 English words (1 min) = 2 min
+    const mixed = '生'.repeat(400) + ' ' + Array(200).fill('word').join(' ');
+    expect(estimateReadingTime(mixed)).toBe(2);
   });
 });
 
