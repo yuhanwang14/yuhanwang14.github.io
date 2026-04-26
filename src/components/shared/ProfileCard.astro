@@ -18,6 +18,20 @@ import { site } from '../../data/site';
   <p class="text-muted leading-relaxed mt-1">{site.role}</p>
   <p class="font-mono text-xs text-muted mt-3">{site.location}</p>
 
+  <ul class="font-mono text-xs text-muted mt-4 space-y-1.5">
+    {site.emails.map((e) => (
+      <li class="break-all">
+        <a
+          href={`mailto:${e.address}`}
+          class="hover:text-ink transition-colors duration-200"
+          title={`${e.label} email`}
+        >
+          {e.address}
+        </a>
+      </li>
+    ))}
+  </ul>
+
   <ul class="flex flex-col gap-1 mt-5">
     {site.social.filter((s) => s.label !== 'RSS').map((s) => (
       <li>
