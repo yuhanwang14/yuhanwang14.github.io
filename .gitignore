@@ -21,13 +21,5 @@ dist/
 .ruby-lsp/
 .bundle/
 
-# Jekyll legacy (kept until end of migration; deleted at Task 35)
-_jekyll-legacy/.bundle/
-_jekyll-legacy/_site/
-_jekyll-legacy/.sass-cache/
-_jekyll-legacy/.jekyll-cache/
-_jekyll-legacy/.ruby-lsp/
-_jekyll-legacy/vendor/
-
 # Vitest
 coverage/
