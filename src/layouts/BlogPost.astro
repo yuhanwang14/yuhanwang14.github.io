@@ -6,11 +6,15 @@ import Footer from '../components/shared/Footer.astro';
 import PostMeta from '../components/blog/PostMeta.astro';
 import TagList from '../components/blog/TagList.astro';
 import TableOfContents from '../components/blog/TableOfContents.astro';
+import LangToggle from '../components/blog/LangToggle.astro';
 import { site } from '../data/site';
+import type { Lang } from '../lib/blog';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
-  id: string;
+  baseSlug: string;
+  lang: Lang;
+  available: Partial<Record<Lang, boolean>>;
   title: string;
   description: string;
   publishedAt: Date;
@@ -22,17 +26,20 @@ interface Props {
 }
 
 const {
-  id, title, description,
+  baseSlug, lang, available,
+  title, description,
   publishedAt, updatedAt, tags, coverImage,
   headings, readingTime,
 } = Astro.props;
 
-const canonical = new URL(`/blog/${id}/`, site.url).toString();
+const path = lang === 'zh' ? `/blog/${baseSlug}/zh/` : `/blog/${baseSlug}/`;
+const canonical = new URL(path, site.url).toString();
 const ogImage = coverImage?.src;
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
+  inLanguage: lang === 'zh' ? 'zh-CN' : 'en-US',
   headline: title,
   description,
   author: { '@type': 'Person', name: site.name, url: site.url },
@@ -52,10 +59,16 @@ const jsonLd = {
   publishedAt={publishedAt}
   updatedAt={updatedAt}
   jsonLd={jsonLd}
+  htmlLang={lang === 'zh' ? 'zh-CN' : 'en'}
 >
   <Navbar active="blog" />
   <main class="post-column py-16">
-    <a href="/blog/" class="label-smallcaps text-muted hover:text-ink transition-colors">← Back to Blog</a>
+    <div class="flex items-center justify-between gap-4">
+      <a href="/blog/" class="label-smallcaps text-muted hover:text-ink transition-colors">
+        {lang === 'zh' ? '← 返回博客' : '← Back to Blog'}
+      </a>
+      <LangToggle baseSlug={baseSlug} current={lang} available={available} />
+    </div>
     <header class="mt-6">
       <PostMeta publishedAt={publishedAt} readingTime={readingTime} updatedAt={updatedAt} />
       <h1 class="font-serif font-semibold text-ink text-3xl md:text-4xl leading-tight mt-3">{title}</h1>
@@ -71,7 +84,7 @@ const jsonLd = {
 
     {tags.length > 0 && (
       <footer class="mt-12 pt-8 hairline">
-        <p class="label-smallcaps mb-3">Tags</p>
+        <p class="label-smallcaps mb-3">{lang === 'zh' ? '标签' : 'Tags'}</p>
         <TagList tags={tags} size="md" />
       </footer>
     )}

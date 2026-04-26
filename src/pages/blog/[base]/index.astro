@@ -1,0 +1,71 @@
+---
+// src/pages/blog/[base]/index.astro
+// English version at /blog/<base>/. Renders a "translation pending" page when only ZH exists.
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BlogPost from '../../../layouts/BlogPost.astro';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import LangToggle from '../../../components/blog/LangToggle.astro';
+import { estimateReadingTime, postUrl, groupByBaseSlug } from '../../../lib/blog';
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog', ({ data }) => !data.draft);
+  const groups = groupByBaseSlug(all);
+  return groups.map((g) => ({
+    params: { base: g.baseSlug },
+    props: {
+      en: (g.posts.en ?? null) as CollectionEntry<'blog'> | null,
+      zh: (g.posts.zh ?? null) as CollectionEntry<'blog'> | null,
+    },
+  }));
+}
+
+interface Props {
+  en: CollectionEntry<'blog'> | null;
+  zh: CollectionEntry<'blog'> | null;
+}
+
+const { base } = Astro.params as { base: string };
+const { en, zh } = Astro.props as Props;
+const available = { en: !!en, zh: !!zh };
+
+const rendered = en ? await render(en) : null;
+const Content = rendered?.Content;
+const headings = rendered?.headings ?? [];
+const readingTime = en ? estimateReadingTime(en.body ?? '') : 0;
+---
+
+{en && Content ? (
+  <BlogPost
+    baseSlug={base}
+    lang="en"
+    available={available}
+    title={en.data.title}
+    description={en.data.description}
+    publishedAt={en.data.publishedAt}
+    updatedAt={en.data.updatedAt}
+    tags={en.data.tags}
+    coverImage={en.data.coverImage}
+    headings={headings}
+    readingTime={readingTime}
+  >
+    <Content />
+  </BlogPost>
+) : (
+  <PageLayout
+    title="Translation pending — Yuhan Wang"
+    description="The English version of this post is being prepared."
+    active="blog"
+    eyebrow="Blog · Translation pending"
+    heading={zh?.data.title ?? 'Translation pending'}
+    intro="The English version of this essay is still being written."
+  >
+    <div class="mt-4">
+      <LangToggle baseSlug={base} current="en" available={available} />
+    </div>
+    <p class="text-muted mt-8 leading-relaxed">
+      I write each language version separately rather than translating, so they can take a while to converge. Read the
+      {' '}<a href={postUrl(base, 'zh')} class="text-accent underline underline-offset-4">Chinese version</a>, or
+      {' '}<a href="/blog/" class="text-accent underline underline-offset-4">browse other posts</a>.
+    </p>
+  </PageLayout>
+)}

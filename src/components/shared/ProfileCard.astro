@@ -1,5 +1,6 @@
 ---
 // src/components/shared/ProfileCard.astro
+// Used as the left sidebar by PageLayout. Compact, stacks vertically.
 import { Image } from 'astro:assets';
 import yuhanPhoto from '../../assets/images/yuhan.png';
 import { site } from '../../data/site';
@@ -7,40 +8,40 @@ import { site } from '../../data/site';
 const scholarShieldUrl = `https://img.shields.io/endpoint?style=for-the-badge&color=16569E&url=https://cdn.jsdelivr.net/gh/${site.scholarShieldRepoBranch}/${site.scholarShieldFile}`;
 ---
 
-<aside class="hairline pt-8 mt-12 grid grid-cols-1 md:grid-cols-[80px_1fr] gap-6 items-start">
+<aside class="text-sm">
   <Image
     src={yuhanPhoto}
     alt={`Photo of ${site.name}`}
-    width={80}
-    height={80}
-    class="rounded-full border border-hairline w-20 h-20 object-cover"
+    width={140}
+    height={140}
+    class="rounded-full border border-hairline w-32 h-32 md:w-36 md:h-36 object-cover mb-4"
   />
-  <div>
-    <p class="font-serif font-semibold text-ink text-lg">{site.name}</p>
-    <p class="text-muted text-sm leading-relaxed mt-1">{site.role}</p>
-    <p class="font-mono text-xs text-muted mt-2">{site.location}</p>
-    <div class="mt-4">
-      <img
-        src={scholarShieldUrl}
-        alt="Google Scholar citations"
-        loading="lazy"
-        decoding="async"
-        height="20"
-      />
-    </div>
-    <ul class="flex flex-wrap gap-x-4 gap-y-1 mt-4">
-      {site.social.filter((s) => s.label !== 'RSS').map((s) => (
-        <li>
-          <a
-            href={s.href}
-            class="label-smallcaps hover:text-ink transition-colors duration-200"
-            target={s.href.startsWith('http') ? '_blank' : undefined}
-            rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-          >
-            {s.label}
-          </a>
-        </li>
-      ))}
-    </ul>
+  <p class="font-serif font-semibold text-ink text-lg leading-tight">{site.name}</p>
+  <p class="text-muted leading-relaxed mt-1">{site.role}</p>
+  <p class="font-mono text-xs text-muted mt-3">{site.location}</p>
+
+  <div class="mt-4">
+    <img
+      src={scholarShieldUrl}
+      alt="Google Scholar citations"
+      loading="lazy"
+      decoding="async"
+      height="20"
+    />
   </div>
+
+  <ul class="flex flex-col gap-1 mt-4">
+    {site.social.filter((s) => s.label !== 'RSS').map((s) => (
+      <li>
+        <a
+          href={s.href}
+          class="label-smallcaps hover:text-ink transition-colors duration-200"
+          target={s.href.startsWith('http') ? '_blank' : undefined}
+          rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+        >
+          {s.label}
+        </a>
+      </li>
+    ))}
+  </ul>
 </aside>

@@ -1,0 +1,41 @@
+---
+// src/components/blog/LangToggle.astro
+import type { Lang } from '../../lib/blog';
+import { LANGS, LANG_LABELS, postUrl } from '../../lib/blog';
+
+interface Props {
+  baseSlug: string;
+  current: Lang;
+  /** Which translations exist; current language is implied to exist. */
+  available: Partial<Record<Lang, boolean>>;
+}
+const { baseSlug, current, available } = Astro.props;
+---
+
+<div class="inline-flex items-center gap-2 text-xs">
+  {LANGS.map((lang, i) => {
+    const isCurrent = lang === current;
+    const exists = !!available[lang] || isCurrent;
+    const href = postUrl(baseSlug, lang);
+    return (
+      <>
+        {i > 0 && <span class="text-hairline">·</span>}
+        <a
+          href={href}
+          class:list={[
+            'label-smallcaps transition-colors duration-200',
+            isCurrent
+              ? 'text-accent'
+              : exists
+                ? 'text-muted hover:text-ink'
+                : 'text-muted/60 italic',
+          ]}
+          title={exists ? `Read in ${LANG_LABELS[lang]}` : `${LANG_LABELS[lang]} version not yet available`}
+          aria-current={isCurrent ? 'page' : undefined}
+        >
+          {LANG_LABELS[lang]}
+        </a>
+      </>
+    );
+  })}
+</div>

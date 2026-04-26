@@ -1,0 +1,71 @@
+---
+// src/pages/blog/[base]/zh.astro
+// Chinese version at /blog/<base>/zh/. Renders a "翻译进行中" page when only EN exists.
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BlogPost from '../../../layouts/BlogPost.astro';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import LangToggle from '../../../components/blog/LangToggle.astro';
+import { estimateReadingTime, postUrl, groupByBaseSlug } from '../../../lib/blog';
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog', ({ data }) => !data.draft);
+  const groups = groupByBaseSlug(all);
+  return groups.map((g) => ({
+    params: { base: g.baseSlug },
+    props: {
+      en: (g.posts.en ?? null) as CollectionEntry<'blog'> | null,
+      zh: (g.posts.zh ?? null) as CollectionEntry<'blog'> | null,
+    },
+  }));
+}
+
+interface Props {
+  en: CollectionEntry<'blog'> | null;
+  zh: CollectionEntry<'blog'> | null;
+}
+
+const { base } = Astro.params as { base: string };
+const { en, zh } = Astro.props as Props;
+const available = { en: !!en, zh: !!zh };
+
+const rendered = zh ? await render(zh) : null;
+const Content = rendered?.Content;
+const headings = rendered?.headings ?? [];
+const readingTime = zh ? estimateReadingTime(zh.body ?? '') : 0;
+---
+
+{zh && Content ? (
+  <BlogPost
+    baseSlug={base}
+    lang="zh"
+    available={available}
+    title={zh.data.title}
+    description={zh.data.description}
+    publishedAt={zh.data.publishedAt}
+    updatedAt={zh.data.updatedAt}
+    tags={zh.data.tags}
+    coverImage={zh.data.coverImage}
+    headings={headings}
+    readingTime={readingTime}
+  >
+    <Content />
+  </BlogPost>
+) : (
+  <PageLayout
+    title="中文版尚未发布 — Yuhan Wang"
+    description="这篇文章的中文版本正在准备中。"
+    active="blog"
+    eyebrow="博客 · 中文版尚未发布"
+    heading={en?.data.title ?? '中文版尚未发布'}
+    intro="这篇随笔的中文版本仍在写作中。"
+  >
+    <div class="mt-4">
+      <LangToggle baseSlug={base} current="zh" available={available} />
+    </div>
+    <p class="text-muted mt-8 leading-relaxed">
+      我写中英两版时不直接互译，所以两边落地的时间常常错开。可以先看
+      {' '}<a href={postUrl(base, 'en')} class="text-accent underline underline-offset-4">英文版</a>，或
+      {' '}<a href="/blog/" class="text-accent underline underline-offset-4">浏览其他文章</a>。
+    </p>
+  </PageLayout>
+)}

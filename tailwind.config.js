@@ -18,7 +18,7 @@ export default {
       },
       maxWidth: {
         'reading': '720px',
-        'post':    '680px',
+        'post':    '880px',
       },
     },
   },

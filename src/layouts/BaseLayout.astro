@@ -2,6 +2,7 @@
 // src/layouts/BaseLayout.astro
 import '../styles/global.css';
 import SEO from '../components/shared/SEO.astro';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title: string;
@@ -12,22 +13,36 @@ interface Props {
   publishedAt?: Date;
   updatedAt?: Date;
   jsonLd?: Record<string, unknown>;
+  htmlLang?: string;
 }
-const props = Astro.props;
+const { htmlLang = 'en', ...seoProps } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Theme hydration: must run BEFORE first paint to avoid FOUC. Inline + sync. -->
+    <script is:inline>
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') {
+          document.documentElement.dataset.theme = t;
+        }
+      } catch {
+        /* storage unavailable; fall through to prefers-color-scheme */
+      }
+    </script>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="alternate" type="application/rss+xml" title="Yuhan Wang — Blog" href="/rss.xml" />
-    <SEO {...props} />
+    <SEO {...seoProps} />
+    <!-- View Transitions: smooth EN ↔ ZH switch and inter-page navigation. -->
+    <ClientRouter fallback="animate" />
   </head>
   <body class="min-h-screen fade-in-on-load">
     <slot />

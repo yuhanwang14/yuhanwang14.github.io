@@ -1,0 +1,41 @@
+---
+// src/components/shared/ThemeToggle.astro
+// 3-way theme cycle: system → light → dark → system → ...
+// State stored in localStorage under "theme" (values: "light" | "dark"; missing = follow system).
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  class="text-muted hover:text-ink transition-colors duration-200 inline-flex items-center justify-center w-7 h-7 rounded-full border border-hairline hover:border-accent/40"
+  aria-label="Toggle color theme"
+  title="Toggle theme"
+>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 3 V21 A9 9 0 0 0 12 3 Z" fill="currentColor" stroke="none" />
+  </svg>
+</button>
+
+<script>
+  type Theme = 'light' | 'dark';
+  const KEY = 'theme';
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+
+  function effective(): Theme {
+    const t = root.dataset.theme;
+    if (t === 'light' || t === 'dark') return t;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  btn?.addEventListener('click', () => {
+    const next: Theme = effective() === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem(KEY, next);
+    } catch {
+      /* storage may be disabled (private mode); the dataset.theme set above still works for the session */
+    }
+  });
+</script>

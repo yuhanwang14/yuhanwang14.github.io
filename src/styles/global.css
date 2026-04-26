@@ -32,8 +32,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Theme tokens (RGB triplets so Tailwind <alpha-value> works: bg-accent/20 etc).
+ *
+ * Resolution order:
+ *   1. <html data-theme="light|dark">  — explicit user override (persisted in localStorage)
+ *   2. @media (prefers-color-scheme)   — system preference (default)
+ *   3. :root                           — hard fallback: light
+ */
 :root {
-  /* RGB triplets so Tailwind's <alpha-value> placeholder works (bg-accent/20 etc) */
   --bg:        250 247 241;   /* warm cream      #FAF7F1 */
   --bg-alt:    241 237 227;   /* code background #F1EDE3 */
   --ink:        27  26  23;   /* deep ink        #1B1A17 */
@@ -43,7 +50,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg:         26  23  20;  /* warm graphite #1A1714 */
     --bg-alt:     36  32  27;  /*               #24201B */
     --ink:       236 231 218;  /* parchment     #ECE7DA */
@@ -51,6 +58,15 @@
     --hairline:   58  53  46;  /*               #3A352E */
     --accent:    201 125 133;  /* dusty rose    #C97D85 */
   }
+}
+
+:root[data-theme="dark"] {
+  --bg:         26  23  20;
+  --bg-alt:     36  32  27;
+  --ink:       236 231 218;
+  --muted:     154 147 136;
+  --hairline:   58  53  46;
+  --accent:    201 125 133;
 }
 
 @layer base {

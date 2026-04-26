@@ -1,6 +1,7 @@
 ---
 // src/components/shared/Navbar.astro
 import { site } from '../../data/site';
+import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
   active?: 'home' | 'research' | 'industry' | 'skills' | 'blog';
@@ -16,26 +17,29 @@ const links: { label: string; href: string; key: NonNullable<Props['active']> }[
 ---
 
 <nav class="border-b border-hairline">
-  <div class="max-w-reading mx-auto px-6 flex items-center justify-between h-14">
+  <div class="max-w-[1100px] mx-auto px-6 flex items-center justify-between h-14">
     <a href="/" class="font-serif font-semibold text-ink hover:text-accent transition-colors duration-200">
       {site.shortName}
     </a>
-    <ul class="flex items-center gap-6">
-      {links.map((link) => (
-        <li>
-          <a
-            href={link.href}
-            class:list={[
-              'label-smallcaps transition-colors duration-200',
-              link.key === active
-                ? 'text-accent border-b-2 border-accent pb-1 -mb-1'
-                : 'hover:text-ink',
-            ]}
-          >
-            {link.label}
-          </a>
-        </li>
-      ))}
-    </ul>
+    <div class="flex items-center gap-6">
+      <ul class="flex items-center gap-6">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={[
+                'label-smallcaps transition-colors duration-200',
+                link.key === active
+                  ? 'text-accent border-b-2 border-accent pb-1 -mb-1'
+                  : 'hover:text-ink',
+              ]}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <ThemeToggle />
+    </div>
   </div>
 </nav>

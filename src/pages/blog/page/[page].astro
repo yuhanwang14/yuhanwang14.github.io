@@ -1,0 +1,65 @@
+---
+// src/pages/blog/page/[page].astro — paginated listing (page 2+).
+import { getCollection, type CollectionEntry } from 'astro:content';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import PostCard from '../../../components/blog/PostCard.astro';
+import Pagination from '../../../components/blog/Pagination.astro';
+import { estimateReadingTime, groupByBaseSlug, parsePostId, type PostGroup } from '../../../lib/blog';
+
+type Group = PostGroup<CollectionEntry<'blog'>>;
+
+export async function getStaticPaths() {
+  const POSTS_PER_PAGE = 10;
+  const all = await getCollection('blog', ({ data }) => !data.draft);
+  const groups = groupByBaseSlug(all).filter((g) => !g.pinned);
+  const totalPages = Math.ceil(groups.length / POSTS_PER_PAGE);
+
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) => {
+    const currentPage = i + 2;
+    return {
+      params: { page: String(currentPage) },
+      props: {
+        groups: groups.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE),
+        currentPage,
+        totalPages,
+      },
+    };
+  });
+}
+
+interface Props {
+  groups: Group[];
+  currentPage: number;
+  totalPages: number;
+}
+const { groups, currentPage, totalPages } = Astro.props as Props;
+
+const availableFor = (g: Group) => ({
+  en: !!g.posts.en,
+  zh: !!g.posts.zh,
+});
+---
+
+<PageLayout
+  title={`Blog — Page ${currentPage} — Yuhan Wang`}
+  description="Essays on cognition, AI, agentic systems, and building Engram."
+  active="blog"
+  eyebrow="Blog"
+  heading="Notes & Essays"
+>
+  <section>
+    <p class="label-smallcaps mb-2">Page {currentPage}</p>
+    <div class="space-y-0">
+      {groups.map((g) => (
+        <PostCard
+          post={g.primary as CollectionEntry<'blog'>}
+          baseSlug={g.baseSlug}
+          primaryLang={parsePostId(g.primary.id).lang}
+          available={availableFor(g)}
+          readingTime={estimateReadingTime(((g.primary as CollectionEntry<'blog'>).body) ?? '')}
+        />
+      ))}
+    </div>
+  </section>
+  <Pagination currentPage={currentPage} totalPages={totalPages} />
+</PageLayout>

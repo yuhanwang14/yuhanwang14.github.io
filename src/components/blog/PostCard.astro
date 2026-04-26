@@ -3,18 +3,32 @@
 import type { CollectionEntry } from 'astro:content';
 import PostMeta from './PostMeta.astro';
 import TagList from './TagList.astro';
+import { LANG_LABELS, type Lang } from '../../lib/blog';
 
 interface Props {
   post: CollectionEntry<'blog'>;
+  baseSlug: string;
+  primaryLang: Lang;
+  /** Languages this post group has versions for. */
+  available: Partial<Record<Lang, boolean>>;
   readingTime: number;
 }
-const { post, readingTime } = Astro.props;
+const { post, baseSlug, primaryLang, available, readingTime } = Astro.props;
 const { title, description, publishedAt, tags } = post.data;
+const href = primaryLang === 'zh' ? `/blog/${baseSlug}/zh/` : `/blog/${baseSlug}/`;
+const langs = (Object.keys(available) as Lang[]).filter((l) => available[l]);
 ---
 
 <article class="hairline pt-8 pb-2">
-  <a href={`/blog/${post.id}/`} class="group block">
-    <PostMeta publishedAt={publishedAt} readingTime={readingTime} />
+  <a href={href} class="group block">
+    <div class="flex items-center gap-3">
+      <PostMeta publishedAt={publishedAt} readingTime={readingTime} />
+      {langs.length > 1 && (
+        <span class="font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
+          {langs.map((l) => LANG_LABELS[l]).join(' · ')}
+        </span>
+      )}
+    </div>
     <h2 class="font-serif font-semibold text-ink text-2xl leading-snug mt-2 group-hover:text-accent transition-colors">
       {title}
     </h2>

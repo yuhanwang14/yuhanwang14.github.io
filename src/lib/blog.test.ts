@@ -1,6 +1,6 @@
 // src/lib/blog.test.ts
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatDateShort, estimateReadingTime, slugify } from './blog';
+import { formatDate, formatDateShort, estimateReadingTime, slugify, parsePostId, postUrl } from './blog';
 
 describe('formatDate', () => {
   it('formats a date as "Mar 25, 2026"', () => {
@@ -41,5 +41,41 @@ describe('slugify', () => {
   });
   it('collapses repeated hyphens and trims edges', () => {
     expect(slugify('  --AI--Cognition--  ')).toBe('ai-cognition');
+  });
+});
+
+describe('parsePostId', () => {
+  it('extracts language and base slug from .en suffix', () => {
+    expect(parsePostId('generation-is-not-creation.en')).toEqual({
+      baseSlug: 'generation-is-not-creation',
+      lang: 'en',
+    });
+  });
+  it('extracts language and base slug from .zh suffix', () => {
+    expect(parsePostId('generation-is-not-creation.zh')).toEqual({
+      baseSlug: 'generation-is-not-creation',
+      lang: 'zh',
+    });
+  });
+  it('defaults to en when no language suffix is present', () => {
+    expect(parsePostId('legacy-post')).toEqual({
+      baseSlug: 'legacy-post',
+      lang: 'en',
+    });
+  });
+  it('treats unrecognized trailing segment as part of slug', () => {
+    expect(parsePostId('post.draft')).toEqual({
+      baseSlug: 'post.draft',
+      lang: 'en',
+    });
+  });
+});
+
+describe('postUrl', () => {
+  it('English posts go to /blog/<slug>/', () => {
+    expect(postUrl('hello', 'en')).toBe('/blog/hello/');
+  });
+  it('Chinese posts go to /blog/<slug>/zh/', () => {
+    expect(postUrl('hello', 'zh')).toBe('/blog/hello/zh/');
   });
 });
