@@ -1,0 +1,28 @@
+---
+// src/pages/skills.astro
+import PageLayout from '../layouts/PageLayout.astro';
+import { skills } from '../data/skills';
+---
+
+<PageLayout
+  title="Skills — Yuhan Wang"
+  description="Programming languages, ML tools, frameworks."
+  active="skills"
+  eyebrow="Skills"
+  heading="Skills"
+>
+  <dl class="space-y-10">
+    {skills.map((g) => (
+      <div class="hairline pt-6 grid grid-cols-1 md:grid-cols-[200px_1fr] gap-x-8 gap-y-2">
+        <dt class="label-smallcaps">{g.name}</dt>
+        <dd class="text-ink leading-relaxed">
+          {g.items.map((it, i) => (
+            <span>
+              <span class="font-mono text-[0.95em]">{it}</span>{i < g.items.length - 1 && <span class="text-muted">  ·  </span>}
+            </span>
+          ))}
+        </dd>
+      </div>
+    ))}
+  </dl>
+</PageLayout>

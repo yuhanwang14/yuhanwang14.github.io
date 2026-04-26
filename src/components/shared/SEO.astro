@@ -1,0 +1,55 @@
+---
+// src/components/shared/SEO.astro
+import { site } from '../../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonical?: string;
+  type?: 'website' | 'article';
+  publishedAt?: Date;
+  updatedAt?: Date;
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description = site.description,
+  ogImage,
+  canonical = Astro.url.href,
+  type = 'website',
+  publishedAt,
+  updatedAt,
+  jsonLd,
+} = Astro.props;
+
+const fullOgImage = ogImage ? new URL(ogImage, site.url).toString() : undefined;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta name="theme-color" content="#FAF7F1" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#1A1714" media="(prefers-color-scheme: dark)" />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content={site.name} />
+{fullOgImage && <meta property="og:image" content={fullOgImage} />}
+{publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
+{updatedAt    && <meta property="article:modified_time"  content={updatedAt.toISOString()} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:creator" content={site.twitterHandle} />
+{fullOgImage && <meta name="twitter:image" content={fullOgImage} />}
+
+{jsonLd && (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}

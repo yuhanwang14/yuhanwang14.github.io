@@ -1,0 +1,51 @@
+---
+// src/components/blog/TableOfContents.astro
+interface Heading { depth: number; slug: string; text: string }
+
+interface Props {
+  headings: Heading[];
+}
+const { headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2);
+---
+
+{items.length >= 3 && (
+  <aside class="my-10 py-5 border-y border-hairline" id="toc">
+    <p class="label-smallcaps mb-3">Contents</p>
+    <ol class="space-y-1.5 list-none pl-0">
+      {items.map((item, i) => (
+        <li class="flex gap-3 text-sm">
+          <span class="font-mono text-muted shrink-0 w-6 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+          <a href={`#${item.slug}`} data-toc-slug={item.slug} class="toc-link text-muted hover:text-ink transition-colors">
+            {item.text}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </aside>
+)}
+
+<script>
+  type TocLink = HTMLAnchorElement & { dataset: { tocSlug: string } };
+  const links = Array.from(document.querySelectorAll<TocLink>('.toc-link'));
+  if (links.length > 0) {
+    const targets = links
+      .map((link) => document.getElementById(link.dataset.tocSlug))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          links.forEach((l) => l.classList.remove('text-accent'));
+          const id = entry.target.id;
+          const active = links.find((l) => l.dataset.tocSlug === id);
+          active?.classList.add('text-accent');
+        });
+      },
+      { rootMargin: '-80px 0px -60% 0px', threshold: 0 },
+    );
+
+    targets.forEach((t) => observer.observe(t));
+  }
+</script>

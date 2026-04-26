@@ -1,0 +1,72 @@
+---
+// src/pages/blog/index.astro
+import { getCollection } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import PostCard from '../../components/blog/PostCard.astro';
+import Pagination from '../../components/blog/Pagination.astro';
+import { estimateReadingTime, groupByBaseSlug, parsePostId } from '../../lib/blog';
+
+const POSTS_PER_PAGE = 10;
+
+const all = await getCollection('blog', ({ data }) => !data.draft);
+const groups = groupByBaseSlug(all);
+
+const pinnedGroups = groups.filter((g) => g.pinned).slice(0, 3);
+const restGroups = groups.filter((g) => !g.pinned);
+const page1 = restGroups.slice(0, POSTS_PER_PAGE);
+const totalPages = Math.max(1, Math.ceil(restGroups.length / POSTS_PER_PAGE));
+
+const availableFor = (g: (typeof groups)[number]) => ({
+  en: !!g.posts.en,
+  zh: !!g.posts.zh,
+});
+---
+
+<PageLayout
+  title="Blog — Yuhan Wang"
+  description="Essays on cognition, AI, agentic systems, and building Engram."
+  active="blog"
+  eyebrow="Blog"
+  heading="Notes & Essays"
+  intro="Long-form thinking on cognition, AI, agentic systems, and what I am building."
+>
+  {pinnedGroups.length > 0 && (
+    <section>
+      <p class="label-smallcaps mb-2">Pinned</p>
+      <div class="space-y-0">
+        {pinnedGroups.map((g) => (
+          <PostCard
+            post={g.primary}
+            baseSlug={g.baseSlug}
+            primaryLang={parsePostId(g.primary.id).lang}
+            available={availableFor(g)}
+            readingTime={estimateReadingTime(g.primary.body ?? '')}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  {page1.length > 0 && (
+    <section class="mt-16">
+      <p class="label-smallcaps mb-2">Latest</p>
+      <div class="space-y-0">
+        {page1.map((g) => (
+          <PostCard
+            post={g.primary}
+            baseSlug={g.baseSlug}
+            primaryLang={parsePostId(g.primary.id).lang}
+            available={availableFor(g)}
+            readingTime={estimateReadingTime(g.primary.body ?? '')}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  {(pinnedGroups.length + page1.length) === 0 && (
+    <p class="text-muted">No posts yet. Check back soon.</p>
+  )}
+
+  <Pagination currentPage={1} totalPages={totalPages} />
+</PageLayout>

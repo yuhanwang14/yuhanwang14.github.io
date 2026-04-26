@@ -1,0 +1,26 @@
+---
+// src/components/shared/Footer.astro
+import { site } from '../../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-hairline">
+  <div class="max-w-reading mx-auto px-6 py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-sm text-muted">
+    <p class="font-mono">© {year} {site.name}</p>
+    <ul class="flex flex-wrap items-center gap-x-5 gap-y-2">
+      {site.social.map((s) => (
+        <li>
+          <a
+            href={s.href}
+            class="label-smallcaps hover:text-ink transition-colors duration-200"
+            target={s.href.startsWith('http') ? '_blank' : undefined}
+            rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          >
+            {s.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</footer>

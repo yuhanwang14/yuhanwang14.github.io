@@ -1,0 +1,37 @@
+---
+// src/pages/research.astro
+import PageLayout from '../layouts/PageLayout.astro';
+import { research, type ResearchItem } from '../data/research';
+
+function dateRange(item: ResearchItem): string {
+  const fmt = (s: string) => {
+    if (s === 'present') return 'Present';
+    const [year, month] = s.split('-');
+    const m = new Date(`${year}-${month}-01T00:00:00Z`).toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
+    return `${m} ${year}`;
+  };
+  return `${fmt(item.startDate)} – ${fmt(item.endDate)}`;
+}
+---
+
+<PageLayout
+  title="Research — Yuhan Wang"
+  description="Research positions at MIT Media Lab, Imperial College, and UESTC."
+  active="research"
+  eyebrow="Research"
+  heading="Research Experience"
+>
+  <ol class="space-y-12">
+    {research.map((r) => (
+      <li class="hairline pt-8">
+        <p class="label-smallcaps mb-2">{dateRange(r)}</p>
+        <h2 class="font-serif font-semibold text-ink text-xl">{r.org}</h2>
+        {r.group && <p class="text-muted text-sm">{r.group}</p>}
+        <p class="text-muted italic mt-1 text-sm">{r.role}</p>
+        <ul class="mt-4 space-y-2 list-disc pl-6">
+          {r.bullets.map((b) => <li class="text-ink leading-relaxed" set:html={b} />)}
+        </ul>
+      </li>
+    ))}
+  </ol>
+</PageLayout>

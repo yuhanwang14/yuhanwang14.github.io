@@ -1,4 +1,25 @@
-_site/
-push.sh
+# Astro
+node_modules/
+dist/
+.astro/
+
+# Environment
+.env
+.env.production
+.env.local
+
+# OS
 .DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Local tooling artifacts
 .gstack/
+.claude/
+.ruby-lsp/
+.bundle/
+
+# Vitest
+coverage/

@@ -1,0 +1,23 @@
+---
+// src/components/blog/PostMeta.astro
+import { formatDate } from '../../lib/blog';
+
+interface Props {
+  publishedAt: Date;
+  readingTime: number;
+  updatedAt?: Date;
+}
+const { publishedAt, readingTime, updatedAt } = Astro.props;
+---
+
+<p class="font-mono text-xs text-muted uppercase tracking-[0.08em]">
+  <time datetime={publishedAt.toISOString()}>{formatDate(publishedAt)}</time>
+  <span class="mx-2">·</span>
+  <span>{readingTime} min read</span>
+  {updatedAt && (
+    <span>
+      <span class="mx-2">·</span>
+      <span>Updated <time datetime={updatedAt.toISOString()}>{formatDate(updatedAt)}</time></span>
+    </span>
+  )}
+</p>

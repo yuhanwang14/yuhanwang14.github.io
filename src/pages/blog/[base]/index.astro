@@ -1,0 +1,91 @@
+---
+// src/pages/blog/[base]/index.astro
+// English version at /blog/<base>/. Renders a "translation pending" page when only ZH exists.
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BlogPost from '../../../layouts/BlogPost.astro';
+import Navbar from '../../../components/shared/Navbar.astro';
+import Footer from '../../../components/shared/Footer.astro';
+import LangToggle from '../../../components/blog/LangToggle.astro';
+import { estimateReadingTime, postUrl, groupByBaseSlug } from '../../../lib/blog';
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog', ({ data }) => !data.draft);
+  const groups = groupByBaseSlug(all);
+  return groups.map((g) => ({
+    params: { base: g.baseSlug },
+    props: {
+      en: (g.posts.en ?? null) as CollectionEntry<'blog'> | null,
+      zh: (g.posts.zh ?? null) as CollectionEntry<'blog'> | null,
+    },
+  }));
+}
+
+interface Props {
+  en: CollectionEntry<'blog'> | null;
+  zh: CollectionEntry<'blog'> | null;
+}
+
+const { base } = Astro.params as { base: string };
+const { en, zh } = Astro.props as Props;
+const available = { en: !!en, zh: !!zh };
+
+const rendered = en ? await render(en) : null;
+const Content = rendered?.Content;
+const headings = rendered?.headings ?? [];
+const readingTime = en ? estimateReadingTime(en.body ?? '') : 0;
+---
+
+{en && Content ? (
+  <BlogPost
+    baseSlug={base}
+    lang="en"
+    available={available}
+    title={en.data.title}
+    description={en.data.description}
+    publishedAt={en.data.publishedAt}
+    updatedAt={en.data.updatedAt}
+    tags={en.data.tags}
+    coverImage={en.data.coverImage}
+    headings={headings}
+    readingTime={readingTime}
+  >
+    <Content />
+  </BlogPost>
+) : (
+  <BaseLayout
+    title="Translation pending — Yuhan Wang"
+    description="The English version of this post is being prepared."
+    htmlLang="en"
+  >
+    <Navbar active="blog" />
+    <main class="post-column py-16">
+      <div class="flex items-center justify-between gap-4">
+        <a href="/blog/" class="label-smallcaps text-muted hover:text-ink transition-colors">
+          ← Back to Blog
+        </a>
+        <LangToggle baseSlug={base} current="en" available={available} />
+      </div>
+      <header class="mt-6">
+        <p class="label-smallcaps text-muted">Translation pending</p>
+        <h1 class="font-serif font-semibold text-ink text-3xl md:text-4xl leading-tight mt-3">
+          {zh?.data.title ?? 'Translation pending'}
+        </h1>
+        <p class="text-muted text-lg italic leading-relaxed mt-3">
+          The English version of this essay is still being written.
+        </p>
+        <hr class="hairline mt-6" />
+      </header>
+      <article class="prose-academic">
+        <p>
+          I write each language version separately rather than translating, so they can take a while to converge.
+        </p>
+        <p>
+          Read the <a href={postUrl(base, 'zh')}>Chinese version</a>, or
+          {' '}<a href="/blog/">browse other posts</a>.
+        </p>
+      </article>
+    </main>
+    <Footer />
+  </BaseLayout>
+)}

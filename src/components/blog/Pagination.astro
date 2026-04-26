@@ -1,0 +1,27 @@
+---
+// src/components/blog/Pagination.astro
+interface Props {
+  currentPage: number;
+  totalPages: number;
+}
+const { currentPage, totalPages } = Astro.props;
+---
+
+{totalPages > 1 && (
+  <nav class="flex justify-center gap-2 mt-12" aria-label="Pagination">
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+      <a
+        href={num === 1 ? '/blog/' : `/blog/page/${num}/`}
+        aria-current={num === currentPage ? 'page' : undefined}
+        class:list={[
+          'font-mono text-sm w-9 h-9 inline-flex items-center justify-center rounded transition-colors',
+          num === currentPage
+            ? 'bg-accent/15 text-accent'
+            : 'text-muted border border-hairline hover:text-ink hover:border-accent/40',
+        ]}
+      >
+        {num}
+      </a>
+    ))}
+  </nav>
+)}

@@ -1,0 +1,91 @@
+---
+// src/pages/blog/[base]/zh.astro
+// Chinese version at /blog/<base>/zh/. Renders a "中文版尚未发布" page when only EN exists.
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BlogPost from '../../../layouts/BlogPost.astro';
+import Navbar from '../../../components/shared/Navbar.astro';
+import Footer from '../../../components/shared/Footer.astro';
+import LangToggle from '../../../components/blog/LangToggle.astro';
+import { estimateReadingTime, postUrl, groupByBaseSlug } from '../../../lib/blog';
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog', ({ data }) => !data.draft);
+  const groups = groupByBaseSlug(all);
+  return groups.map((g) => ({
+    params: { base: g.baseSlug },
+    props: {
+      en: (g.posts.en ?? null) as CollectionEntry<'blog'> | null,
+      zh: (g.posts.zh ?? null) as CollectionEntry<'blog'> | null,
+    },
+  }));
+}
+
+interface Props {
+  en: CollectionEntry<'blog'> | null;
+  zh: CollectionEntry<'blog'> | null;
+}
+
+const { base } = Astro.params as { base: string };
+const { en, zh } = Astro.props as Props;
+const available = { en: !!en, zh: !!zh };
+
+const rendered = zh ? await render(zh) : null;
+const Content = rendered?.Content;
+const headings = rendered?.headings ?? [];
+const readingTime = zh ? estimateReadingTime(zh.body ?? '') : 0;
+---
+
+{zh && Content ? (
+  <BlogPost
+    baseSlug={base}
+    lang="zh"
+    available={available}
+    title={zh.data.title}
+    description={zh.data.description}
+    publishedAt={zh.data.publishedAt}
+    updatedAt={zh.data.updatedAt}
+    tags={zh.data.tags}
+    coverImage={zh.data.coverImage}
+    headings={headings}
+    readingTime={readingTime}
+  >
+    <Content />
+  </BlogPost>
+) : (
+  <BaseLayout
+    title="中文版尚未发布 — Yuhan Wang"
+    description="这篇文章的中文版本正在准备中。"
+    htmlLang="zh-CN"
+  >
+    <Navbar active="blog" />
+    <main class="post-column py-16">
+      <div class="flex items-center justify-between gap-4">
+        <a href="/blog/" class="label-smallcaps text-muted hover:text-ink transition-colors">
+          ← 返回博客
+        </a>
+        <LangToggle baseSlug={base} current="zh" available={available} />
+      </div>
+      <header class="mt-6">
+        <p class="label-smallcaps text-muted">中文版尚未发布</p>
+        <h1 class="font-serif font-semibold text-ink text-3xl md:text-4xl leading-tight mt-3">
+          {en?.data.title ?? '中文版尚未发布'}
+        </h1>
+        <p class="text-muted text-lg italic leading-relaxed mt-3">
+          这篇随笔的中文版本仍在写作中。
+        </p>
+        <hr class="hairline mt-6" />
+      </header>
+      <article class="prose-academic">
+        <p>
+          我写中英两版时不直接互译，所以两边落地的时间常常错开。
+        </p>
+        <p>
+          可以先看 <a href={postUrl(base, 'en')}>英文版</a>，或
+          {' '}<a href="/blog/">浏览其他文章</a>。
+        </p>
+      </article>
+    </main>
+    <Footer />
+  </BaseLayout>
+)}

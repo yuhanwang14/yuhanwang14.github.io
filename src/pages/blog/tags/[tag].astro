@@ -1,0 +1,68 @@
+---
+// src/pages/blog/tags/[tag].astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import PostCard from '../../../components/blog/PostCard.astro';
+import { estimateReadingTime, groupByBaseSlug, parsePostId, slugify, type PostGroup } from '../../../lib/blog';
+
+type Group = PostGroup<CollectionEntry<'blog'>>;
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog', ({ data }) => !data.draft);
+  const groups = groupByBaseSlug(all);
+
+  // Aggregate by tag — tags come from primary post's frontmatter.
+  const tagMap = new Map<string, { displayName: string; groups: Group[] }>();
+  for (const g of groups) {
+    for (const tag of g.primary.data.tags) {
+      const key = slugify(tag);
+      const entry = tagMap.get(key);
+      if (entry) {
+        entry.groups.push(g);
+      } else {
+        tagMap.set(key, { displayName: tag, groups: [g] });
+      }
+    }
+  }
+
+  return Array.from(tagMap.entries()).map(([slug, { displayName, groups: gs }]) => ({
+    params: { tag: slug },
+    props: { displayName, groups: gs },
+  }));
+}
+
+interface Props {
+  displayName: string;
+  groups: Group[];
+}
+const { displayName, groups } = Astro.props as Props;
+
+const availableFor = (g: Group) => ({
+  en: !!g.posts.en,
+  zh: !!g.posts.zh,
+});
+---
+
+<PageLayout
+  title={`Posts tagged ${displayName} — Yuhan Wang`}
+  description={`All blog posts tagged with ${displayName}.`}
+  active="blog"
+  eyebrow="Tag"
+  heading={displayName}
+  intro={`${groups.length} ${groups.length === 1 ? 'post' : 'posts'}`}
+>
+  <div class="space-y-0">
+    {groups.map((g) => (
+      <PostCard
+        post={g.primary as CollectionEntry<'blog'>}
+        baseSlug={g.baseSlug}
+        primaryLang={parsePostId(g.primary.id).lang}
+        available={availableFor(g)}
+        readingTime={estimateReadingTime(((g.primary as CollectionEntry<'blog'>).body) ?? '')}
+      />
+    ))}
+  </div>
+  <p class="mt-12">
+    <a href="/blog/" class="label-smallcaps hover:text-ink transition-colors">← All posts</a>
+  </p>
+</PageLayout>

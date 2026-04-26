@@ -1,0 +1,177 @@
+/* Self-hosted fonts */
+@font-face {
+  font-family: 'Newsreader';
+  src: url('/fonts/Newsreader-Variable.woff2') format('woff2-variations');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Newsreader';
+  src: url('/fonts/Newsreader-Variable-Italic.woff2') format('woff2-variations');
+  font-weight: 200 800;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Variable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Variable.woff2') format('woff2-variations');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Theme tokens (RGB triplets so Tailwind <alpha-value> works: bg-accent/20 etc).
+ *
+ * Resolution order:
+ *   1. <html data-theme="light|dark">  — explicit user override (persisted in localStorage)
+ *   2. @media (prefers-color-scheme)   — system preference (default)
+ *   3. :root                           — hard fallback: light
+ */
+:root {
+  --bg:        250 247 241;   /* warm cream      #FAF7F1 */
+  --bg-alt:    241 237 227;   /* code background #F1EDE3 */
+  --ink:        27  26  23;   /* deep ink        #1B1A17 */
+  --muted:    107 103  96;    /* warm gray       #6B6760 */
+  --hairline: 212 207 196;    /*                 #D4CFC4 */
+  --accent:   122  31  43;    /* oxblood         #7A1F2B */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:         26  23  20;  /* warm graphite #1A1714 */
+    --bg-alt:     36  32  27;  /*               #24201B */
+    --ink:       236 231 218;  /* parchment     #ECE7DA */
+    --muted:     154 147 136;  /*               #9A9388 */
+    --hairline:   58  53  46;  /*               #3A352E */
+    --accent:    201 125 133;  /* dusty rose    #C97D85 */
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg:         26  23  20;
+  --bg-alt:     36  32  27;
+  --ink:       236 231 218;
+  --muted:     154 147 136;
+  --hairline:   58  53  46;
+  --accent:    201 125 133;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-ink font-serif;
+  }
+
+  ::selection {
+    @apply bg-accent/20 text-ink;
+  }
+}
+
+@layer components {
+  .reading-column {
+    @apply max-w-reading mx-auto px-6;
+  }
+
+  .post-column {
+    @apply max-w-post mx-auto px-6;
+  }
+
+  .label-smallcaps {
+    @apply font-sans text-xs uppercase tracking-[0.12em] font-medium text-muted;
+  }
+
+  .hairline {
+    @apply border-t border-hairline;
+  }
+
+  .fade-in-on-load {
+    animation: fadeIn 200ms ease-out both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@layer utilities {
+  /* Prose for blog post body */
+  .prose-academic {
+    @apply text-ink;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+  .prose-academic h2 {
+    @apply font-serif font-semibold text-ink mt-12 mb-4;
+    font-size: 1.5rem;
+    scroll-margin-top: 6rem;
+  }
+  .prose-academic h3 {
+    @apply font-serif font-semibold text-ink mt-8 mb-3;
+    font-size: 1.2rem;
+    scroll-margin-top: 6rem;
+  }
+  .prose-academic p { @apply my-5; }
+  .prose-academic a {
+    color: rgb(var(--accent));
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-academic strong { @apply font-semibold text-ink; }
+  .prose-academic em { @apply italic; }
+  .prose-academic blockquote {
+    border-left: 2px solid rgb(var(--accent));
+    @apply pl-5 my-6 italic text-muted;
+  }
+  .prose-academic ul, .prose-academic ol { @apply my-5 pl-6; }
+  .prose-academic ul li { @apply list-disc mb-2; }
+  .prose-academic ol li { @apply list-decimal mb-2; }
+  .prose-academic code:not(pre code) {
+    background: rgb(var(--bg-alt));
+    @apply px-1.5 py-0.5 rounded text-[0.92em] font-mono;
+  }
+  .prose-academic pre {
+    background: rgb(var(--bg-alt));
+    @apply p-4 rounded my-6 overflow-x-auto text-sm;
+  }
+  .prose-academic img {
+    @apply mx-auto my-6 rounded;
+    max-width: 520px;
+    width: 100%;
+  }
+  .prose-academic > :first-child img,
+  .prose-academic > img:first-child {
+    max-width: 100%;
+    @apply my-8;
+  }
+  .prose-academic hr {
+    @apply border-0 border-t border-hairline my-10;
+  }
+  .prose-academic table { @apply w-full my-6 text-sm; }
+  .prose-academic th { @apply text-left font-semibold pb-2 border-b border-hairline; }
+  .prose-academic td { @apply py-2 border-b border-hairline/60; }
+
+  /* Footnotes (GFM) */
+  .prose-academic .footnotes {
+    @apply mt-12 pt-6 border-t border-hairline text-sm text-muted;
+  }
+  .prose-academic .footnotes ol { @apply pl-6; }
+}

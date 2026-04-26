@@ -1,0 +1,33 @@
+---
+// src/layouts/PageLayout.astro
+import BaseLayout from './BaseLayout.astro';
+import Navbar from '../components/shared/Navbar.astro';
+import Footer from '../components/shared/Footer.astro';
+import ProfileCard from '../components/shared/ProfileCard.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  active?: 'home' | 'research' | 'industry' | 'skills' | 'blog';
+  eyebrow?: string;
+  heading?: string;
+  intro?: string;
+}
+const { title, description, active = 'home', eyebrow, heading, intro } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <Navbar active={active} />
+  <div class="max-w-[1100px] mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-[240px_1fr] md:gap-12">
+    <aside class="md:sticky md:top-8 md:self-start mb-12 md:mb-0">
+      <ProfileCard />
+    </aside>
+    <main class="min-w-0">
+      {eyebrow && <p class="label-smallcaps mb-3">{eyebrow}</p>}
+      {heading && <h1 class="font-serif font-semibold text-ink text-3xl md:text-4xl leading-tight mb-3">{heading}</h1>}
+      {intro && <p class="text-muted text-lg leading-relaxed mb-12">{intro}</p>}
+      <slot />
+    </main>
+  </div>
+  <Footer />
+</BaseLayout>
