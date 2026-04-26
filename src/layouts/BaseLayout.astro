@@ -23,16 +23,31 @@ const { htmlLang = 'en', ...seoProps } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Theme hydration: must run BEFORE first paint to avoid FOUC. Inline + sync. -->
+    <!--
+      Theme hydration: must run BEFORE first paint to avoid FOUC. Inline + sync.
+
+      Astro's ClientRouter does an SPA-style DOM swap that does NOT re-run inline
+      head scripts, and the new <html> may arrive without our data-theme. So we
+      also re-apply the theme on astro:after-swap (fires before paint of the
+      next page).
+    -->
     <script is:inline>
-      try {
-        const t = localStorage.getItem('theme');
-        if (t === 'light' || t === 'dark') {
-          document.documentElement.dataset.theme = t;
+      (function () {
+        function applyTheme() {
+          try {
+            var t = localStorage.getItem('theme');
+            if (t === 'light' || t === 'dark') {
+              document.documentElement.dataset.theme = t;
+            } else {
+              delete document.documentElement.dataset.theme;
+            }
+          } catch (_) {
+            /* storage unavailable; fall through to prefers-color-scheme */
+          }
         }
-      } catch {
-        /* storage unavailable; fall through to prefers-color-scheme */
-      }
+        applyTheme();
+        document.addEventListener('astro:after-swap', applyTheme);
+      })();
     </script>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

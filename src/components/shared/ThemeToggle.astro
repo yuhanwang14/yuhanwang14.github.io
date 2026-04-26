@@ -18,20 +18,24 @@
 </button>
 
 <script>
+  // Event delegation on the document so the handler survives Astro view
+  // transitions (which replace the body, including the toggle button itself).
   type Theme = 'light' | 'dark';
   const KEY = 'theme';
-  const root = document.documentElement;
-  const btn = document.getElementById('theme-toggle');
 
   function effective(): Theme {
-    const t = root.dataset.theme;
+    const t = document.documentElement.dataset.theme;
     if (t === 'light' || t === 'dark') return t;
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
 
-  btn?.addEventListener('click', () => {
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (!target.closest('#theme-toggle')) return;
+
     const next: Theme = effective() === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = next;
+    document.documentElement.dataset.theme = next;
     try {
       localStorage.setItem(KEY, next);
     } catch {
