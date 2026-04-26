@@ -32,6 +32,7 @@ export const site: SiteData = {
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/yuhan-wang-5546832a2/' },
     { label: 'X',        href: 'https://x.com/YuhanWangWork14' },
     { label: 'Email',    href: 'mailto:yuhanwangwork14@gmail.com' },
+    { label: 'Engram',   href: 'mailto:yuhan@engramai.co' },
     { label: 'RSS',      href: '/rss.xml' },
   ],
 };
