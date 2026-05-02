@@ -17,7 +17,7 @@ export const publications: Publication[] = [
     title: 'PAGE-4D: Disentangled Pose and Geometry Estimation for 4D Perception',
     authorsHtml:
       'Kaichen Zhou, <strong>Yuhan Wang</strong>, Grace Chen, Xinhai Chang, Gaspard Beaudouin, Fangneng Zhan, Paul Pu Liang, Mengyu Wang.',
-    href: 'https://page-4d.github.io/anonymous-submission/',
+    href: 'https://page4d.github.io/',
     paperHref: 'https://arxiv.org/pdf/2510.17568',
     image: page4d,
   },
