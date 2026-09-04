@@ -1,6 +1,4 @@
 ---
-// src/components/shared/ProfileCard.astro
-// Used as the left sidebar by PageLayout. Compact, stacks vertically.
 import { Image } from 'astro:assets';
 import yuhanPhoto from '../../assets/images/yuhan.png';
 import { site } from '../../data/site';
@@ -19,29 +17,21 @@ import { site } from '../../data/site';
   <p class="font-mono text-xs text-muted mt-3">{site.location}</p>
 
   <ul class="font-mono text-xs text-muted mt-4 space-y-1.5">
-    {site.emails.map((e) => (
-      <li class="break-all">
-        <a
-          href={`mailto:${e.address}`}
-          class="hover:text-ink transition-colors duration-200"
-          title={`${e.label} email`}
-        >
-          {e.address}
-        </a>
-      </li>
+    {site.emails.map((email) => (
+      <li class="break-all">{email.address}</li>
     ))}
   </ul>
 
   <ul class="flex flex-col gap-1 mt-5">
-    {site.social.filter((s) => s.label !== 'RSS').map((s) => (
+    {site.social.filter((link) => link.label !== 'RSS').map((link) => (
       <li>
         <a
-          href={s.href}
+          href={link.href}
           class="label-smallcaps hover:text-ink transition-colors duration-200"
-          target={s.href.startsWith('http') ? '_blank' : undefined}
-          rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          target={link.href.startsWith('http') ? '_blank' : undefined}
+          rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
         >
-          {s.label}
+          {link.label === 'Scholar' ? 'Google Scholar' : link.label}
         </a>
       </li>
     ))}

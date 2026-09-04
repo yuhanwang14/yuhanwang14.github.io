@@ -26,14 +26,14 @@ export interface SiteData {
 export const site: SiteData = {
   name: 'Yuhan Wang',
   shortName: 'Yuhan',
-  role: 'Founder & CTO @ Engram · MIT Researcher · Imperial College',
+  role: 'Computer Vision · Embodied Intelligence · Agentic Framework · Quantitative Trading',
   location: 'London & Boston',
   emails: [
     { label: 'Personal', address: 'yuhanwangwork14@gmail.com' },
     { label: 'Engram',   address: 'yuhan@engramai.co' },
   ],
   description:
-    'Founder & CTO @ Engram. Research on cognitive AI, agentic systems, and 4D foundation models. Imperial College mathematics & computer science.',
+    'Yuhan Wang is the founder of Engram, with a background in AI research at the MIT Media Lab and AI engineering at Millennium.',
   url: 'https://yuhanwang14.github.io',
   twitterHandle: '@YuhanWangWork14',
   social: [

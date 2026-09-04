@@ -4,33 +4,39 @@ import { site } from '../../data/site';
 import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
-  active?: 'home' | 'research' | 'industry' | 'skills' | 'blog';
+  active?: 'home' | 'research' | 'industry' | 'skills' | 'publication' | 'blog';
 }
 const { active = 'home' } = Astro.props;
 
 const links: { label: string; href: string; key: NonNullable<Props['active']> }[] = [
-  { label: 'Research', href: '/research/', key: 'research' },
-  { label: 'Industry', href: '/industry/', key: 'industry' },
-  { label: 'Skills',   href: '/skills/',   key: 'skills'   },
-  { label: 'Blog',     href: '/blog/',     key: 'blog'     },
+  { label: 'Publication', href: '/publication/', key: 'publication' },
+  { label: 'Blog', href: '/blog/', key: 'blog' },
 ];
 ---
 
-<nav class="border-b border-hairline">
+<nav class="border-b border-hairline" aria-label="Primary">
   <div class="max-w-[1100px] mx-auto px-6 flex items-center justify-between h-14">
-    <a href="/" class="font-serif font-semibold text-ink hover:text-accent transition-colors duration-200">
-      {site.shortName}
+    <a
+      href="/"
+      aria-current={active === 'home' ? 'page' : undefined}
+      class:list={[
+        'font-serif font-semibold text-ink hover:text-accent transition-colors duration-200',
+        active === 'home' && 'text-accent',
+      ]}
+    >
+      {site.name}
     </a>
-    <div class="flex items-center gap-6">
-      <ul class="flex items-center gap-6">
+    <div class="flex items-center gap-4 sm:gap-6">
+      <ul class="flex items-center">
         {links.map((link) => (
           <li>
             <a
               href={link.href}
+              aria-current={link.key === active ? 'page' : undefined}
               class:list={[
-                'label-smallcaps transition-colors duration-200',
+                'label-smallcaps inline-flex min-h-11 items-center px-2 transition-colors duration-200',
                 link.key === active
-                  ? 'text-accent border-b-2 border-accent pb-1 -mb-1'
+                  ? 'text-accent'
                   : 'hover:text-ink',
               ]}
             >

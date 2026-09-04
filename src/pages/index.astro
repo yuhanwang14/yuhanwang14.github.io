@@ -1,9 +1,6 @@
 ---
 // src/pages/index.astro
-import { Image } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
-import { news } from '../data/news';
-import { publications } from '../data/publications';
 import { site } from '../data/site';
 ---
 
@@ -11,70 +8,32 @@ import { site } from '../data/site';
   title={`${site.name} — ${site.role}`}
   description={site.description}
   active="home"
-  eyebrow="About"
-  heading={site.name}
-  intro={site.role}
+  heading="About"
 >
-  <section>
+  <section class="max-w-[46rem]">
     <p class="text-ink leading-[1.75] text-base">
-      I am the Founder &amp; CTO of <strong>Engram</strong>, where we are building a local-first
-      <em>cognitive alignment layer</em> for AI systems. I hold a Master's in Joint Mathematics
-      and Computer Science from Imperial College and am a graduate researcher at MIT Media Lab.
+      I am the founder of <strong>Engram</strong>. Previously, I worked as a researcher at the MIT Media
+      Lab and as an AI Engineer at Millennium. I study Joint Mathematics and Computer Science at
+      Imperial College London.
     </p>
     <p class="text-ink leading-[1.75] text-base mt-4">
-      My work spans <em>deep learning</em>, <em>robotics</em>, <em>computer vision</em>, and
-      <em>agent engineering</em>. My research interests include <em>3D/4D foundation models</em>,
-      <em>world model</em>, <em>VLA</em>, <em>robotics</em>, <em>agent infra</em>, and
-      <em>cognitive AI</em>.
+      My interests span <em>Computer Vision</em>, <em>Embodied Intelligence</em>, <em>Agentic Frameworks</em>,
+      and <em>Quantitative Trading</em>. My research has focused on 4D perception, vision-language-action
+      interpretability, and active vision, while my industry work has centered on AI agents for equity
+      research. At Engram, we are exploring digital twins, agent-to-agent (A2A) systems, and new models
+      for robot distribution.
     </p>
     <p class="text-ink leading-[1.75] text-base mt-4">
-      Previously, I conducted research at MIT Media Lab on 4D perception (PAGE-4D, ICLR 2026),
-      and I will join Millennium's Equity Technology Team as an AI Engineer Intern in Summer 2026.
+      I write about this new AI era: how intelligence is moving from models into institutions and the
+      physical world, how it may reshape finance and knowledge work, and what should remain distinctly
+      human. As a founder, I want to build for the long term, pursuing ideas that are technically
+      ambitious, useful in the real world, and durable beyond the current cycle.
     </p>
-    <p class="text-ink leading-[1.75] text-base mt-4">
-      For academic collaboration, reach me at
-      {' '}<a href="mailto:yuhanwangwork14@gmail.com" class="text-accent underline underline-offset-4">yuhanwangwork14@gmail.com</a>.
-      For business and Engram inquiries,
-      {' '}<a href="mailto:yuhan@engramai.co" class="text-accent underline underline-offset-4">yuhan@engramai.co</a>.
-    </p>
-  </section>
-
-  <section class="mt-16">
-    <p class="label-smallcaps mb-4">News</p>
-    <ul class="space-y-3">
-      {news.map((item) => (
-        <li class="flex gap-4 text-ink leading-relaxed">
-          <span class="font-mono text-sm text-muted shrink-0 w-20 pt-0.5">{item.date}</span>
-          <span class="text-base">
-            <span class="mr-1">{item.emoji}</span>
-            <span set:html={item.htmlBody} />
-          </span>
-        </li>
-      ))}
-    </ul>
-  </section>
-
-  <section class="mt-16">
-    <p class="label-smallcaps mb-4">Publications</p>
-    <ul class="space-y-10">
-      {publications.map((p) => (
-        <li class="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 hairline pt-8">
-          <div class="relative">
-            <span class="absolute top-2 left-2 bg-accent text-bg font-mono text-xs px-2 py-0.5 z-10">
-              {p.badge}
-            </span>
-            <Image src={p.image} alt={p.title} widths={[200, 400]} sizes="200px" class="w-full h-auto rounded" />
-          </div>
-          <div>
-            <a href={p.href} class="font-serif font-semibold text-ink hover:text-accent transition-colors">{p.title}</a>
-            <p class="text-muted text-sm mt-2 leading-relaxed" set:html={p.authorsHtml} />
-            <p class="mt-3 text-sm flex gap-4">
-              <a href={p.href} class="label-smallcaps hover:text-ink transition-colors">Project</a>
-              {p.paperHref && <a href={p.paperHref} class="label-smallcaps hover:text-ink transition-colors">Paper</a>}
-            </p>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <a
+      href="/blog/"
+      class="mt-5 inline-flex min-h-11 items-center border-b border-accent font-serif text-xl font-semibold text-ink transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4"
+    >
+      Read my essays
+    </a>
   </section>
 </PageLayout>
