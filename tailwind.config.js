@@ -12,6 +12,7 @@ export default {
         accent:    'rgb(var(--accent) / <alpha-value>)',
       },
       fontFamily: {
+        display: ['"Metropolitan Line"', 'Geist', 'system-ui', 'sans-serif'],
         serif: ['Newsreader', 'Georgia', 'serif'],
         sans:  ['Geist', 'system-ui', 'sans-serif'],
         mono:  ['"JetBrains Mono"', 'ui-monospace', 'monospace'],

@@ -1,4 +1,5 @@
 ---
+// src/pages/publication.astro
 import { Image } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import { publications } from '../data/publications';
@@ -6,46 +7,56 @@ import { publications } from '../data/publications';
 
 <PageLayout
   title="Publication — Yuhan Wang"
-  description="Selected research publication by Yuhan Wang."
+  description="Research by Yuhan Wang in computer vision and 4D perception."
   active="publication"
-  eyebrow="Publication"
-  heading="Research Papers"
-  intro="Selected work in computer vision, embodied intelligence, and 4D perception."
+  heading="Publication"
+  intro="Research in computer vision, embodied intelligence, and 4D perception."
 >
-  <section class="mt-16 max-w-[46rem]">
-    <p class="label-smallcaps mb-2">Selected</p>
-    <ul>
-      {publications.map((publication) => (
-        <li class="hairline grid grid-cols-1 gap-6 pb-2 pt-8 sm:grid-cols-[160px_1fr]">
-          <div class="relative">
-            <span class="absolute left-2 top-2 z-10 bg-accent px-2 py-0.5 font-mono text-xs text-bg">
-              {publication.badge}
-            </span>
-            <Image
-              src={publication.image}
-              alt={publication.title}
-              widths={[160, 320]}
-              sizes="(max-width: 639px) 100vw, 160px"
-              class="h-auto w-full rounded"
+  <ol class="border-b border-hairline">
+    {publications.map((publication, i) => (
+      <li class="border-t border-hairline py-12 md:py-16">
+        <article class="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] md:items-start md:gap-14">
+          <div class="min-w-0 md:pt-1" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+            <p class="label-smallcaps text-accent">{publication.badge}</p>
+            <h2 class="mt-4 font-display text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.12] text-ink">
+              <a href={publication.href} class="transition-colors duration-200 hover:text-accent focus-visible:text-accent">
+                {publication.title}
+              </a>
+            </h2>
+            <p
+              class="mt-5 max-w-[36rem] text-[1.0625rem] leading-relaxed text-muted [&_strong]:font-semibold [&_strong]:text-ink"
+              set:html={publication.authorsHtml}
             />
-          </div>
-          <div>
-            <a
-              href={publication.href}
-              class="font-serif font-semibold text-ink transition-colors hover:text-accent"
-            >
-              {publication.title}
-            </a>
-            <p class="mt-2 text-sm leading-relaxed text-muted" set:html={publication.authorsHtml} />
-            <p class="mt-4 flex gap-5 text-sm">
-              <a href={publication.href} class="label-smallcaps transition-colors hover:text-ink">Project</a>
+            <p class="mt-8 flex gap-8">
+              <a href={publication.href} class="link-sweep inline-block py-2 font-display text-[15px] uppercase tracking-[0.1em] text-ink [--sweep-offset:4px] hover:text-accent">
+                Project
+              </a>
               {publication.paperHref && (
-                <a href={publication.paperHref} class="label-smallcaps transition-colors hover:text-ink">Paper</a>
+                <a href={publication.paperHref} class="link-sweep inline-block py-2 font-display text-[15px] uppercase tracking-[0.1em] text-ink [--sweep-offset:4px] hover:text-accent">
+                  Paper
+                </a>
               )}
             </p>
           </div>
-        </li>
-      ))}
-    </ul>
-  </section>
+          <a
+            href={publication.href}
+            tabindex="-1"
+            aria-hidden="true"
+            class="group block overflow-hidden rounded-[2px] bg-bg-alt"
+            data-reveal
+            style={`--reveal-delay:${i * 90 + 180}ms`}
+          >
+            <Image
+              src={publication.image}
+              alt=""
+              widths={[400]}
+              sizes="(max-width: 767px) calc(100vw - 3rem), 416px"
+              class="h-auto w-full transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+            />
+          </a>
+        </article>
+      </li>
+    ))}
+  </ol>
 </PageLayout>
+

@@ -43,6 +43,7 @@ const readingTime = en ? estimateReadingTime(en.body ?? '') : 0;
     available={available}
     title={en.data.title}
     description={en.data.description}
+    category={en.data.category}
     publishedAt={en.data.publishedAt}
     updatedAt={en.data.updatedAt}
     tags={en.data.tags}
@@ -59,22 +60,20 @@ const readingTime = en ? estimateReadingTime(en.body ?? '') : 0;
     htmlLang="en"
   >
     <Navbar active="blog" />
-    <main class="post-column py-16">
+    <main class="post-column pt-16 md:pt-24">
       <div class="flex items-center justify-between gap-4">
-        <a href="/blog/" class="label-smallcaps text-muted hover:text-ink transition-colors">
-          ← Back to Blog
-        </a>
+        <a href="/blog/" class="link-sweep inline-block py-2 font-display text-[13px] uppercase tracking-[0.1em] text-muted [--sweep-offset:4px] hover:text-ink">All essays</a>
         <LangToggle baseSlug={base} current="en" available={available} />
       </div>
-      <header class="mt-6">
+      <header class="mt-12">
         <p class="label-smallcaps text-muted">Translation pending</p>
-        <h1 class="font-serif font-semibold text-ink text-3xl md:text-4xl leading-tight mt-3">
+        <h1 class="mt-5 font-display text-[clamp(2.25rem,5.5vw,3.75rem)] font-normal leading-[1.06] text-ink">
           {zh?.data.title ?? 'Translation pending'}
         </h1>
-        <p class="text-muted text-lg italic leading-relaxed mt-3">
+        <p class="mt-6 text-lg leading-relaxed text-muted">
           The English version of this essay is still being written.
         </p>
-        <hr class="hairline mt-6" />
+        <hr class="hairline mt-12" />
       </header>
       <article class="prose-academic">
         <p>

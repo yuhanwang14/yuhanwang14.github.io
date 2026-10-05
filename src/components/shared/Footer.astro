@@ -3,24 +3,29 @@
 import { site } from '../../data/site';
 
 const year = new Date().getFullYear();
+const footerLinks = ['LinkedIn', 'GitHub']
+  .map((label) => site.social.find((link) => link.label === label))
+  .filter((link): link is NonNullable<typeof link> => Boolean(link));
+const email = site.emails[0]?.address;
 ---
 
 <footer class="mt-24 border-t border-hairline">
-  <div class="max-w-reading mx-auto px-6 py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-sm text-muted">
+  <div class="max-w-[1100px] mx-auto px-6 py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-sm text-muted">
     <p class="font-mono">© {year} {site.name}</p>
-    <ul class="flex flex-wrap items-center gap-x-5 gap-y-2">
-      {site.social.map((s) => (
+    <ul class="flex flex-wrap items-center gap-x-6 gap-y-2">
+      {footerLinks.map((link) => (
         <li>
           <a
-            href={s.href}
+            href={link.href}
             class="label-smallcaps hover:text-ink transition-colors duration-200"
-            target={s.href.startsWith('http') ? '_blank' : undefined}
-            rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            {s.label}
+            {link.label}
           </a>
         </li>
       ))}
+      {email && <li class="font-mono text-ink/80 select-all">{email}</li>}
     </ul>
   </div>
 </footer>

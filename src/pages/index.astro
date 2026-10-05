@@ -1,39 +1,42 @@
 ---
 // src/pages/index.astro
-import PageLayout from '../layouts/PageLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/shared/Footer.astro';
+import FogWindow from '../components/home/FogWindow.astro';
 import { site } from '../data/site';
+
+const links = [
+  { label: 'Publication', href: '/publication/' },
+  { label: 'Blog', href: '/blog/' },
+];
 ---
 
-<PageLayout
-  title={`${site.name} — ${site.role}`}
-  description={site.description}
-  active="home"
-  heading="About"
->
-  <section class="max-w-[46rem]">
-    <p class="text-ink leading-[1.75] text-base">
-      I am the founder of <strong>Engram</strong>. Previously, I worked as a researcher at the MIT Media
-      Lab and as an AI Engineer at Millennium. I study Joint Mathematics and Computer Science at
-      Imperial College London.
-    </p>
-    <p class="text-ink leading-[1.75] text-base mt-4">
-      My interests span <em>Computer Vision</em>, <em>Embodied Intelligence</em>, <em>Agentic Frameworks</em>,
-      and <em>Quantitative Trading</em>. My research has focused on 4D perception, vision-language-action
-      interpretability, and active vision, while my industry work has centered on AI agents for equity
-      research. At Engram, we are exploring digital twins, agent-to-agent (A2A) systems, and new models
-      for robot distribution.
-    </p>
-    <p class="text-ink leading-[1.75] text-base mt-4">
-      I write about this new AI era: how intelligence is moving from models into institutions and the
-      physical world, how it may reshape finance and knowledge work, and what should remain distinctly
-      human. As a founder, I want to build for the long term, pursuing ideas that are technically
-      ambitious, useful in the real world, and durable beyond the current cycle.
-    </p>
-    <a
-      href="/blog/"
-      class="mt-5 inline-flex min-h-11 items-center border-b border-accent font-serif text-xl font-semibold text-ink transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4"
-    >
-      Read my essays
-    </a>
-  </section>
-</PageLayout>
+<BaseLayout title={`${site.name} — ${site.role}`} description={site.description}>
+  <main class="mx-auto max-w-[1100px] px-6 pt-16 md:pt-24">
+    <header class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div>
+        <h1 class="rise font-display text-[clamp(3rem,8.5vw,6rem)] font-normal leading-[0.95] tracking-[-0.01em] text-ink">
+          {site.name}<span class="text-accent">.</span>
+        </h1>
+        <p class="rise mt-5 font-display text-[clamp(1.375rem,2.8vw,2rem)] leading-tight text-muted [--rise-delay:120ms]">
+          Founder | Engineer | Exile
+        </p>
+      </div>
+      <nav aria-label="Primary" class="rise -mb-3 flex gap-7 [--rise-delay:240ms]">
+        {links.map((link) => (
+          <a
+            href={link.href}
+            class="link-sweep inline-block py-3 font-display text-[15px] uppercase tracking-[0.1em] text-muted [--sweep-offset:10px] hover:text-ink focus-visible:text-ink"
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+    </header>
+
+    <FogWindow class="rise mt-12 md:mt-16 [--rise-delay:360ms]" />
+  </main>
+
+  <Footer />
+</BaseLayout>
+

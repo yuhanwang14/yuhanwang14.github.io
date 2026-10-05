@@ -1,20 +1,25 @@
 ---
 // src/pages/blog/index.astro
+// One list of essays with a filter: All, Personal, AI. The filter reads the URL hash
+// (/blog/#ai), so links from a post's category label land on the right view.
 import { getCollection } from 'astro:content';
 import PageLayout from '../../layouts/PageLayout.astro';
 import PostCard from '../../components/blog/PostCard.astro';
-import Pagination from '../../components/blog/Pagination.astro';
-import { estimateReadingTime, groupByBaseSlug, parsePostId } from '../../lib/blog';
-
-const POSTS_PER_PAGE = 10;
+import { CATEGORIES, CATEGORY_META, estimateReadingTime, groupByBaseSlug, parsePostId } from '../../lib/blog';
 
 const all = await getCollection('blog', ({ data }) => !data.draft);
 const groups = groupByBaseSlug(all);
+const listed = [...groups.filter((g) => g.pinned), ...groups.filter((g) => !g.pinned)];
 
-const pinnedGroups = groups.filter((g) => g.pinned).slice(0, 3);
-const restGroups = groups.filter((g) => !g.pinned);
-const page1 = restGroups.slice(0, POSTS_PER_PAGE);
-const totalPages = Math.max(1, Math.ceil(restGroups.length / POSTS_PER_PAGE));
+const filters = [
+  { key: 'all', label: 'All', href: '/blog/', count: listed.length },
+  ...CATEGORIES.map((category) => ({
+    key: category,
+    label: CATEGORY_META[category].label,
+    href: `/blog/#${category}`,
+    count: listed.filter((g) => g.primary.data.category === category).length,
+  })),
+];
 
 const availableFor = (g: (typeof groups)[number]) => ({
   en: !!g.posts.en,
@@ -24,49 +29,85 @@ const availableFor = (g: (typeof groups)[number]) => ({
 
 <PageLayout
   title="Blog — Yuhan Wang"
-  description="Essays on cognition, AI, agentic systems, and building Engram."
+  description="Essays by Yuhan Wang: personal writing, and thinking on AI."
   active="blog"
-  eyebrow="Blog"
-  heading="Notes & Essays"
-  intro="Long-form thinking on cognition, AI, agentic systems, and what I am building."
+  heading="Blog"
+  intro="Essays on AI, work, and where we belong."
 >
-  {pinnedGroups.length > 0 && (
-    <section>
-      <p class="label-smallcaps mb-2">Pinned</p>
-      <div class="space-y-0">
-        {pinnedGroups.map((g) => (
-          <PostCard
-            post={g.primary}
-            baseSlug={g.baseSlug}
-            primaryLang={parsePostId(g.primary.id).lang}
-            available={availableFor(g)}
-            readingTime={estimateReadingTime(g.primary.body ?? '')}
-          />
-        ))}
-      </div>
-    </section>
-  )}
+  <nav aria-label="Filter essays" class="rise mb-6 flex flex-wrap gap-x-8 gap-y-2 [--rise-delay:200ms]" data-essay-filter>
+    {filters.map((filter) => (
+      <a
+        href={filter.href}
+        data-filter={filter.key}
+        aria-current={filter.key === 'all' ? 'true' : undefined}
+        class="essay-filter link-sweep inline-flex items-baseline gap-2 py-2 font-display text-[15px] uppercase tracking-[0.1em] text-muted [--sweep-offset:4px] hover:text-ink"
+      >
+        {filter.label}
+        <span class="font-mono text-[11px] tracking-normal">{filter.count}</span>
+      </a>
+    ))}
+  </nav>
 
-  {page1.length > 0 && (
-    <section class="mt-16">
-      <p class="label-smallcaps mb-2">Latest</p>
-      <div class="space-y-0">
-        {page1.map((g) => (
-          <PostCard
-            post={g.primary}
-            baseSlug={g.baseSlug}
-            primaryLang={parsePostId(g.primary.id).lang}
-            available={availableFor(g)}
-            readingTime={estimateReadingTime(g.primary.body ?? '')}
-          />
-        ))}
-      </div>
-    </section>
-  )}
-
-  {(pinnedGroups.length + page1.length) === 0 && (
+  {listed.length > 0 ? (
+    <div class="essay-list border-b border-hairline" data-essay-rows>
+      {listed.map((g, i) => (
+        <PostCard
+          post={g.primary}
+          baseSlug={g.baseSlug}
+          primaryLang={parsePostId(g.primary.id).lang}
+          available={availableFor(g)}
+          readingTime={estimateReadingTime(g.primary.body ?? '')}
+          index={i}
+          pinned={g.pinned}
+        />
+      ))}
+    </div>
+  ) : (
     <p class="text-muted">No posts yet. Check back soon.</p>
   )}
-
-  <Pagination currentPage={1} totalPages={totalPages} />
 </PageLayout>
+
+<style is:global>
+  .essay-filter[aria-current='true'] {
+    color: rgb(var(--ink));
+    background-size: 100% 1px;
+  }
+</style>
+
+<script>
+  const KEYS = ['personal', 'ai'];
+
+  function apply(key: string) {
+    const nav = document.querySelector<HTMLElement>('[data-essay-filter]');
+    const rows = document.querySelectorAll<HTMLElement>('[data-essay-rows] [data-category]');
+    if (!nav) return;
+    const active = KEYS.includes(key) ? key : 'all';
+    nav.querySelectorAll<HTMLElement>('[data-filter]').forEach((link) => {
+      if (link.dataset.filter === active) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
+    rows.forEach((row) => {
+      row.hidden = active !== 'all' && row.dataset.category !== active;
+    });
+  }
+
+  function fromHash() {
+    apply(location.hash.replace('#', ''));
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    const nav = document.querySelector<HTMLElement>('[data-essay-filter]');
+    if (!nav) return;
+    fromHash();
+    // Filter in place: keep the router from treating these links as navigation.
+    nav.addEventListener('click', (event) => {
+      const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('[data-filter]');
+      if (!link) return;
+      event.preventDefault();
+      history.replaceState(history.state, '', link.getAttribute('href') ?? '/blog/');
+      apply(link.dataset.filter ?? 'all');
+    });
+  });
+  window.addEventListener('hashchange', fromHash);
+</script>
+

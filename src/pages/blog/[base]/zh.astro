@@ -43,6 +43,7 @@ const readingTime = zh ? estimateReadingTime(zh.body ?? '') : 0;
     available={available}
     title={zh.data.title}
     description={zh.data.description}
+    category={zh.data.category}
     publishedAt={zh.data.publishedAt}
     updatedAt={zh.data.updatedAt}
     tags={zh.data.tags}
@@ -59,22 +60,20 @@ const readingTime = zh ? estimateReadingTime(zh.body ?? '') : 0;
     htmlLang="zh-CN"
   >
     <Navbar active="blog" />
-    <main class="post-column py-16">
+    <main class="post-column pt-16 md:pt-24">
       <div class="flex items-center justify-between gap-4">
-        <a href="/blog/" class="label-smallcaps text-muted hover:text-ink transition-colors">
-          ← 返回博客
-        </a>
+        <a href="/blog/" class="link-sweep inline-block py-2 font-display text-[13px] uppercase tracking-[0.1em] text-muted [--sweep-offset:4px] hover:text-ink">全部文章</a>
         <LangToggle baseSlug={base} current="zh" available={available} />
       </div>
-      <header class="mt-6">
+      <header class="mt-12">
         <p class="label-smallcaps text-muted">中文版尚未发布</p>
-        <h1 class="font-serif font-semibold text-ink text-3xl md:text-4xl leading-tight mt-3">
+        <h1 class="mt-5 font-display text-[clamp(2.25rem,5.5vw,3.75rem)] font-normal leading-[1.06] text-ink">
           {en?.data.title ?? '中文版尚未发布'}
         </h1>
-        <p class="text-muted text-lg italic leading-relaxed mt-3">
+        <p class="mt-6 text-lg leading-relaxed text-muted">
           这篇随笔的中文版本仍在写作中。
         </p>
-        <hr class="hairline mt-6" />
+        <hr class="hairline mt-12" />
       </header>
       <article class="prose-academic">
         <p>

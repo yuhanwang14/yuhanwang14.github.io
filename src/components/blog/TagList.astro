@@ -4,21 +4,17 @@ import { slugify } from '../../lib/blog';
 
 interface Props {
   tags: string[];
-  size?: 'sm' | 'md';
 }
-const { tags, size = 'sm' } = Astro.props;
+const { tags } = Astro.props;
 ---
 
 {tags.length > 0 && (
-  <ul class:list={['flex flex-wrap', size === 'md' ? 'gap-3' : 'gap-2']}>
+  <ul class="flex flex-wrap gap-x-6 gap-y-2">
     {tags.map((tag) => (
       <li>
         <a
           href={`/blog/tags/${slugify(tag)}/`}
-          class:list={[
-            'label-smallcaps border border-hairline rounded-full hover:text-ink hover:border-accent/40 transition-colors',
-            size === 'md' ? 'px-3 py-1' : 'px-2.5 py-0.5',
-          ]}
+          class="link-sweep label-smallcaps inline-block py-1 [--sweep-offset:2px] hover:text-ink"
         >
           {tag}
         </a>
@@ -26,3 +22,4 @@ const { tags, size = 'sm' } = Astro.props;
     ))}
   </ul>
 )}
+

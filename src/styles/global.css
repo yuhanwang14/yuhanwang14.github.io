@@ -27,6 +27,15 @@
   font-style: normal;
   font-display: swap;
 }
+/* Metropolitan Line: open revival of Johnston (SIL OFL 1.1, see /fonts/MetropolitanLine-OFL.txt).
+   Ships a single Regular weight, so .font-display disables synthetic bold/italic. */
+@font-face {
+  font-family: 'Metropolitan Line';
+  src: url('/fonts/MetropolitanLine-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -34,39 +43,15 @@
 
 /*
  * Theme tokens (RGB triplets so Tailwind <alpha-value> works: bg-accent/20 etc).
- *
- * Resolution order:
- *   1. <html data-theme="light|dark">  — explicit user override (persisted in localStorage)
- *   2. @media (prefers-color-scheme)   — system preference (default)
- *   3. :root                           — hard fallback: light
+ * One theme only: London fog.
  */
 :root {
-  --bg:        250 247 241;   /* warm cream      #FAF7F1 */
-  --bg-alt:    241 237 227;   /* code background #F1EDE3 */
-  --ink:        27  26  23;   /* deep ink        #1B1A17 */
-  --muted:    107 103  96;    /* warm gray       #6B6760 */
-  --hairline: 212 207 196;    /*                 #D4CFC4 */
-  --accent:   122  31  43;    /* oxblood         #7A1F2B */
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg:         26  23  20;  /* warm graphite #1A1714 */
-    --bg-alt:     36  32  27;  /*               #24201B */
-    --ink:       236 231 218;  /* parchment     #ECE7DA */
-    --muted:     154 147 136;  /*               #9A9388 */
-    --hairline:   58  53  46;  /*               #3A352E */
-    --accent:    201 125 133;  /* dusty rose    #C97D85 */
-  }
-}
-
-:root[data-theme="dark"] {
-  --bg:         26  23  20;
-  --bg-alt:     36  32  27;
-  --ink:       236 231 218;
-  --muted:     154 147 136;
-  --hairline:   58  53  46;
-  --accent:    201 125 133;
+  --bg:        227 228 224;   /* fog gray        #E3E4E0 */
+  --bg-alt:    214 216 211;   /* deeper fog      #D6D8D3 */
+  --ink:        17  17  16;   /* ink             #111110 */
+  --muted:      92  94  89;   /* wet stone       #5C5E59 */
+  --hairline:  196 198 192;   /*                 #C4C6C0 */
+  --accent:    194  65  12;   /* signal orange   #C2410C */
 }
 
 @layer base {
@@ -98,6 +83,10 @@
     @apply font-sans text-xs uppercase tracking-[0.12em] font-medium text-muted;
   }
 
+  .font-display {
+    font-synthesis: none;
+  }
+
   .hairline {
     @apply border-t border-hairline;
   }
@@ -106,9 +95,61 @@
     animation: fadeIn 200ms ease-out both;
   }
 
+  /* Opacity only: a transform here would make <body> the containing block for fixed elements. */
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(4px); }
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Link underline that sweeps in from the left. */
+  .link-sweep {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 calc(100% - var(--sweep-offset, 0px));
+    background-size: 0% 1px;
+    transition: background-size 420ms cubic-bezier(0.16, 1, 0.3, 1), color 200ms ease-out;
+  }
+  .link-sweep:hover,
+  .link-sweep:focus-visible,
+  .link-sweep[aria-current='page'] {
+    background-size: 100% 1px;
+  }
+
+  /* Entrance: content rises into place once, staggered with --rise-delay. */
+  .rise {
+    animation: rise 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--rise-delay, 0ms);
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll reveal: blocks clear out of a light fog. Hidden only when JS is running. */
+  html.js [data-reveal],
+  html.js .prose-academic img {
+    transition:
+      opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 900ms cubic-bezier(0.16, 1, 0.3, 1),
+      filter 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  html.js [data-reveal]:not(.is-revealed),
+  html.js .prose-academic img:not(.is-revealed) {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+
+  /* Essay list: hovering one essay lets the others recede. */
+  @media (hover: hover) and (pointer: fine) {
+    .essay-list .essay-row > a {
+      transition: opacity 360ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .essay-list:hover .essay-row:not(:hover) > a {
+      opacity: 0.35;
+    }
   }
 }
 
@@ -174,4 +215,16 @@
     @apply mt-12 pt-6 border-t border-hairline text-sm text-muted;
   }
   .prose-academic .footnotes ol { @apply pl-6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .fade-in-on-load {
+    animation: none;
+  }
+  .link-sweep,
+  html.js [data-reveal],
+  html.js .prose-academic img {
+    transition: none;
+  }
 }

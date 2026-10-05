@@ -19,6 +19,8 @@ const blog = defineCollection({
     updatedAt: z.coerce.date().optional(),
     pinned: z.boolean().default(false),
     draft: z.boolean().default(false),
+    // Which Blog filter the essay belongs to.
+    category: z.enum(['personal', 'ai']),
     tags: z.array(z.string()).default([]),
     coverImage: image().optional(),
   }),

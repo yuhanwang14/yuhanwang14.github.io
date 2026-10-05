@@ -47,22 +47,24 @@ const availableFor = (g: Group) => ({
   title={`Posts tagged ${displayName} — Yuhan Wang`}
   description={`All blog posts tagged with ${displayName}.`}
   active="blog"
-  eyebrow="Tag"
   heading={displayName}
-  intro={`${groups.length} ${groups.length === 1 ? 'post' : 'posts'}`}
+  intro={`${groups.length} ${groups.length === 1 ? 'essay' : 'essays'}`}
 >
-  <div class="space-y-0">
-    {groups.map((g) => (
+  <div class="essay-list border-b border-hairline">
+    {groups.map((g, i) => (
       <PostCard
         post={g.primary as CollectionEntry<'blog'>}
         baseSlug={g.baseSlug}
         primaryLang={parsePostId(g.primary.id).lang}
         available={availableFor(g)}
         readingTime={estimateReadingTime(((g.primary as CollectionEntry<'blog'>).body) ?? '')}
+        index={i}
       />
     ))}
   </div>
   <p class="mt-12">
-    <a href="/blog/" class="label-smallcaps hover:text-ink transition-colors">← All posts</a>
+    <a href="/blog/" class="link-sweep inline-block py-2 font-display text-[13px] uppercase tracking-[0.1em] text-muted [--sweep-offset:4px] hover:text-ink">
+      All essays
+    </a>
   </p>
 </PageLayout>

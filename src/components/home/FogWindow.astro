@@ -1,0 +1,354 @@
+---
+// src/components/home/FogWindow.astro
+// The homepage hero: a fogged-up window. Moving the pointer across the glass wipes
+// the condensation away; it slowly fogs back over.
+import { Image } from 'astro:assets';
+import londonFog from '../../assets/images/home/london-fog.png';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<figure class:list={['fog-window', className]}>
+  <div class="fog-stage relative aspect-[4/3] w-full overflow-hidden bg-bg-alt sm:aspect-[3/2]" data-fog-stage>
+    <div class="fog-layer absolute inset-0">
+      <Image
+        src={londonFog}
+        alt="Wet London rooftops and chimney pots on a foggy morning, a church spire fading into the distance"
+        widths={[768, 1152, 1536]}
+        sizes="(max-width: 1100px) calc(100vw - 3rem), 1052px"
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+      <canvas class="fog-canvas absolute inset-0 h-full w-full" aria-hidden="true"></canvas>
+    </div>
+  </div>
+  <figcaption class="label-smallcaps mt-3 flex items-baseline justify-between gap-6">
+    <span>London, in fog</span>
+    <span class="fog-hint">Wipe the glass</span>
+  </figcaption>
+</figure>
+
+<noscript><style>.fog-layer { opacity: 1 !important; } .fog-hint { display: none; }</style></noscript>
+
+<style>
+  .fog-layer {
+    opacity: 0;
+    transition: opacity 1400ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .fog-stage[data-ready] .fog-layer {
+    opacity: 1;
+  }
+  .fog-canvas {
+    touch-action: pan-y;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%23111110' stroke-opacity='.5' stroke-width='1.25'/%3E%3C/svg%3E") 16 16, crosshair;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fog-layer {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  type Point = { x: number; y: number };
+  type Controller = { destroy: () => void };
+
+  // Share of the fog restored per 60fps frame, and how long until the pane is fully fogged again.
+  // Fog is laid down in 120ms batches: per-frame increments are too small for an 8-bit canvas
+  // and would be rounded away, leaving the glass stuck half-clear.
+  const REFOG_PER_FRAME = 0.0045;
+  const REFOG_SETTLE_MS = 14000;
+  const REFOG_BATCH_MS = 120;
+
+  let controllers: Controller[] = [];
+
+  function fogColor(): string {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+    const parts = raw.split(/\s+/).filter(Boolean);
+    return parts.length === 3 ? parts.join(',') : '227,228,224';
+  }
+
+  function createFog(stage: HTMLElement): Controller {
+    const img = stage.querySelector('img');
+    const canvas = stage.querySelector('canvas');
+    const ctx = canvas?.getContext('2d');
+    if (!img || !canvas || !ctx) {
+      stage.dataset.ready = '';
+      return { destroy() {} };
+    }
+
+    const fog = document.createElement('canvas');
+    const fctx = fog.getContext('2d') as CanvasRenderingContext2D;
+    // The mask records how much condensation covers each spot (opaque = fully fogged).
+    // Keeping it separate means the fog texture is always redrawn clean, so repeated soft
+    // wipes never shift its colours or leave halos at the edges.
+    const mask = document.createElement('canvas');
+    const kctx = mask.getContext('2d') as CanvasRenderingContext2D;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const rgb = fogColor();
+    const pointers = new Map<number, Point>();
+
+    let width = 0;
+    let height = 0;
+    let raf = 0;
+    let demoRaf = 0;
+    let demoTimer = 0;
+    let running = false;
+    let visible = true;
+    let destroyed = false;
+    let demoCancelled = false;
+    let lastWipe = 0;
+    let lastFrame = 0;
+    let pendingFog = 0;
+    let dirty = false;
+
+    function drawCover(target: CanvasRenderingContext2D, tw: number, th: number) {
+      const source = img as HTMLImageElement;
+      const scale = Math.max(tw / source.naturalWidth, th / source.naturalHeight);
+      const dw = source.naturalWidth * scale;
+      const dh = source.naturalHeight * scale;
+      target.drawImage(source, (tw - dw) / 2, (th - dh) / 2, dw, dh);
+    }
+
+    function buildFog() {
+      const surface = canvas as HTMLCanvasElement;
+      const rect = stage.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = Math.max(1, Math.round(rect.width * dpr));
+      height = Math.max(1, Math.round(rect.height * dpr));
+      surface.width = fog.width = mask.width = width;
+      surface.height = fog.height = mask.height = height;
+
+      // Frosted glass: shrink the view, then scale it back up in two passes so it blurs softly.
+      const tiny = document.createElement('canvas');
+      tiny.width = Math.max(16, Math.round(width / 28));
+      tiny.height = Math.max(16, Math.round(height / 28));
+      const tctx = tiny.getContext('2d') as CanvasRenderingContext2D;
+      tctx.imageSmoothingQuality = 'high';
+      drawCover(tctx, tiny.width, tiny.height);
+
+      const mid = document.createElement('canvas');
+      mid.width = tiny.width * 4;
+      mid.height = tiny.height * 4;
+      const mctx = mid.getContext('2d') as CanvasRenderingContext2D;
+      mctx.imageSmoothingQuality = 'high';
+      mctx.drawImage(tiny, 0, 0, mid.width, mid.height);
+
+      // Base colour plus a slight bleed so rounding never leaves a clear strip at the edges.
+      fctx.fillStyle = 'rgb(' + rgb + ')';
+      fctx.fillRect(0, 0, width, height);
+      fctx.imageSmoothingQuality = 'high';
+      const bleed = Math.ceil(width / tiny.width) * 2;
+      fctx.drawImage(mid, -bleed, -bleed, width + bleed * 2, height + bleed * 2);
+
+      // Condensation veil, a little heavier toward the bottom of the pane.
+      const veil = fctx.createLinearGradient(0, 0, 0, height);
+      veil.addColorStop(0, 'rgba(' + rgb + ',0.44)');
+      veil.addColorStop(1, 'rgba(' + rgb + ',0.6)');
+      fctx.fillStyle = veil;
+      fctx.fillRect(0, 0, width, height);
+
+      kctx.globalCompositeOperation = 'source-over';
+      kctx.globalAlpha = 1;
+      kctx.fillStyle = '#fff';
+      kctx.fillRect(0, 0, width, height);
+      render();
+    }
+
+    function render() {
+      const c = ctx as CanvasRenderingContext2D;
+      c.globalAlpha = 1;
+      c.globalCompositeOperation = 'copy';
+      c.drawImage(fog, 0, 0);
+      c.globalCompositeOperation = 'destination-in';
+      c.drawImage(mask, 0, 0);
+      c.globalCompositeOperation = 'source-over';
+      dirty = false;
+    }
+
+    function wipe(from: Point, to: Point) {
+      const r = Math.max(30, Math.min(width, height) * 0.09);
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const steps = Math.max(1, Math.ceil(Math.hypot(dx, dy) / (r * 0.3)));
+      kctx.globalCompositeOperation = 'destination-out';
+      kctx.globalAlpha = 1;
+      for (let i = 1; i <= steps; i++) {
+        const x = from.x + (dx * i) / steps;
+        const y = from.y + (dy * i) / steps;
+        const g = kctx.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, 'rgba(0,0,0,0.34)');
+        g.addColorStop(0.3, 'rgba(0,0,0,0.24)');
+        g.addColorStop(0.7, 'rgba(0,0,0,0.06)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        kctx.fillStyle = g;
+        kctx.beginPath();
+        kctx.arc(x, y, r, 0, Math.PI * 2);
+        kctx.fill();
+      }
+      kctx.globalCompositeOperation = 'source-over';
+      dirty = true;
+      lastWipe = performance.now();
+      start();
+    }
+
+    function tick(now: number) {
+      raf = 0;
+      if (!visible || destroyed) {
+        running = false;
+        return;
+      }
+      // Time-based so the fog returns at the same pace on slow or throttled frames.
+      const dt = lastFrame ? Math.min(1000, now - lastFrame) : 16.7;
+      lastFrame = now;
+      pendingFog += dt;
+      if (pendingFog >= REFOG_BATCH_MS) {
+        kctx.globalCompositeOperation = 'source-over';
+        kctx.globalAlpha = 1 - Math.pow(1 - REFOG_PER_FRAME, pendingFog / 16.7);
+        kctx.fillStyle = '#fff';
+        kctx.fillRect(0, 0, width, height);
+        kctx.globalAlpha = 1;
+        pendingFog = 0;
+        dirty = true;
+      }
+      if (now - lastWipe > REFOG_SETTLE_MS) {
+        kctx.fillStyle = '#fff';
+        kctx.fillRect(0, 0, width, height);
+        render();
+        running = false;
+        lastFrame = 0;
+        return;
+      }
+      if (dirty) render();
+      raf = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (running || !visible || destroyed) return;
+      running = true;
+      lastFrame = 0;
+      raf = requestAnimationFrame(tick);
+    }
+
+    function toCanvas(e: PointerEvent): Point {
+      const rect = (canvas as HTMLCanvasElement).getBoundingClientRect();
+      return {
+        x: ((e.clientX - rect.left) / rect.width) * width,
+        y: ((e.clientY - rect.top) / rect.height) * height,
+      };
+    }
+
+    function cancelDemo() {
+      demoCancelled = true;
+      window.clearTimeout(demoTimer);
+      cancelAnimationFrame(demoRaf);
+    }
+
+    // One gentle stroke after load shows visitors the glass can be wiped.
+    function demo() {
+      if (reduceMotion || destroyed || demoCancelled) return;
+      const duration = 1300;
+      const t0 = performance.now();
+      let prev: Point | null = null;
+      const step = (now: number) => {
+        if (destroyed || demoCancelled) return;
+        const t = Math.min(1, (now - t0) / duration);
+        const e = 1 - Math.pow(1 - t, 3);
+        const p = { x: width * (0.22 + 0.46 * e), y: height * (0.56 - 0.08 * Math.sin(e * Math.PI)) };
+        wipe(prev ?? p, p);
+        prev = p;
+        if (t < 1) demoRaf = requestAnimationFrame(step);
+      };
+      demoRaf = requestAnimationFrame(step);
+    }
+
+    function onDown(e: PointerEvent) {
+      const p = toCanvas(e);
+      pointers.set(e.pointerId, p);
+      wipe(p, p);
+      cancelDemo();
+    }
+    function onMove(e: PointerEvent) {
+      if (e.pointerType !== 'mouse' && !pointers.has(e.pointerId)) return;
+      const p = toCanvas(e);
+      wipe(pointers.get(e.pointerId) ?? p, p);
+      pointers.set(e.pointerId, p);
+      cancelDemo();
+    }
+    function onEnd(e: PointerEvent) {
+      pointers.delete(e.pointerId);
+    }
+    function onUp(e: PointerEvent) {
+      if (e.pointerType !== 'mouse') onEnd(e);
+    }
+
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointermove', onMove);
+    canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('pointerleave', onEnd);
+    canvas.addEventListener('pointercancel', onEnd);
+
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) start();
+    });
+    io.observe(stage);
+
+    let lastSize = '';
+    let resizeTimer = 0;
+    const ro = new ResizeObserver(() => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        const rect = stage.getBoundingClientRect();
+        const size = Math.round(rect.width) + 'x' + Math.round(rect.height);
+        if (size !== lastSize && stage.dataset.ready !== undefined) {
+          lastSize = size;
+          buildFog();
+        }
+      }, 150);
+    });
+
+    const ready = () => {
+      if (destroyed) return;
+      buildFog();
+      const rect = stage.getBoundingClientRect();
+      lastSize = Math.round(rect.width) + 'x' + Math.round(rect.height);
+      stage.dataset.ready = '';
+      ro.observe(stage);
+      demoTimer = window.setTimeout(demo, 900);
+    };
+    if (img.complete && img.naturalWidth > 0) ready();
+    else img.addEventListener('load', ready, { once: true });
+
+    return {
+      destroy() {
+        destroyed = true;
+        cancelDemo();
+        cancelAnimationFrame(raf);
+        window.clearTimeout(resizeTimer);
+        io.disconnect();
+        ro.disconnect();
+        canvas.removeEventListener('pointerdown', onDown);
+        canvas.removeEventListener('pointermove', onMove);
+        canvas.removeEventListener('pointerup', onUp);
+        canvas.removeEventListener('pointerleave', onEnd);
+        canvas.removeEventListener('pointercancel', onEnd);
+      },
+    };
+  }
+
+  function init() {
+    controllers.forEach((c) => c.destroy());
+    controllers = Array.from(document.querySelectorAll<HTMLElement>('[data-fog-stage]')).map(createFog);
+  }
+
+  document.addEventListener('astro:page-load', init);
+  document.addEventListener('astro:before-swap', () => {
+    controllers.forEach((c) => c.destroy());
+    controllers = [];
+  });
+</script>

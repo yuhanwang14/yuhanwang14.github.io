@@ -47,6 +47,16 @@ export function slugify(input: string): string {
 
 export type Lang = 'en' | 'zh';
 
+/** Every essay belongs to exactly one category, used to filter the Blog page. */
+export type Category = 'personal' | 'ai';
+
+export const CATEGORIES: Category[] = ['personal', 'ai'];
+
+export const CATEGORY_META: Record<Category, { label: string; labelZh: string }> = {
+  personal: { label: 'Personal', labelZh: '个人' },
+  ai: { label: 'AI', labelZh: 'AI' },
+};
+
 export const LANGS: Lang[] = ['en', 'zh'];
 
 export const LANG_LABELS: Record<Lang, string> = {
