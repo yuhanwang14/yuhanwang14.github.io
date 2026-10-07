@@ -141,12 +141,14 @@
     transform: translateY(12px);
   }
 
-  /* Essay list: hovering one essay lets the others recede, and the homepage's orange scan
-     line runs along the top of the one under the pointer. */
-  .essay-row {
+  /* Essay and project lists: hovering one row lets the others recede, and the homepage's
+     orange scan line runs along the top of the one under the pointer. */
+  .essay-row,
+  .project-row {
     position: relative;
   }
-  .essay-row::before {
+  .essay-row::before,
+  .project-row::before {
     content: '';
     position: absolute;
     top: -1px;
@@ -158,20 +160,25 @@
     transform-origin: 0 50%;
     pointer-events: none;
   }
-  .essay-row:focus-within::before {
+  .essay-row:focus-within::before,
+  .project-row:focus-within::before {
     transform: scaleX(1);
   }
   @media (hover: hover) and (pointer: fine) {
-    .essay-list .essay-row > a {
+    .essay-list .essay-row > a,
+    .project-list .project-row > div {
       transition: opacity 360ms cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .essay-list:hover .essay-row:not(:hover) > a {
+    .essay-list:hover .essay-row:not(:hover) > a,
+    .project-list:hover .project-row:not(:hover) > div {
       opacity: 0.35;
     }
-    .essay-row::before {
+    .essay-row::before,
+    .project-row::before {
       transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .essay-row:hover::before {
+    .essay-row:hover::before,
+    .project-row:hover::before {
       transform: scaleX(1);
     }
   }
@@ -325,6 +332,7 @@
   }
   .link-sweep,
   .essay-row::before,
+  .project-row::before,
   html.js [data-reveal],
   html.js .prose-academic img {
     transition: none;

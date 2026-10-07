@@ -5,12 +5,13 @@ import yuhanPhoto from '../../assets/images/yuhan.jpg';
 import { site } from '../../data/site';
 
 interface Props {
-  active?: 'home' | 'research' | 'industry' | 'skills' | 'publication' | 'blog';
+  active?: 'home' | 'research' | 'industry' | 'skills' | 'publication' | 'projects' | 'blog';
 }
 const { active = 'home' } = Astro.props;
 
 const links: { label: string; href: string; key: NonNullable<Props['active']> }[] = [
   { label: 'Publication', href: '/publication/', key: 'publication' },
+  { label: 'Projects', href: '/projects/', key: 'projects' },
   { label: 'Blog', href: '/blog/', key: 'blog' },
 ];
 ---
