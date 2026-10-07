@@ -23,14 +23,10 @@ const { htmlLang = 'en', ...seoProps } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Marks JS as available so scroll reveals can start hidden; re-applied after
-         client-side navigation because the router swaps the <html> attributes.
-         Elements that morph between pages skip their entrance after a client-side swap,
+    <!-- Elements that morph between pages skip their entrance after a client-side swap,
          so the morph lands on a visible element. -->
     <script is:inline>
-      document.documentElement.classList.add('js');
       document.addEventListener('astro:after-swap', function () {
-        document.documentElement.classList.add('js');
         document.querySelectorAll('[data-still-on-swap]').forEach(function (el) {
           el.classList.remove('rise');
         });
@@ -49,31 +45,5 @@ const { htmlLang = 'en', ...seoProps } = Astro.props;
   </head>
   <body class="min-h-screen fade-in-on-load">
     <slot />
-    <script>
-      // Scroll reveal: marked blocks and essay images rise into place as they enter the view.
-      let observer: IntersectionObserver | undefined;
-
-      function initReveal() {
-        observer?.disconnect();
-        const targets = document.querySelectorAll<HTMLElement>('[data-reveal], .prose-academic img');
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
-          targets.forEach((el) => el.classList.add('is-revealed'));
-          return;
-        }
-        observer = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (!entry.isIntersecting) continue;
-              entry.target.classList.add('is-revealed');
-              observer?.unobserve(entry.target);
-            }
-          },
-          { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
-        );
-        targets.forEach((el) => observer?.observe(el));
-      }
-
-      document.addEventListener('astro:page-load', initReveal);
-    </script>
   </body>
 </html>

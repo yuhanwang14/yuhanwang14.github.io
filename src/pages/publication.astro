@@ -15,10 +15,10 @@ import { publications } from '../data/publications';
   horizon
 >
   <ol class="border-b border-hairline">
-    {publications.map((publication, i) => (
+    {publications.map((publication) => (
       <li class="border-t border-hairline py-12 md:py-16">
         <article class="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] md:items-center md:gap-14">
-          <div class="min-w-0" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+          <div class="min-w-0">
             <p class="label-smallcaps text-accent">{publication.badge}</p>
             <h2 class="mt-4 font-display text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.12] text-ink">
               <a href={publication.href} class="transition-colors duration-200 hover:text-accent focus-visible:text-accent">
@@ -55,8 +55,6 @@ import { publications } from '../data/publications';
             tabindex="-1"
             aria-hidden="true"
             class="group block overflow-hidden rounded-[2px]"
-            data-reveal
-            style={`--reveal-delay:${i * 90 + 140}ms`}
           >
             <video
               class="pub-loop block h-auto w-full transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"

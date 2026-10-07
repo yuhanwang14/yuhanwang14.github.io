@@ -51,14 +51,13 @@ const availableFor = (g: Group) => ({
   intro={`${groups.length} ${groups.length === 1 ? 'essay' : 'essays'}`}
 >
   <div class="essay-list border-b border-hairline">
-    {groups.map((g, i) => (
+    {groups.map((g) => (
       <PostCard
         post={g.primary as CollectionEntry<'blog'>}
         baseSlug={g.baseSlug}
         primaryLang={parsePostId(g.primary.id).lang}
         available={availableFor(g)}
         readingTime={estimateReadingTime(((g.primary as CollectionEntry<'blog'>).body) ?? '')}
-        index={i}
       />
     ))}
   </div>

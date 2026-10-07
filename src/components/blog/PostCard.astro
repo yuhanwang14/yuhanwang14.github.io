@@ -12,22 +12,15 @@ interface Props {
   /** Languages this post group has versions for. */
   available: Partial<Record<Lang, boolean>>;
   readingTime: number;
-  /** Position in the list, used to stagger the entrance. */
-  index?: number;
   pinned?: boolean;
 }
-const { post, baseSlug, primaryLang, available, readingTime, index = 0, pinned = false } = Astro.props;
+const { post, baseSlug, primaryLang, available, readingTime, pinned = false } = Astro.props;
 const { title, description, publishedAt, tags, category } = post.data;
 const href = primaryLang === 'zh' ? `/blog/${baseSlug}/zh/` : `/blog/${baseSlug}/`;
 const langs = (Object.keys(available) as Lang[]).filter((l) => available[l]);
 ---
 
-<article
-  class="essay-row border-t border-hairline"
-  data-reveal
-  data-category={category}
-  style={`--reveal-delay:${Math.min(index, 6) * 90}ms`}
->
+<article class="essay-row border-t border-hairline" data-category={category}>
   <a href={href} class="group grid grid-cols-1 gap-x-10 gap-y-3 py-10 md:grid-cols-[10rem_minmax(0,1fr)] md:py-12">
     <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.08em] text-muted md:flex-col md:gap-y-2 md:pt-3">
       <span class="font-display text-[13px] tracking-[0.1em] text-accent">{CATEGORY_META[category].label}</span>

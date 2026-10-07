@@ -127,20 +127,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Scroll reveal: blocks rise into place once. Hidden only when JS is running. */
-  html.js [data-reveal],
-  html.js .prose-academic img {
-    transition:
-      opacity 500ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
-    transition-delay: var(--reveal-delay, 0ms);
-  }
-  html.js [data-reveal]:not(.is-revealed),
-  html.js .prose-academic img:not(.is-revealed) {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
   /* Essay and project lists: hovering one row lets the others recede, and the homepage's
      orange scan line runs along the top of the one under the pointer. */
   .essay-row,
@@ -332,9 +318,7 @@
   }
   .link-sweep,
   .essay-row::before,
-  .project-row::before,
-  html.js [data-reveal],
-  html.js .prose-academic img {
+  .project-row::before {
     transition: none;
   }
   .page-horizon-scan span {

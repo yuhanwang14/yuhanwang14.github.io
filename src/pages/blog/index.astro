@@ -51,14 +51,13 @@ const availableFor = (g: (typeof groups)[number]) => ({
 
   {listed.length > 0 ? (
     <div class="essay-list border-b border-hairline" data-essay-rows>
-      {listed.map((g, i) => (
+      {listed.map((g) => (
         <PostCard
           post={g.primary}
           baseSlug={g.baseSlug}
           primaryLang={parsePostId(g.primary.id).lang}
           available={availableFor(g)}
           readingTime={estimateReadingTime(g.primary.body ?? '')}
-          index={i}
           pinned={g.pinned}
         />
       ))}

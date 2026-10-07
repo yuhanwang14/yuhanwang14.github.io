@@ -14,8 +14,8 @@ import { projects } from '../data/projects';
   horizon
 >
   <div class="project-list border-b border-hairline">
-    {projects.map((project, i) => (
-      <article class="project-row border-t border-hairline" data-reveal style={`--reveal-delay:${Math.min(i, 6) * 90}ms`}>
+    {projects.map((project) => (
+      <article class="project-row border-t border-hairline">
         <div class="grid grid-cols-1 gap-x-10 gap-y-3 py-10 md:grid-cols-[10rem_minmax(0,1fr)] md:py-12">
           <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.08em] text-muted md:flex-col md:gap-y-2 md:pt-3">
             <span class="font-display text-[13px] tracking-[0.1em] text-accent">{project.context}</span>
