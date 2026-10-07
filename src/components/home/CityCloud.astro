@@ -201,6 +201,13 @@ const { class: className } = Astro.props;
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE);
 
+    // Clear to the site background token so the canvas and the page are one surface.
+    const bg = getComputedStyle(document.documentElement)
+      .getPropertyValue('--bg')
+      .trim()
+      .split(/\s+/)
+      .map((v) => (Number(v) || 0) / 255);
+
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const small = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
 
@@ -281,7 +288,7 @@ const { class: className } = Astro.props;
         canvas.height = h;
       }
       gl.viewport(0, 0, w, h);
-      gl.clearColor(11 / 255, 13 / 255, 16 / 255, 1);
+      gl.clearColor(bg[0] ?? 0, bg[1] ?? 0, bg[2] ?? 0, 1);
       gl.clear(gl.COLOR_BUFFER_BIT);
       if (!current) return;
 

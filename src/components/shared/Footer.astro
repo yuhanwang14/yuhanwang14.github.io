@@ -1,5 +1,7 @@
 ---
 // src/components/shared/Footer.astro
+// Footer for inner pages. The two city clocks repeat the homepage's London / Boston switch.
+import { cities } from '../../data/cities';
 import { site } from '../../data/site';
 
 const year = new Date().getFullYear();
@@ -11,7 +13,17 @@ const email = site.emails[0]?.address;
 
 <footer class="mt-24 border-t border-hairline">
   <div class="max-w-[1100px] mx-auto px-6 py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-sm text-muted">
-    <p class="font-mono">© {year} {site.name}</p>
+    <div class="flex flex-wrap items-baseline gap-x-6 gap-y-2 font-mono">
+      <p>© {year} {site.name}</p>
+      <p class="tabular-nums">
+        {cities.map((city, i) => (
+          <span>
+            {i > 0 && <span class="mx-2" aria-hidden="true">·</span>}
+            {city.label} <time data-footer-clock={city.timeZone}>--:--</time>
+          </span>
+        ))}
+      </p>
+    </div>
     <ul class="flex flex-wrap items-center gap-x-6 gap-y-2">
       {footerLinks.map((link) => (
         <li>
@@ -29,3 +41,26 @@ const email = site.emails[0]?.address;
     </ul>
   </div>
 </footer>
+
+<script>
+  let timer: number | undefined;
+
+  function tick() {
+    const now = new Date();
+    document.querySelectorAll<HTMLElement>('[data-footer-clock]').forEach((el) => {
+      el.textContent = new Intl.DateTimeFormat('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: el.dataset.footerClock,
+      }).format(now);
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    window.clearInterval(timer);
+    if (!document.querySelector('[data-footer-clock]')) return;
+    tick();
+    timer = window.setInterval(tick, 15000);
+  });
+</script>

@@ -1,6 +1,14 @@
 // src/data/publications.ts
-import type { ImageMetadata } from 'astro';
-import page4d from '../assets/images/publications/PAGE-4D.gif';
+// Each entry shows a short muted loop made from the paper's own results (public/publications/).
+
+export interface PublicationMedia {
+  /** Muted, looping clip served from /public. */
+  video: string;
+  /** Still frame shown before the clip loads and for reduced motion. */
+  poster: string;
+  width: number;
+  height: number;
+}
 
 export interface Publication {
   badge: string;
@@ -8,7 +16,9 @@ export interface Publication {
   authorsHtml: string;
   href: string;
   paperHref?: string;
-  image: ImageMetadata;
+  /** Copied by the BibTeX button; keep its title and authors in line with the fields above. */
+  bibtex?: string;
+  media: PublicationMedia;
 }
 
 export const publications: Publication[] = [
@@ -19,6 +29,21 @@ export const publications: Publication[] = [
       'Kaichen Zhou, <strong>Yuhan Wang</strong>, Grace Chen, Xinhai Chang, Gaspard Beaudouin, Fangneng Zhan, Paul Pu Liang, Mengyu Wang.',
     href: 'https://page4d.github.io/',
     paperHref: 'https://arxiv.org/pdf/2510.17568',
-    image: page4d,
+    bibtex: `@inproceedings{zhou2026page,
+  title={PAGE-4D: Disentangled Pose and Geometry Estimation for 4D Perception},
+  author={Zhou, Kaichen and Wang, Yuhan and Chen, Grace and Chang, Xinhai and Beaudouin, Gaspard and Zhan, Fangneng and Liang, Paul Pu and Wang, Mengyu},
+  booktitle={International Conference on Learning Representations (ICLR)},
+  pages={36401--36414},
+  year={2026},
+  url={https://proceedings.iclr.cc/paper_files/paper/2026/hash/3d55170799265c03b37993e02b71b2cc-Abstract-Conference.html}
+}`,
+    // From the PAGE-4D teaser: one street video of a taxi, reconstructed as a point cloud.
+    // The row of taxis is the same car at successive moments.
+    media: {
+      video: '/publications/page4d-recon.mp4',
+      poster: '/publications/page4d-recon-poster.webp',
+      width: 608,
+      height: 342,
+    },
   },
 ];

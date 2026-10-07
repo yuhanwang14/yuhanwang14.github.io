@@ -15,7 +15,7 @@ const links: { label: string; href: string; key: NonNullable<Props['active']> }[
 ];
 ---
 
-<nav aria-label="Primary" class="mx-auto flex max-w-[1100px] items-center justify-between gap-6 px-6 pt-6">
+<nav aria-label="Primary" class="relative z-10 mx-auto flex max-w-[1100px] items-center justify-between gap-6 px-6 pt-6">
   <a href="/" class="group inline-flex items-center gap-3 font-display text-xl leading-none text-ink">
     <Image
       src={yuhanPhoto}
@@ -24,7 +24,11 @@ const links: { label: string; href: string; key: NonNullable<Props['active']> }[
       sizes="36px"
       class="h-9 w-9 rounded-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
     />
-    <span class="transition-colors duration-200 group-hover:text-accent">{site.name}<span class="text-accent">.</span></span>
+    <span
+      class="inline-block leading-[0.92] tracking-[-0.01em] transition-colors duration-200 group-hover:text-accent"
+      transition:name="site-name"
+      transition:animate="initial"
+    >{site.name}<span class="text-accent">.</span></span>
   </a>
   <ul class="flex items-center gap-6">
     {links.map((link) => (
@@ -43,4 +47,3 @@ const links: { label: string; href: string; key: NonNullable<Props['active']> }[
     ))}
   </ul>
 </nav>
-

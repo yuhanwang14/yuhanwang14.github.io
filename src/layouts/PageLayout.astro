@@ -1,7 +1,8 @@
 ---
 // src/layouts/PageLayout.astro
 // Inner pages: the same masthead language as the homepage (display name, accent full stop),
-// single column, no sidebar.
+// single column, no sidebar. With horizon, the London skyline from the homepage point cloud
+// sits behind the masthead and the homepage's orange scan line crosses it once on arrival.
 import BaseLayout from './BaseLayout.astro';
 import Navbar from '../components/shared/Navbar.astro';
 import Footer from '../components/shared/Footer.astro';
@@ -12,13 +13,28 @@ interface Props {
   active?: 'home' | 'research' | 'industry' | 'skills' | 'publication' | 'blog';
   heading?: string;
   intro?: string;
+  horizon?: boolean;
 }
-const { title, description, active = 'home', heading, intro } = Astro.props;
+const { title, description, active = 'home', heading, intro, horizon = false } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
+  {horizon && (
+    <div class="page-horizon" aria-hidden="true" transition:name="page-horizon" transition:animate="initial">
+      <img
+        src="/city/london-horizon-1440.webp"
+        srcset="/city/london-horizon-1440.webp 1440w, /city/london-horizon-2880.webp 2880w"
+        sizes="100vw"
+        width="2880"
+        height="720"
+        alt=""
+        decoding="async"
+      />
+      <div class="page-horizon-scan"><span></span></div>
+    </div>
+  )}
   <Navbar active={active} />
-  <main class="mx-auto max-w-[1100px] px-6 pt-16 md:pt-24">
+  <main class="relative z-[1] mx-auto max-w-[1100px] px-6 pt-16 md:pt-24">
     {heading && (
       <header class="mb-14 md:mb-20">
         <h1 class="rise font-display text-[clamp(2.75rem,7vw,5rem)] font-normal leading-[0.95] tracking-[-0.01em] text-ink">
@@ -35,4 +51,3 @@ const { title, description, active = 'home', heading, intro } = Astro.props;
   </main>
   <Footer />
 </BaseLayout>
-

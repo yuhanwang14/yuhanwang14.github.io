@@ -51,8 +51,8 @@ const email = site.emails[0]?.address;
 
       <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 class="rise font-display text-[clamp(3.25rem,9vw,7rem)] font-normal leading-[0.92] tracking-[-0.01em]">
-            {site.name}<span class="text-[#FF5A1F]">.</span>
+          <h1 class="rise font-display text-[clamp(3.25rem,9vw,7rem)] font-normal leading-[0.92] tracking-[-0.01em]" data-still-on-swap>
+            <span class="inline-block" transition:name="site-name" transition:animate="initial">{site.name}<span class="text-[#FF5A1F]">.</span></span>
           </h1>
           <p class="rise mt-4 font-display text-[clamp(1.25rem,2.6vw,1.9rem)] leading-tight text-[#F1EEE7]/80 [--rise-delay:120ms]">
             Founder | Engineer | Exile
@@ -81,13 +81,13 @@ const email = site.emails[0]?.address;
 <style is:global>
   html:has(.home-hero),
   html:has(.home-hero) body {
-    background: #0b0d10;
+    background: rgb(var(--bg));
   }
   .home-scrim {
     background:
-      linear-gradient(to top, rgb(11 13 16 / 0.82), rgb(11 13 16 / 0) 42%),
-      linear-gradient(to right, rgb(11 13 16 / 0.5), rgb(11 13 16 / 0) 45%),
-      linear-gradient(to bottom, rgb(11 13 16 / 0.6), rgb(11 13 16 / 0) 22%);
+      linear-gradient(to top, rgb(var(--bg) / 0.82), rgb(var(--bg) / 0) 42%),
+      linear-gradient(to right, rgb(var(--bg) / 0.5), rgb(var(--bg) / 0) 45%),
+      linear-gradient(to bottom, rgb(var(--bg) / 0.6), rgb(var(--bg) / 0) 22%);
   }
   .city-btn {
     color: rgb(241 238 231 / 0.42);

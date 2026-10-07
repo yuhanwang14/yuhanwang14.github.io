@@ -43,14 +43,14 @@
 
 /*
  * Theme tokens (RGB triplets so Tailwind <alpha-value> works: bg-accent/20 etc).
- * One theme: the city at night, matching the homepage.
+ * One theme: the city at night on graphite, matching the homepage.
  */
 :root {
-  --bg:         11  13  16;   /* night           #0B0D10 */
-  --bg-alt:     22  26  32;   /* raised night    #161A20 */
-  --ink:       241 238 231;   /* lamplit paper   #F1EEE7 */
-  --muted:     156 160 167;   /* street haze     #9CA0A7 */
-  --hairline:   40  45  53;   /*                 #282D35 */
+  --bg:         21  21  21;   /* graphite        #151515 */
+  --bg-alt:     32  32  32;   /* raised night    #202020 */
+  --ink:       232 229 222;   /* lamplit paper   #E8E5DE, a touch dimmer so text does not glare on the dark ground */
+  --muted:     160 160 160;   /* street haze     #A0A0A0 */
+  --hairline:   46  46  46;   /*                 #2E2E2E */
   --accent:    255  90  31;   /* signal orange   #FF5A1F */
   color-scheme: dark;
 }
@@ -127,23 +127,40 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Scroll reveal: blocks clear out of a light fog. Hidden only when JS is running. */
+  /* Scroll reveal: blocks rise into place once. Hidden only when JS is running. */
   html.js [data-reveal],
   html.js .prose-academic img {
     transition:
-      opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 900ms cubic-bezier(0.16, 1, 0.3, 1),
-      filter 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+      opacity 500ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
     transition-delay: var(--reveal-delay, 0ms);
   }
   html.js [data-reveal]:not(.is-revealed),
   html.js .prose-academic img:not(.is-revealed) {
     opacity: 0;
-    transform: translateY(20px);
-    filter: blur(10px);
+    transform: translateY(12px);
   }
 
-  /* Essay list: hovering one essay lets the others recede. */
+  /* Essay list: hovering one essay lets the others recede, and the homepage's orange scan
+     line runs along the top of the one under the pointer. */
+  .essay-row {
+    position: relative;
+  }
+  .essay-row::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgb(var(--accent));
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    pointer-events: none;
+  }
+  .essay-row:focus-within::before {
+    transform: scaleX(1);
+  }
   @media (hover: hover) and (pointer: fine) {
     .essay-list .essay-row > a {
       transition: opacity 360ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -151,6 +168,89 @@
     .essay-list:hover .essay-row:not(:hover) > a {
       opacity: 0.35;
     }
+    .essay-row::before {
+      transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .essay-row:hover::before {
+      transform: scaleX(1);
+    }
+  }
+
+  /* Inner-page masthead: the London skyline from the homepage point cloud. The image is
+     points on black, so plus-lighter adds its light to whatever the page background is. */
+  .page-horizon {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    height: clamp(240px, 29vw, 400px);
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 8%, #000 58%),
+      linear-gradient(to bottom, #000 40%, transparent 96%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent 8%, #000 58%),
+      linear-gradient(to bottom, #000 40%, transparent 96%);
+    mask-composite: intersect;
+  }
+  .page-horizon img,
+  .page-horizon-scan {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .page-horizon img {
+    object-fit: cover;
+    object-position: 64% 100%;
+    opacity: 0.45;
+    mix-blend-mode: plus-lighter;
+  }
+  /* The scan lights only the points: an orange band, masked by the skyline's own light. */
+  .page-horizon-scan {
+    mix-blend-mode: plus-lighter;
+    -webkit-mask: url('/city/london-horizon-mask.webp') 64% 100% / cover no-repeat;
+    mask: url('/city/london-horizon-mask.webp') 64% 100% / cover no-repeat;
+  }
+  .page-horizon-scan span {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 22%;
+    background: linear-gradient(90deg, rgb(255 90 31 / 0), rgb(255 90 31 / 0.95) 50%, rgb(255 90 31 / 0));
+    transform: translateX(-100%);
+    animation: horizon-scan 2200ms cubic-bezier(0.45, 0, 0.2, 1) 300ms both;
+  }
+  @keyframes horizon-scan {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(460%); }
+  }
+
+  /* Essay pages: a 2px orange reading-progress line along the top edge. */
+  .read-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    height: 2px;
+    background: rgb(var(--accent));
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    pointer-events: none;
+  }
+  @supports (animation-timeline: scroll()) {
+    .read-progress {
+      animation: read-progress linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+  @keyframes read-progress {
+    to { transform: scaleX(1); }
   }
 }
 
@@ -224,8 +324,25 @@
     animation: none;
   }
   .link-sweep,
+  .essay-row::before,
   html.js [data-reveal],
   html.js .prose-academic img {
     transition: none;
   }
+  .page-horizon-scan span {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Page to page: the name travels between the homepage masthead and the navbar. */
+::view-transition-group(site-name) {
+  animation-duration: 560ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Blog filter: essays slide to their new places instead of jumping. */
+::view-transition-group(.essay-row) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }

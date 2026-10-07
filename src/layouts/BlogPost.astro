@@ -65,6 +65,7 @@ const jsonLd = {
   jsonLd={jsonLd}
   htmlLang={lang === 'zh' ? 'zh-CN' : 'en'}
 >
+  <div class="read-progress" aria-hidden="true" data-read-progress></div>
   <Navbar active="blog" />
   <main class="post-column pt-16 md:pt-24">
     <div class="flex items-center justify-between gap-4">
@@ -105,3 +106,36 @@ const jsonLd = {
   </main>
   <Footer />
 </BaseLayout>
+
+<script>
+  // Browsers without scroll-driven animations get the same progress line from a scroll listener.
+  let detach: (() => void) | undefined;
+
+  function initProgress() {
+    detach?.();
+    detach = undefined;
+    const bar = document.querySelector<HTMLElement>('[data-read-progress]');
+    if (!bar || CSS.supports('animation-timeline: scroll()')) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      bar.style.transform = 'scaleX(' + progress + ')';
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    detach = () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }
+
+  document.addEventListener('astro:page-load', initProgress);
+  document.addEventListener('astro:before-swap', () => detach?.());
+</script>

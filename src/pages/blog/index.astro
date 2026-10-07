@@ -33,6 +33,7 @@ const availableFor = (g: (typeof groups)[number]) => ({
   active="blog"
   heading="Blog"
   intro="Essays on AI, work, and where we belong."
+  horizon
 >
   <nav aria-label="Filter essays" class="rise mb-6 flex flex-wrap gap-x-8 gap-y-2 [--rise-delay:200ms]" data-essay-filter>
     {filters.map((filter) => (
@@ -95,6 +96,27 @@ const availableFor = (g: (typeof groups)[number]) => ({
     apply(location.hash.replace('#', ''));
   }
 
+  // Same filter, but essays slide to their new places (View Transitions, where supported).
+  function applyAnimated(key: string) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || typeof document.startViewTransition !== 'function') {
+      apply(key);
+      return;
+    }
+    const rows = Array.from(document.querySelectorAll<HTMLElement>('[data-essay-rows] [data-category]'));
+    rows.forEach((row, i) => {
+      row.style.setProperty('view-transition-name', 'essay-row-' + i);
+      row.style.setProperty('view-transition-class', 'essay-row');
+    });
+    const transition = document.startViewTransition(() => apply(key));
+    transition.finished.finally(() => {
+      rows.forEach((row) => {
+        row.style.removeProperty('view-transition-name');
+        row.style.removeProperty('view-transition-class');
+      });
+    });
+  }
+
   document.addEventListener('astro:page-load', () => {
     const nav = document.querySelector<HTMLElement>('[data-essay-filter]');
     if (!nav) return;
@@ -105,9 +127,8 @@ const availableFor = (g: (typeof groups)[number]) => ({
       if (!link) return;
       event.preventDefault();
       history.replaceState(history.state, '', link.getAttribute('href') ?? '/blog/');
-      apply(link.dataset.filter ?? 'all');
+      applyAnimated(link.dataset.filter ?? 'all');
     });
   });
   window.addEventListener('hashchange', fromHash);
 </script>
-
