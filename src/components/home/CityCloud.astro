@@ -1,0 +1,417 @@
+---
+// src/components/home/CityCloud.astro
+// Full-screen WebGL2 point cloud of a city from aerial LiDAR. The city rises out of the
+// ground on load, a scan line sweeps across it, and the camera drifts slowly. The city
+// switch and clocks live in the page and are found by data attributes.
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<div class:list={['city-cloud', className]} data-city-cloud>
+  <canvas class="city-canvas" aria-hidden="true"></canvas>
+</div>
+
+<style is:global>
+  .city-cloud {
+    overflow: hidden;
+  }
+  .city-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    transition: opacity 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .city-cloud[data-ready] .city-canvas {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  import { cities, type City } from '../../data/cities';
+
+  const VS = `#version 300 es
+  precision highp float;
+  layout(location = 0) in vec3 a_pos;
+  layout(location = 1) in float a_shade;
+  layout(location = 2) in float a_hag;
+  uniform mat4 u_vp;
+  uniform vec3 u_min;
+  uniform vec3 u_max;
+  uniform float u_ground;
+  uniform vec3 u_eye;
+  uniform float u_rise;
+  uniform float u_scan;
+  uniform vec2 u_scanDir;
+  uniform float u_size;
+  uniform float u_gain;
+  out vec3 v_color;
+
+  float hash(float n) { return fract(sin(n * 12.9898) * 43758.5453); }
+
+  void main() {
+    vec3 p = mix(u_min, u_max, a_pos);
+    float id = float(gl_VertexID);
+    float delay = hash(id) * 0.55;
+    float t = clamp((u_rise - delay) / 0.45, 0.0, 1.0);
+    float e = 1.0 - pow(1.0 - t, 3.0);
+    // Each point rises from the ground beneath it.
+    float above = a_hag * 255.0;
+    p.z -= above * (1.0 - e);
+    gl_Position = u_vp * vec4(p, 1.0);
+
+    float dist = length(p - u_eye);
+    gl_PointSize = u_size * clamp(1500.0 / dist, 0.6, 2.4);
+
+    // Ground stays dim and cool; buildings brighten toward warm white as they rise.
+    float h = clamp(above / 120.0, 0.0, 1.0);
+    vec3 low = vec3(0.20, 0.25, 0.33);
+    vec3 high = vec3(1.0, 0.94, 0.84);
+    vec3 c = mix(low, high, pow(h, 0.6)) * mix(0.55, 2.4, h) * (0.45 + 0.55 * a_shade);
+    float fog = exp(-max(dist - 1100.0, 0.0) / 1500.0);
+    float s = dot(p.xy, u_scanDir) - u_scan;
+    float band = exp(-s * s / 900.0);
+    c = c * fog + vec3(1.0, 0.36, 0.12) * band * (0.35 + 2.2 * h);
+    v_color = c * u_gain * mix(0.12, 1.0, e);
+  }
+  `;
+
+  const FS = `#version 300 es
+  precision mediump float;
+  in vec3 v_color;
+  out vec4 outColor;
+  void main() {
+    outColor = vec4(v_color, 1.0);
+  }
+  `;
+
+  type Vec3 = [number, number, number];
+
+  function perspective(fovy: number, aspect: number, near: number, far: number): number[] {
+    const f = 1 / Math.tan(fovy / 2);
+    const nf = 1 / (near - far);
+    return [f / aspect, 0, 0, 0, 0, f, 0, 0, 0, 0, (far + near) * nf, -1, 0, 0, 2 * far * near * nf, 0];
+  }
+
+  function lookAt(eye: Vec3, target: Vec3, up: Vec3): number[] {
+    const norm = (v: Vec3): Vec3 => {
+      const l = Math.hypot(v[0], v[1], v[2]) || 1;
+      return [v[0] / l, v[1] / l, v[2] / l];
+    };
+    const cross = (a: Vec3, b: Vec3): Vec3 => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+    const dot = (a: Vec3, b: Vec3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    const z = norm([eye[0] - target[0], eye[1] - target[1], eye[2] - target[2]]);
+    const x = norm(cross(up, z));
+    const y = cross(z, x);
+    return [x[0], y[0], z[0], 0, x[1], y[1], z[1], 0, x[2], y[2], z[2], 0, -dot(x, eye), -dot(y, eye), -dot(z, eye), 1];
+  }
+
+  function multiply(a: number[], b: number[]): number[] {
+    const out = new Array(16).fill(0);
+    for (let c = 0; c < 4; c++) {
+      for (let r = 0; r < 4; r++) {
+        let s = 0;
+        for (let k = 0; k < 4; k++) s += a[k * 4 + r] * b[c * 4 + k];
+        out[c * 4 + r] = s;
+      }
+    }
+    return out;
+  }
+
+  interface Loaded {
+    city: City;
+    vao: WebGLVertexArrayObject;
+    buffers: WebGLBuffer[];
+    count: number;
+    min: Vec3;
+    max: Vec3;
+    ground: number;
+  }
+
+  let teardown: (() => void) | null = null;
+
+  function init() {
+    teardown?.();
+    teardown = null;
+    const root = document.querySelector<HTMLElement>('[data-city-cloud]');
+    const canvas = root?.querySelector('canvas');
+    if (!root || !canvas) return;
+
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-city-switch] [data-city]'));
+    const clocks = Array.from(document.querySelectorAll<HTMLElement>('[data-clock]'));
+
+    const tickClocks = () => {
+      const now = new Date();
+      clocks.forEach((el) => {
+        el.textContent = new Intl.DateTimeFormat('en-GB', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+          timeZone: el.dataset.clock,
+        }).format(now);
+      });
+    };
+    tickClocks();
+    const clockTimer = window.setInterval(tickClocks, 15000);
+
+    const visitorZone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    let index = visitorZone.startsWith('America/') ? cities.findIndex((c) => c.id === 'boston') : 0;
+    if (index < 0) index = 0;
+
+    const markActive = (i: number) => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.city === cities[i].id)));
+    };
+    markActive(index);
+
+    const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, powerPreference: 'high-performance' });
+    if (!gl) {
+      teardown = () => window.clearInterval(clockTimer);
+      return;
+    }
+
+    const compile = (type: number, src: string) => {
+      const sh = gl.createShader(type) as WebGLShader;
+      gl.shaderSource(sh, src);
+      gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh) ?? 'shader');
+      return sh;
+    };
+    const program = gl.createProgram() as WebGLProgram;
+    try {
+      gl.attachShader(program, compile(gl.VERTEX_SHADER, VS));
+      gl.attachShader(program, compile(gl.FRAGMENT_SHADER, FS));
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program) ?? 'link');
+    } catch (err) {
+      console.error(err);
+      teardown = () => window.clearInterval(clockTimer);
+      return;
+    }
+    gl.useProgram(program);
+    const U = (n: string) => gl.getUniformLocation(program, n);
+    const u = {
+      vp: U('u_vp'), min: U('u_min'), max: U('u_max'), ground: U('u_ground'), eye: U('u_eye'), rise: U('u_rise'),
+      scan: U('u_scan'), scanDir: U('u_scanDir'), size: U('u_size'), gain: U('u_gain'),
+    };
+    gl.disable(gl.DEPTH_TEST);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE);
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const small = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+
+    const cache = new Map<number, Promise<Loaded>>();
+    const load = (i: number): Promise<Loaded> => {
+      const hit = cache.get(i);
+      if (hit) return hit;
+      const city = cities[i];
+      const p = fetch(city.file)
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to load ' + city.file);
+          return res.arrayBuffer();
+        })
+        .then((buf) => {
+          const headerLength = new DataView(buf).getUint32(0, true);
+          const header = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 4, headerLength)));
+          const total: number = header.count;
+          const offset = 4 + headerLength;
+          const positions = new Uint16Array(buf, offset, total * 3);
+          const shades = new Uint8Array(buf, offset + total * 6, total);
+          const heights = new Uint8Array(buf, offset + total * 7, total);
+          const min = header.min as Vec3;
+          const max = header.max as Vec3;
+
+          // Ground level: a low percentile of point heights.
+          const sample: number[] = [];
+          for (let k = 0; k < total; k += 37) sample.push(min[2] + (positions[k * 3 + 2] / 65535) * (max[2] - min[2]));
+          sample.sort((a, b) => a - b);
+          const ground = sample[Math.floor(sample.length * 0.08)] ?? min[2];
+
+          const vao = gl.createVertexArray() as WebGLVertexArrayObject;
+          gl.bindVertexArray(vao);
+          const pb = gl.createBuffer() as WebGLBuffer;
+          gl.bindBuffer(gl.ARRAY_BUFFER, pb);
+          gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+          gl.enableVertexAttribArray(0);
+          gl.vertexAttribPointer(0, 3, gl.UNSIGNED_SHORT, true, 0, 0);
+          const sb = gl.createBuffer() as WebGLBuffer;
+          gl.bindBuffer(gl.ARRAY_BUFFER, sb);
+          gl.bufferData(gl.ARRAY_BUFFER, shades, gl.STATIC_DRAW);
+          gl.enableVertexAttribArray(1);
+          gl.vertexAttribPointer(1, 1, gl.UNSIGNED_BYTE, true, 0, 0);
+          const hb = gl.createBuffer() as WebGLBuffer;
+          gl.bindBuffer(gl.ARRAY_BUFFER, hb);
+          gl.bufferData(gl.ARRAY_BUFFER, heights, gl.STATIC_DRAW);
+          gl.enableVertexAttribArray(2);
+          gl.vertexAttribPointer(2, 1, gl.UNSIGNED_BYTE, true, 0, 0);
+          gl.bindVertexArray(null);
+          const count = small ? Math.min(total, 220000) : total;
+          return { city, vao, buffers: [pb, sb, hb], count, min, max, ground };
+        });
+      cache.set(i, p);
+      p.catch(() => cache.delete(i));
+      return p;
+    };
+
+    let destroyed = false;
+    let current: Loaded | null = null;
+    let rise = reduce ? 1 : 0;
+    let target = 1;
+    let pending: number | null = null;
+    let headingOffset = 0;
+    let tiltOffset = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+    let raf = 0;
+    let last = 0;
+    let clock = 0;
+    let scanStart = reduce ? -1 : 1.6;
+
+    const draw = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = Math.max(1, Math.round(rect.width * dpr));
+      const h = Math.max(1, Math.round(rect.height * dpr));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+      }
+      gl.viewport(0, 0, w, h);
+      gl.clearColor(11 / 255, 13 / 255, 16 / 255, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      if (!current) return;
+
+      const aspect = w / h;
+      const portrait = aspect < 1;
+      const elevation = (portrait ? 0.5 : 0.4) + tiltOffset;
+      const heading = current.city.heading + headingOffset + (reduce ? 0 : clock * 0.01);
+      const radius = portrait ? 1250 : 1500 * Math.max(1, 1.25 / aspect);
+      const target: Vec3 = [current.city.focus[0], current.city.focus[1], current.ground + 60];
+      const eye: Vec3 = [
+        target[0] + radius * Math.cos(elevation) * Math.sin(heading),
+        target[1] - radius * Math.cos(elevation) * Math.cos(heading),
+        target[2] + radius * Math.sin(elevation),
+      ];
+      const fov = portrait ? 58 : 38;
+      const vp = multiply(perspective((fov * Math.PI) / 180, aspect, 20, 9000), lookAt(eye, target, [0, 0, 1]));
+
+      let scan = 1e6;
+      if (scanStart >= 0) {
+        const t = (clock - scanStart) % 11;
+        if (clock >= scanStart && t < 4) scan = -1600 + (t / 4) * 3200;
+      }
+
+      gl.useProgram(program);
+      gl.bindVertexArray(current.vao);
+      gl.uniformMatrix4fv(u.vp, false, new Float32Array(vp));
+      gl.uniform3fv(u.min, current.min);
+      gl.uniform3fv(u.max, current.max);
+      gl.uniform1f(u.ground, current.ground);
+      gl.uniform3fv(u.eye, eye);
+      gl.uniform1f(u.rise, rise);
+      gl.uniform1f(u.scan, scan);
+      gl.uniform2f(u.scanDir, Math.cos(0.5), Math.sin(0.5));
+      gl.uniform1f(u.size, 1.5 * dpr);
+      gl.uniform1f(u.gain, small ? 0.85 : 0.42);
+      gl.drawArrays(gl.POINTS, 0, current.count);
+      gl.bindVertexArray(null);
+    };
+
+    const show = (loaded: Loaded, i: number) => {
+      current = loaded;
+      index = i;
+      markActive(i);
+      root.dataset.ready = '';
+      target = 1;
+      if (!reduce) scanStart = clock + 1.6;
+    };
+
+    const loop = (now: number) => {
+      raf = requestAnimationFrame(loop);
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 0.016;
+      last = now;
+      clock += dt;
+      if (rise < target) rise = Math.min(target, rise + dt / 2.8);
+      else if (rise > target) rise = Math.max(target, rise - dt / 0.9);
+      if (pending !== null && rise === 0) {
+        const next = pending;
+        pending = null;
+        load(next).then((loaded) => {
+          if (!destroyed) show(loaded, next);
+        });
+      }
+      headingOffset += (pointerX * 0.22 - headingOffset) * 0.035;
+      tiltOffset += (pointerY * -0.06 - tiltOffset) * 0.035;
+      draw();
+    };
+
+    const onPointer = (e: PointerEvent) => {
+      pointerX = e.clientX / window.innerWidth - 0.5;
+      pointerY = e.clientY / window.innerHeight - 0.5;
+    };
+    const onResize = () => {
+      if (reduce) draw();
+    };
+    const choose = (i: number) => {
+      if (i === index && pending === null) return;
+      markActive(i);
+      void load(i);
+      if (reduce) {
+        load(i).then((loaded) => {
+          if (destroyed) return;
+          show(loaded, i);
+          draw();
+        });
+        return;
+      }
+      pending = i;
+      target = 0;
+    };
+    const onClick = (e: Event) => {
+      const id = (e.currentTarget as HTMLElement).dataset.city;
+      const i = cities.findIndex((c) => c.id === id);
+      if (i >= 0) choose(i);
+    };
+
+    load(index)
+      .then((loaded) => {
+        if (destroyed) return;
+        show(loaded, index);
+        if (reduce) draw();
+        else raf = requestAnimationFrame(loop);
+        window.setTimeout(() => void load((index + 1) % cities.length), 2500);
+      })
+      .catch((err) => console.error(err));
+
+    if (!reduce) window.addEventListener('pointermove', onPointer, { passive: true });
+    window.addEventListener('resize', onResize);
+    buttons.forEach((b) => b.addEventListener('click', onClick));
+
+    teardown = () => {
+      destroyed = true;
+      cancelAnimationFrame(raf);
+      window.clearInterval(clockTimer);
+      window.removeEventListener('pointermove', onPointer);
+      window.removeEventListener('resize', onResize);
+      buttons.forEach((b) => b.removeEventListener('click', onClick));
+      cache.forEach((p) =>
+        p.then((l) => {
+          gl.deleteVertexArray(l.vao);
+          l.buffers.forEach((b) => gl.deleteBuffer(b));
+        }).catch(() => {}),
+      );
+      gl.deleteProgram(program);
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+    };
+  }
+
+  document.addEventListener('astro:page-load', init);
+  document.addEventListener('astro:before-swap', () => {
+    teardown?.();
+    teardown = null;
+  });
+</script>

@@ -43,15 +43,16 @@
 
 /*
  * Theme tokens (RGB triplets so Tailwind <alpha-value> works: bg-accent/20 etc).
- * One theme only: London fog.
+ * One theme: the city at night, matching the homepage.
  */
 :root {
-  --bg:        227 228 224;   /* fog gray        #E3E4E0 */
-  --bg-alt:    214 216 211;   /* deeper fog      #D6D8D3 */
-  --ink:        17  17  16;   /* ink             #111110 */
-  --muted:      92  94  89;   /* wet stone       #5C5E59 */
-  --hairline:  196 198 192;   /*                 #C4C6C0 */
-  --accent:    194  65  12;   /* signal orange   #C2410C */
+  --bg:         11  13  16;   /* night           #0B0D10 */
+  --bg-alt:     22  26  32;   /* raised night    #161A20 */
+  --ink:       241 238 231;   /* lamplit paper   #F1EEE7 */
+  --muted:     156 160 167;   /* street haze     #9CA0A7 */
+  --hairline:   40  45  53;   /*                 #282D35 */
+  --accent:    255  90  31;   /* signal orange   #FF5A1F */
+  color-scheme: dark;
 }
 
 @layer base {
