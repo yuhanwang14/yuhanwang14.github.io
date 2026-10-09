@@ -19,6 +19,9 @@ const blog = defineCollection({
     updatedAt: z.coerce.date().optional(),
     pinned: z.boolean().default(false),
     draft: z.boolean().default(false),
+    // True when this file translates the essay's original language version.
+    // Listings show the original, so a Chinese essay stays Chinese on /blog/.
+    translation: z.boolean().default(false),
     // Which Blog filter the essay belongs to.
     category: z.enum(['personal', 'ai']),
     tags: z.array(z.string()).default([]),

@@ -90,17 +90,29 @@ export function postUrl(baseSlug: string, lang: Lang): string {
  * Date. Used to avoid pulling Astro types into lib (so this module stays
  * trivially testable in vitest's node environment).
  */
-type Groupable<T> = { id: string; data: { publishedAt: Date; pinned?: boolean } } & T;
+type Groupable<T> = {
+  id: string;
+  data: { publishedAt: Date; pinned?: boolean; translation?: boolean };
+} & T;
 
 export interface PostGroup<T> {
   baseSlug: string;
   posts: Partial<Record<Lang, Groupable<T>>>;
-  /** The post we use to represent this base slug in listings. EN preferred, else ZH. */
+  /**
+   * The post we use to represent this base slug in listings: the original
+   * language version. When both versions are originals, EN is preferred.
+   */
   primary: Groupable<T>;
   /** True if a translation in any other language exists. */
   hasTranslations: boolean;
   pinned: boolean;
   publishedAt: Date;
+}
+
+/** Picks the original-language post; falls back to EN, then ZH. */
+function pickPrimary<T>(posts: Partial<Record<Lang, Groupable<T>>>): Groupable<T> {
+  const present = LANGS.map((l) => posts[l]).filter((p): p is Groupable<T> => !!p);
+  return present.find((p) => !p.data.translation) ?? present[0];
 }
 
 /**
@@ -125,13 +137,9 @@ export function groupByBaseSlug<T>(entries: Groupable<T>[]): PostGroup<T>[] {
       map.set(baseSlug, group);
     }
     group.posts[lang] = entry;
-    // EN takes precedence as the "primary" view; otherwise keep the most recently
-    // added (which will be ZH-only).
-    if (lang === 'en' || !group.posts.en) {
-      group.primary = entry;
-      group.publishedAt = entry.data.publishedAt;
-      group.pinned = !!entry.data.pinned;
-    }
+    group.primary = pickPrimary(group.posts);
+    group.publishedAt = group.primary.data.publishedAt;
+    group.pinned = !!group.primary.data.pinned;
     group.hasTranslations = Object.keys(group.posts).length > 1;
   }
 

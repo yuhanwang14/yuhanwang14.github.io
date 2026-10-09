@@ -1,6 +1,6 @@
 // src/lib/blog.test.ts
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatDateShort, estimateReadingTime, slugify, parsePostId, postUrl } from './blog';
+import { formatDate, formatDateShort, estimateReadingTime, slugify, parsePostId, postUrl, groupByBaseSlug } from './blog';
 
 describe('formatDate', () => {
   it('formats a date as "Mar 25, 2026"', () => {
@@ -88,5 +88,23 @@ describe('postUrl', () => {
   });
   it('Chinese posts go to /blog/<slug>/zh/', () => {
     expect(postUrl('hello', 'zh')).toBe('/blog/hello/zh/');
+  });
+});
+
+describe('groupByBaseSlug', () => {
+  const day = new Date('2026-04-26T00:00:00Z');
+  it('lists a Chinese original as primary when the English file is a translation', () => {
+    const [group] = groupByBaseSlug([
+      { id: 'essay.zh', data: { publishedAt: day } },
+      { id: 'essay.en', data: { publishedAt: day, translation: true } },
+    ]);
+    expect(group.primary.id).toBe('essay.zh');
+  });
+  it('prefers English when both versions are originals', () => {
+    const [group] = groupByBaseSlug([
+      { id: 'essay.zh', data: { publishedAt: day } },
+      { id: 'essay.en', data: { publishedAt: day } },
+    ]);
+    expect(group.primary.id).toBe('essay.en');
   });
 });
