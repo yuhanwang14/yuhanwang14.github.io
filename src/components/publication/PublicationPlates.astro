@@ -1,0 +1,161 @@
+---
+// src/components/publication/PublicationPlates.astro
+// Publication: each paper is a plate under the shared masthead: its loop in a
+// viewfinder frame, and beside it venue, title, authors and links.
+// Pointing at a paper sends the orange reticle to its figure. The page's own script plays
+// the loops and copies BibTeX.
+import { publications } from '../../data/publications';
+---
+
+<section class="pbb">
+  <ol class="pbb-list" data-pbb-list>
+    {publications.map((publication, i) => (
+      <li class="pbb-plate" data-pbb-plate>
+        <figure class="pbb-fig">
+          <div class="pbb-frame vf" data-pbb-frame>
+            {publication.media ? (
+              <a href={publication.href} class="pub-media" tabindex="-1" aria-hidden="true">
+                <video
+                  class="pub-loop"
+                  src={publication.media.video}
+                  poster={publication.media.poster}
+                  width={publication.media.width}
+                  height={publication.media.height}
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                  disablepictureinpicture
+                  data-play-in-view
+                ></video>
+              </a>
+            ) : (
+              <a href={publication.href} class="pub-media pub-board" tabindex="-1" aria-hidden="true">
+                <span>{publication.badge}</span>
+              </a>
+            )}
+          </div>
+          <figcaption class="pub-cap">
+            <span class="text-ink">Fig. {i + 1}</span>{' '}
+            {publication.media?.caption ?? publication.title}
+          </figcaption>
+        </figure>
+        <div class="pbb-text">
+          <p class="pbb-venue">{publication.badge}</p>
+          <h2 class="pbb-ptitle">
+            <a href={publication.href}>{publication.title}</a>
+          </h2>
+          <p class="pbb-authors" set:html={publication.authorsHtml} />
+          <p class="pbb-links">
+            {publication.paperHref && (
+              <a href={publication.paperHref} class="pub-link link-sweep [--sweep-offset:2px]">Paper</a>
+            )}
+            <a href={publication.href} class="pub-link link-sweep [--sweep-offset:2px]">Project page</a>
+            {publication.bibtex && (
+              <button type="button" class="pub-link link-sweep [--sweep-offset:2px]" data-bibtex={publication.bibtex}>
+                <span data-bib-label>BibTeX</span>
+              </button>
+            )}
+          </p>
+          <p class="sr-only" aria-live="polite" data-bib-status></p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style is:global>
+  .pbb-list {
+    position: relative;
+    list-style: none;
+    margin: clamp(0.5rem, 2vh, 1.5rem) 0 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(3.5rem, 8vh, 5.5rem);
+  }
+  .pbb-plate {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 2rem 3.5rem;
+    align-items: start;
+  }
+  .pbb-fig {
+    margin: 0;
+  }
+  .pbb-frame {
+    padding: 14px;
+  }
+  .pbb-venue {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(var(--ink));
+  }
+  .pbb-ptitle {
+    margin-top: 1rem;
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-synthesis: none;
+    font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+    line-height: 1.12;
+    color: rgb(var(--ink));
+    text-wrap: balance;
+  }
+  .pbb-ptitle a {
+    transition: color 200ms ease-out;
+  }
+  .pbb-ptitle a:hover,
+  .pbb-ptitle a:focus-visible {
+    color: rgb(var(--accent));
+  }
+  .pbb-authors {
+    margin-top: 1rem;
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-synthesis: none;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: rgb(var(--muted));
+  }
+  .pbb-authors strong {
+    font-weight: 400;
+    color: rgb(var(--ink));
+  }
+  .pbb-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.75rem;
+    margin-top: 1.5rem;
+  }
+  @media (max-width: 1023px) {
+    .pbb-plate {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  import { createReticle, type Reticle } from '../../lib/reticle';
+
+  let reticle: Reticle | null = null;
+
+  document.addEventListener('astro:page-load', () => {
+    reticle?.destroy();
+    reticle = null;
+    const list = document.querySelector<HTMLElement>('[data-pbb-list]');
+    if (!list || !window.matchMedia('(hover: hover)').matches) return;
+    const r = createReticle(list, 0);
+    reticle = r;
+    list.querySelectorAll<HTMLElement>('[data-pbb-plate]').forEach((plate) => {
+      const frame = plate.querySelector('[data-pbb-frame]');
+      if (!frame) return;
+      plate.addEventListener('pointerenter', () => r.to(frame, 0));
+      plate.addEventListener('focusin', () => r.to(frame, 0));
+    });
+    list.addEventListener('pointerleave', () => r.hide());
+  });
+  document.addEventListener('astro:before-swap', () => {
+    reticle?.destroy();
+    reticle = null;
+  });
+</script>

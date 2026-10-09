@@ -1,0 +1,407 @@
+---
+// src/components/projects/ProjectViewer.astro
+// Projects: the homepage as a viewer. The index on the left works like the homepage
+// city switch; the frame on the right is the stage, with the project's line and year in the
+// top corners, its name and one-liner in the lower left and its links in the lower right,
+// the way the homepage pins things to the corners of the screen. Switching runs the
+// homepage's orange scan across the stage. Small screens stack every project as its own frame.
+import { lines, projects } from '../../data/projects';
+
+const lineName = Object.fromEntries(lines.map((l) => [l.id, l.name])) as Record<string, string>;
+const repo = (href: string) => href.replace(/^https?:\/\/(www\.)?github\.com\//, '');
+const groups = lines
+  .map((line) => ({ line, items: projects.map((p, i) => ({ p, i })).filter(({ p }) => p.line === line.id) }))
+  .filter((g) => g.items.length > 0);
+---
+
+<section class="pjb" data-pjb aria-label="All projects">
+  <nav class="pjb-index" aria-label="Choose a project">
+    {groups.map(({ line, items }) => (
+      <div>
+        <p class="clock-k pjb-gname">{line.name}</p>
+        <ul class="pjb-picks">
+          {items.map(({ p, i }) => (
+            <li>
+              <button type="button" class="pjb-pick" data-pick={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+                {p.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </nav>
+
+  <div class="pjb-stage vf" data-pjb-stage>
+    {projects.map((p, i) => (
+      <article class="pjb-slide vf" data-slide={i} data-active={i === 0 ? '' : undefined}>
+        <p class="pjb-top">
+          <span>{lineName[p.line]} · {p.year}</span>
+          <span class:list={[p.status && 'text-accent']}>{p.status ?? (p.href ? repo(p.href) : '')}</span>
+        </p>
+        <div class="pjb-view" data-device={p.device} data-empty={p.shots?.length ? undefined : ''}>
+          {p.shots && p.shots.length > 0 ? (
+            <div class="pjb-shots">
+              {p.shots.map((shot) => (
+                <img src={shot.src} width={shot.width} height={shot.height} alt={shot.alt} decoding="async" />
+              ))}
+            </div>
+          ) : (
+            <span class="pjb-empty" aria-hidden="true"><span>Screenshot to come</span></span>
+          )}
+        </div>
+        <div class="pjb-foot">
+          <div>
+            <h2 class="pjb-name">{p.name}<span class="text-accent">.</span></h2>
+            <p class="pjb-one">{p.oneLiner}</p>
+          </div>
+          {(p.href || p.interchange) && (
+            <p class="pjb-go">
+              {p.href && (
+                <a href={p.href} target="_blank" rel="noopener noreferrer" class="link-sweep [--sweep-offset:0px]">GitHub</a>
+              )}
+              {p.interchange && (
+                <a href={p.interchange.href} target="_blank" rel="noopener noreferrer" class="link-sweep [--sweep-offset:0px]">Engram edition</a>
+              )}
+            </p>
+          )}
+        </div>
+      </article>
+    ))}
+    <span class="pjb-scan" aria-hidden="true"></span>
+  </div>
+</section>
+
+<style is:global>
+  .pjb {
+    display: grid;
+    grid-template-columns: 14rem minmax(0, 1fr);
+    gap: 3.5rem;
+    height: clamp(28rem, calc(100svh - var(--band) - 3rem), 46rem);
+    margin-top: clamp(0.5rem, 2vh, 1.5rem);
+  }
+  .pjb-index {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-top: 0.25rem;
+  }
+  .pjb-gname {
+    color: rgb(var(--muted));
+  }
+  .pjb-picks {
+    margin-top: 0.6rem;
+  }
+  .pjb-pick {
+    display: block;
+    padding: 0.28rem 0;
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-synthesis: none;
+    font-size: 1.2rem;
+    line-height: 1.2;
+    text-align: left;
+    color: rgb(var(--ink) / 0.42);
+    transition: color 300ms ease-out;
+  }
+  .pjb-pick:hover,
+  .pjb-pick:focus-visible {
+    color: rgb(var(--ink) / 0.8);
+  }
+  .pjb-pick[aria-pressed='true'] {
+    color: rgb(var(--ink));
+  }
+  .pjb-pick[aria-pressed='true']::after {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-left: 9px;
+    vertical-align: 0.2em;
+    border-radius: 50%;
+    background: rgb(var(--accent));
+  }
+
+  .pjb-stage {
+    --tick: 22px;
+    display: grid;
+    min-height: 0;
+    overflow: hidden;
+    padding: 1.5rem 1.75rem 1.6rem;
+  }
+  .pjb-stage[data-focus] {
+    animation: pjb-focus 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes pjb-focus {
+    0% {
+      --tick: 54px;
+      --tick-c: rgb(255 90 31);
+    }
+    55% {
+      --tick: 22px;
+      --tick-c: rgb(255 90 31);
+    }
+    100% {
+      --tick: 22px;
+      --tick-c: rgb(232 229 222 / 0.3);
+    }
+  }
+  .pjb .pjb-slide {
+    background-image: none;
+  }
+  .pjb-slide {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    min-height: 0;
+  }
+  .pjb-slide:not([data-active]) {
+    display: none;
+  }
+  .pjb-slide[data-enter] > * {
+    animation: pjb-in 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .pjb-slide[data-enter] > :nth-child(2) {
+    animation-delay: 60ms;
+  }
+  .pjb-slide[data-enter] > :nth-child(3) {
+    animation-delay: 120ms;
+  }
+  @keyframes pjb-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .pjb-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(var(--muted));
+  }
+  .pjb-view {
+    position: relative;
+    min-height: 0;
+  }
+  .pjb-shots {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  .pjb-shots img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 3px;
+    box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.8);
+  }
+  .pjb-view[data-device='phone'] .pjb-shots img {
+    height: 100%;
+    max-width: 42%;
+    border-radius: 10px;
+  }
+  .pjb-empty {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background:
+      linear-gradient(rgb(var(--ink) / 0.22), rgb(var(--ink) / 0.22)) 50% 50% / 28px 1px no-repeat,
+      linear-gradient(rgb(var(--ink) / 0.22), rgb(var(--ink) / 0.22)) 50% 50% / 1px 28px no-repeat;
+  }
+  .pjb-empty span {
+    margin-top: 4.5rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(var(--ink) / 0.3);
+  }
+  .pjb-foot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+  .pjb-name {
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-synthesis: none;
+    font-size: clamp(2.5rem, 4.6vw, 4.25rem);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: rgb(var(--ink));
+    text-wrap: balance;
+  }
+  .pjb-one {
+    margin-top: 0.75rem;
+    max-width: 34rem;
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-synthesis: none;
+    font-size: clamp(1.1rem, 1.6vw, 1.375rem);
+    line-height: 1.3;
+    color: rgb(var(--ink) / 0.8);
+    text-wrap: pretty;
+  }
+  .pjb-go {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+  .pjb-go a {
+    padding-block: 0.2rem;
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(var(--ink) / 0.75);
+  }
+  .pjb-go a:hover,
+  .pjb-go a:focus-visible {
+    color: rgb(var(--ink));
+  }
+  /* The homepage scan line, crossing the stage once per switch. */
+  .pjb-scan {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 24%;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgb(255 90 31 / 0), rgb(255 90 31 / 0.34) 50%, rgb(255 90 31 / 0));
+    mix-blend-mode: plus-lighter;
+    transform: translateX(-110%);
+  }
+  .pjb-stage[data-focus] .pjb-scan {
+    animation: pjb-scan 900ms cubic-bezier(0.45, 0, 0.2, 1) both;
+  }
+  @keyframes pjb-scan {
+    from {
+      transform: translateX(-110%);
+    }
+    to {
+      transform: translateX(430%);
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .pjb {
+      display: block;
+      height: auto;
+      margin-top: 1rem;
+    }
+    .pjb-index,
+    .pjb-scan {
+      display: none;
+    }
+    .pjb-stage {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      padding: 0;
+      overflow: visible;
+      background: none;
+    }
+    .pjb .pjb-slide,
+    .pjb .pjb-slide:not([data-active]) {
+      display: grid;
+      grid-template-rows: auto;
+      gap: 1.25rem;
+      padding: 1.25rem 1.25rem 1.4rem;
+    }
+    .pjb .pjb-slide {
+      background:
+        linear-gradient(var(--tick-c), var(--tick-c)) 0 0 / var(--tick) 1px,
+        linear-gradient(var(--tick-c), var(--tick-c)) 0 0 / 1px var(--tick),
+        linear-gradient(var(--tick-c), var(--tick-c)) 100% 0 / var(--tick) 1px,
+        linear-gradient(var(--tick-c), var(--tick-c)) 100% 0 / 1px var(--tick),
+        linear-gradient(var(--tick-c), var(--tick-c)) 0 100% / var(--tick) 1px,
+        linear-gradient(var(--tick-c), var(--tick-c)) 0 100% / 1px var(--tick),
+        linear-gradient(var(--tick-c), var(--tick-c)) 100% 100% / var(--tick) 1px,
+        linear-gradient(var(--tick-c), var(--tick-c)) 100% 100% / 1px var(--tick);
+      background-repeat: no-repeat;
+    }
+    .pjb-view {
+      aspect-ratio: 16 / 10;
+    }
+    .pjb-view[data-empty] {
+      display: none;
+    }
+    .pjb-top span:last-child:not(.text-accent) {
+      display: none;
+    }
+    .pjb-foot {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .pjb-go {
+      flex-direction: row;
+      gap: 1.5rem;
+    }
+    .pjb-name {
+      font-size: clamp(2rem, 8vw, 2.75rem);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pjb-stage[data-focus],
+    .pjb-stage[data-focus] .pjb-scan,
+    .pjb-slide[data-enter] > * {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const root = document.querySelector<HTMLElement>('[data-pjb]');
+    const stage = root?.querySelector<HTMLElement>('[data-pjb-stage]');
+    if (!root || !stage) return;
+    const picks = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-pick]'));
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    let current = '0';
+
+    const choose = (id: string) => {
+      if (id === current) return;
+      current = id;
+      picks.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pick === id)));
+      slides.forEach((s) => {
+        const on = s.dataset.slide === id;
+        s.toggleAttribute('data-active', on);
+        s.removeAttribute('data-enter');
+        if (on) {
+          void s.offsetWidth;
+          s.setAttribute('data-enter', '');
+        }
+      });
+      stage.removeAttribute('data-focus');
+      void stage.offsetWidth;
+      stage.setAttribute('data-focus', '');
+    };
+
+    picks.forEach((b) => b.addEventListener('click', () => choose(b.dataset.pick ?? '0')));
+    // Arrow keys move through the index.
+    root.querySelector('.pjb-index')?.addEventListener('keydown', (event) => {
+      const e = event as KeyboardEvent;
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      const at = picks.findIndex((b) => b === document.activeElement);
+      if (at < 0) return;
+      e.preventDefault();
+      const next = picks[(at + (e.key === 'ArrowDown' ? 1 : picks.length - 1)) % picks.length];
+      next.focus();
+      choose(next.dataset.pick ?? '0');
+    });
+  });
+</script>

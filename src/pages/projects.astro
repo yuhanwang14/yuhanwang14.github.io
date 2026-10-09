@@ -1,8 +1,7 @@
 ---
 // src/pages/projects.astro
-// One row per project, like the Blog list. A row with an install command gets a copy button.
 import PageLayout from '../layouts/PageLayout.astro';
-import { projects } from '../data/projects';
+import ProjectViewer from '../components/projects/ProjectViewer.astro';
 ---
 
 <PageLayout
@@ -10,97 +9,7 @@ import { projects } from '../data/projects';
   description="Software by Yuhan Wang, built at Engram, on his own, and with friends."
   active="projects"
   heading="Projects"
-  intro="Software I have built at Engram, on my own, and with friends."
-  horizon
+  intro="Built at Engram, on my own, and with friends."
 >
-  <div class="project-list border-b border-hairline">
-    {projects.map((project) => (
-      <article class="project-row border-t border-hairline">
-        <div class="grid grid-cols-1 gap-x-10 gap-y-3 py-10 md:grid-cols-[10rem_minmax(0,1fr)] md:py-12">
-          <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.08em] text-muted md:flex-col md:gap-y-2 md:pt-3">
-            <span class="font-display text-[13px] tracking-[0.1em] text-accent">{project.context}</span>
-            <span>{project.year}</span>
-            {project.status && <span>{project.status}</span>}
-          </p>
-          <div class="min-w-0">
-            <h2 class="font-display text-[clamp(1.75rem,3.4vw,2.6rem)] font-normal leading-[1.1] text-ink [text-wrap:balance]">
-              {project.links[0] ? (
-                <a href={project.links[0].href} class="transition-colors duration-200 hover:text-accent focus-visible:text-accent">
-                  {project.name}
-                </a>
-              ) : (
-                project.name
-              )}
-            </h2>
-            <p class="mt-4 max-w-[38rem] text-[1.0625rem] leading-relaxed text-muted [text-wrap:pretty]">{project.summary}</p>
-            <p class="label-smallcaps mt-5">{project.stack.join(' · ')}</p>
-            {project.install && (
-              <p class="mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-1">
-                <code class="font-mono text-[13px] text-ink/85 [overflow-wrap:anywhere]">{project.install}</code>
-                <button
-                  type="button"
-                  class="cmd-copy link-sweep inline-block py-1 font-display text-[13px] uppercase tracking-[0.1em] text-muted [--sweep-offset:2px] hover:text-ink"
-                  data-copy={project.install}
-                >
-                  <span data-copy-label>Copy</span>
-                </button>
-                <span class="sr-only" aria-live="polite" data-copy-status></span>
-              </p>
-            )}
-            {project.links.length > 0 && (
-              <p class="mt-5 flex flex-wrap items-center gap-x-8 gap-y-2">
-                {project.links.map((link) => (
-                  <a href={link.href} class="link-sweep inline-block py-1 font-display text-[13px] uppercase tracking-[0.1em] text-ink [--sweep-offset:2px] hover:text-accent">
-                    {link.label}
-                  </a>
-                ))}
-              </p>
-            )}
-          </div>
-        </div>
-      </article>
-    ))}
-  </div>
+  <ProjectViewer />
 </PageLayout>
-
-<style is:global>
-  .cmd-copy {
-    transition: transform 160ms ease-out, color 200ms ease-out, background-size 420ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .cmd-copy:active {
-    transform: scale(0.97);
-  }
-  .cmd-copy[data-copied] {
-    color: rgb(var(--accent));
-    background-size: 100% 1px;
-  }
-</style>
-
-<script>
-  function initCopy() {
-    document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
-      const label = button.querySelector<HTMLElement>('[data-copy-label]');
-      const status = button.parentElement?.querySelector<HTMLElement>('[data-copy-status]');
-      let timer: number | undefined;
-      button.addEventListener('click', async () => {
-        let ok = true;
-        try {
-          await navigator.clipboard.writeText(button.dataset.copy ?? '');
-        } catch {
-          ok = false;
-        }
-        if (!label) return;
-        window.clearTimeout(timer);
-        label.textContent = ok ? 'Copied' : 'Copy failed';
-        if (ok) button.setAttribute('data-copied', '');
-        if (status) status.textContent = ok ? 'Install command copied to clipboard.' : 'Could not copy the install command.';
-        timer = window.setTimeout(() => {
-          label.textContent = 'Copy';
-          button.removeAttribute('data-copied');
-        }, 1600);
-      });
-    });
-  }
-
-  document.addEventListener('astro:page-load', initCopy);
-</script>

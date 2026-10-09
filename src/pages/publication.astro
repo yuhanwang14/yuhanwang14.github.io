@@ -1,9 +1,12 @@
 ---
 // src/pages/publication.astro
-// Each paper: text on the left, a muted loop of its own results on the right. The loop
-// plays only while on screen; the BibTeX button copies the official citation.
+// The paper plates, plus the page-wide pieces they use: loops that play only while on
+// screen, and BibTeX buttons that copy the citation.
 import PageLayout from '../layouts/PageLayout.astro';
-import { publications } from '../data/publications';
+import PublicationPlates from '../components/publication/PublicationPlates.astro';
+import { site } from '../data/site';
+
+const scholar = site.social.find((link) => link.label === 'Scholar');
 ---
 
 <PageLayout
@@ -12,74 +15,52 @@ import { publications } from '../data/publications';
   active="publication"
   heading="Publication"
   intro="Research in computer vision, embodied intelligence, and 4D perception."
-  horizon
 >
-  <ol class="border-b border-hairline">
-    {publications.map((publication) => (
-      <li class="border-t border-hairline py-12 md:py-16">
-        <article class="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] md:items-center md:gap-14">
-          <div class="min-w-0">
-            <p class="label-smallcaps text-accent">{publication.badge}</p>
-            <h2 class="mt-4 font-display text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.12] text-ink">
-              <a href={publication.href} class="transition-colors duration-200 hover:text-accent focus-visible:text-accent">
-                {publication.title}
-              </a>
-            </h2>
-            <p
-              class="mt-5 max-w-[36rem] text-[1.0625rem] leading-relaxed text-muted [&_strong]:font-semibold [&_strong]:text-ink"
-              set:html={publication.authorsHtml}
-            />
-            <p class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-2">
-              <a href={publication.href} class="link-sweep inline-block py-2 font-display text-[15px] uppercase tracking-[0.1em] text-ink [--sweep-offset:4px] hover:text-accent">
-                Project
-              </a>
-              {publication.paperHref && (
-                <a href={publication.paperHref} class="link-sweep inline-block py-2 font-display text-[15px] uppercase tracking-[0.1em] text-ink [--sweep-offset:4px] hover:text-accent">
-                  Paper
-                </a>
-              )}
-              {publication.bibtex && (
-                <button
-                  type="button"
-                  class="bib-copy link-sweep inline-block py-2 font-display text-[15px] uppercase tracking-[0.1em] text-ink [--sweep-offset:4px] hover:text-accent"
-                  data-bibtex={publication.bibtex}
-                >
-                  <span data-bib-label>BibTeX</span>
-                </button>
-              )}
-            </p>
-            <p class="sr-only" aria-live="polite" data-bib-status></p>
-          </div>
-          <a
-            href={publication.href}
-            tabindex="-1"
-            aria-hidden="true"
-            class="group block overflow-hidden rounded-[2px]"
-          >
-            <video
-              class="pub-loop block h-auto w-full transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-              src={publication.media.video}
-              poster={publication.media.poster}
-              width={publication.media.width}
-              height={publication.media.height}
-              muted
-              loop
-              playsinline
-              preload="none"
-              disablepictureinpicture
-              data-play-in-view
-            ></video>
-          </a>
-        </article>
-      </li>
-    ))}
-  </ol>
+  {scholar && (
+    <a
+      slot="mast"
+      href={scholar.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link-sweep mt-5 inline-block py-1 font-display text-[13px] uppercase tracking-[0.12em] text-ink/75 [--sweep-offset:0px] hover:text-ink"
+    >Google Scholar</a>
+  )}
+  <PublicationPlates />
 </PageLayout>
 
 <style is:global>
-  /* The loop is points on black; lighten lets it sit directly on any dark background.
-     The crop cuts through the point cloud, so its edges fade out instead of ending hard. */
+  .pub-link {
+    display: inline-block;
+    padding-block: 0.2rem;
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(var(--ink));
+  }
+  .pub-link:hover,
+  .pub-link:focus-visible,
+  .pub-link[data-copied] {
+    color: rgb(var(--accent));
+  }
+  .pub-link[data-copied] {
+    background-size: 100% 1px;
+  }
+  /* The loop is points on black: lighten lets the page colour show through its black, and
+     the mask fades its cut edges. */
+  .pub-media {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    isolation: isolate;
+    background-color: rgb(var(--bg));
+  }
   .pub-loop {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     mix-blend-mode: lighten;
     -webkit-mask-image:
       linear-gradient(to right, transparent, #000 7%, #000 93%, transparent),
@@ -90,15 +71,23 @@ import { publications } from '../data/publications';
       linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
     mask-composite: intersect;
   }
-  .bib-copy {
-    transition: transform 160ms ease-out, color 200ms ease-out, background-size 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  .pub-board {
+    display: grid;
+    place-items: center;
+    background-color: rgb(var(--bg-alt));
   }
-  .bib-copy:active {
-    transform: scale(0.97);
+  .pub-board span {
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-size: 1.5rem;
+    color: rgb(var(--muted));
   }
-  .bib-copy[data-copied] {
-    color: rgb(var(--accent));
-    background-size: 100% 1px;
+  .pub-cap {
+    margin-top: 0.8rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 1.65;
+    color: rgb(var(--muted));
+    text-wrap: pretty;
   }
 </style>
 
@@ -128,22 +117,18 @@ import { publications } from '../data/publications';
     videos.forEach((video) => observer?.observe(video));
   }
 
-  async function copyText(text: string) {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
   function initBibtex() {
     document.querySelectorAll<HTMLButtonElement>('[data-bibtex]').forEach((button) => {
       const label = button.querySelector<HTMLElement>('[data-bib-label]');
-      const status = button.closest('div')?.querySelector<HTMLElement>('[data-bib-status]');
+      const status = button.closest('li')?.querySelector<HTMLElement>('[data-bib-status]');
       let timer: number | undefined;
       button.addEventListener('click', async () => {
-        const ok = await copyText(button.dataset.bibtex ?? '');
+        let ok = true;
+        try {
+          await navigator.clipboard.writeText(button.dataset.bibtex ?? '');
+        } catch {
+          ok = false;
+        }
         if (!label) return;
         window.clearTimeout(timer);
         label.textContent = ok ? 'Copied' : 'Copy failed';

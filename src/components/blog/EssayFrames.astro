@@ -1,0 +1,265 @@
+---
+// src/components/blog/EssayFrames.astro
+// Essays as viewfinder frames: category and date in the top left corner, reading time in the
+// top right, the title large in the lower left. The orange reticle marks the active filter
+// and glides between essays as the pointer moves. The filter reads the URL hash (/blog/#ai),
+// so a post's category label lands on its view. Tag pages pass the slugs to show and no filter.
+import { getCollection } from 'astro:content';
+import { CATEGORIES, CATEGORY_META, LANG_LABELS, estimateReadingTime, formatDate, groupByBaseSlug, parsePostId, type Lang } from '../../lib/blog';
+
+interface Props {
+  /** Only these base slugs, in listing order. */
+  slugs?: string[];
+  filter?: boolean;
+}
+const { slugs, filter = true } = Astro.props;
+
+const all = await getCollection('blog', ({ data }) => !data.draft);
+const groups = groupByBaseSlug(all).filter((g) => !slugs || slugs.includes(g.baseSlug));
+const listed = [...groups.filter((g) => g.pinned), ...groups.filter((g) => !g.pinned)];
+
+const essays = listed.map((g) => {
+  const post = g.primary;
+  const lang = parsePostId(post.id).lang;
+  const langs = (['en', 'zh'] as Lang[]).filter((l) => g.posts[l]);
+  return {
+    href: lang === 'zh' ? `/blog/${g.baseSlug}/zh/` : `/blog/${g.baseSlug}/`,
+    title: post.data.title,
+    deck: post.data.description,
+    category: post.data.category,
+    iso: post.data.publishedAt.toISOString(),
+    date: formatDate(post.data.publishedAt),
+    minutes: estimateReadingTime(post.body ?? ''),
+    langs: langs.length > 1 ? langs.map((l) => LANG_LABELS[l]).join(' · ') : '',
+    textLang: lang === 'zh' ? 'zh-CN' : 'en',
+  };
+});
+
+const filters = [
+  { key: 'all', label: 'All', href: '/blog/', count: listed.length },
+  ...CATEGORIES.map((category) => ({
+    key: category,
+    label: CATEGORY_META[category].label,
+    href: `/blog/#${category}`,
+    count: listed.filter((g) => g.primary.data.category === category).length,
+  })),
+];
+---
+
+<section class="blb" data-blb>
+  {filter && (
+    <header class="blb-head">
+      <nav aria-label="Filter essays" class="blb-modes" data-blb-filter>
+        {filters.map((item) => (
+          <a href={item.href} data-filter={item.key} aria-current={item.key === 'all' ? 'true' : undefined} class="blb-mode">
+            {item.label}<span class="blb-count">{item.count}</span>
+          </a>
+        ))}
+      </nav>
+    </header>
+  )}
+
+  {essays.length > 0 ? (
+    <ol class="blb-list" data-blb-rows>
+      {essays.map((essay) => (
+        <li data-category={essay.category}>
+          <a href={essay.href} class="blb-essay vf" data-blb-essay>
+            <p class="blb-corner">
+              <span>
+                <span class="blb-cat">{CATEGORY_META[essay.category].label}</span>
+                <time datetime={essay.iso}>{essay.date}</time>
+              </span>
+              <span>{essay.minutes} min read{essay.langs && ` · ${essay.langs}`}</span>
+            </p>
+            <div>
+              <h2 class="blb-t" lang={essay.textLang}>{essay.title}</h2>
+              <p class="blb-d" lang={essay.textLang}>{essay.deck}</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="text-muted">No essays yet.</p>
+  )}
+</section>
+
+<style is:global>
+  .blb-head {
+    display: flex;
+    padding: 0 0 clamp(1.25rem, 3vh, 2rem);
+  }
+  .blb-modes {
+    position: relative;
+    display: flex;
+    gap: 0.5rem;
+    margin-left: -0.9rem;
+  }
+  .blb-mode {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.6rem 0.9rem;
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(var(--ink) / 0.45);
+    transition: color 300ms ease-out;
+  }
+  .blb-mode:hover,
+  .blb-mode:focus-visible {
+    color: rgb(var(--ink) / 0.85);
+  }
+  .blb-mode[aria-current='true'] {
+    color: rgb(var(--ink));
+  }
+  .blb-count {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0;
+  }
+
+  .blb-list {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .blb-essay {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+    min-height: clamp(11rem, 18vw, 13.5rem);
+    padding: 1.4rem 1.6rem 1.6rem;
+  }
+  .blb-corner {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(var(--muted));
+  }
+  .blb-cat {
+    margin-right: 1rem;
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: rgb(var(--accent));
+  }
+  .blb-t {
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-synthesis: none;
+    font-size: clamp(1.9rem, 3.4vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: rgb(var(--ink));
+    text-wrap: balance;
+  }
+  .blb-t:lang(zh) {
+    font-family: 'PingFang SC', 'Noto Sans SC', 'Hiragino Sans GB', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: clamp(1.75rem, 3.1vw, 2.75rem);
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+  .blb-d {
+    max-width: 44rem;
+    margin-top: 0.9rem;
+    font-family: 'Metropolitan Line', Geist, system-ui, sans-serif;
+    font-synthesis: none;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: rgb(var(--muted));
+    text-wrap: pretty;
+  }
+  @media (max-width: 640px) {
+    .blb-modes {
+      margin-left: -0.9rem;
+    }
+    .blb-essay {
+      padding: 1.2rem 1.25rem 1.35rem;
+    }
+    .blb-corner {
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+  }
+</style>
+
+<script>
+  import { createReticle, type Reticle } from '../../lib/reticle';
+
+  const KEYS = ['personal', 'ai'];
+  let reticles: Reticle[] = [];
+  let filterReticle: Reticle | null = null;
+
+  function apply(key: string) {
+    const root = document.querySelector<HTMLElement>('[data-blb]');
+    if (!root?.querySelector('[data-blb-filter]')) return;
+    const active = KEYS.includes(key) ? key : 'all';
+    let activeLink: HTMLElement | null = null;
+    root.querySelectorAll<HTMLElement>('[data-blb-filter] [data-filter]').forEach((link) => {
+      if (link.dataset.filter === active) {
+        link.setAttribute('aria-current', 'true');
+        activeLink = link;
+      } else link.removeAttribute('aria-current');
+    });
+    root.querySelectorAll<HTMLElement>('[data-blb-rows] [data-category]').forEach((row) => {
+      row.hidden = active !== 'all' && row.dataset.category !== active;
+    });
+    if (activeLink && filterReticle) filterReticle.to(activeLink, 0);
+  }
+
+  function init() {
+    reticles.forEach((r) => r.destroy());
+    reticles = [];
+    filterReticle = null;
+    const root = document.querySelector<HTMLElement>('[data-blb]');
+    const nav = root?.querySelector<HTMLElement>('[data-blb-filter]');
+    const list = root?.querySelector<HTMLElement>('[data-blb-rows]');
+    if (!root) return;
+
+    if (nav) {
+      filterReticle = createReticle(nav, 0);
+      reticles.push(filterReticle);
+      apply(location.hash.replace('#', ''));
+    }
+
+    if (list && window.matchMedia('(hover: hover)').matches) {
+      const r = createReticle(list, 0);
+      reticles.push(r);
+      list.querySelectorAll<HTMLElement>('[data-blb-essay]').forEach((essay) => {
+        essay.addEventListener('pointerenter', () => r.to(essay, 0));
+        essay.addEventListener('focus', () => r.to(essay, 0));
+      });
+      list.addEventListener('pointerleave', () => r.hide());
+    }
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    init();
+    const nav = document.querySelector<HTMLElement>('[data-blb-filter]');
+    if (!nav) return;
+    apply(location.hash.replace('#', ''));
+    nav.addEventListener('click', (event) => {
+      const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('[data-filter]');
+      if (!link) return;
+      event.preventDefault();
+      history.replaceState(history.state, '', link.getAttribute('href') ?? '/blog/');
+      apply(link.dataset.filter ?? 'all');
+    });
+  });
+  window.addEventListener('hashchange', () => apply(location.hash.replace('#', '')));
+  document.addEventListener('astro:before-swap', () => {
+    reticles.forEach((r) => r.destroy());
+    reticles = [];
+    filterReticle = null;
+  });
+</script>

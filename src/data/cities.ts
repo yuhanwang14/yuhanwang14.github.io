@@ -16,6 +16,8 @@ export interface City {
   label: string;
   timeZone: string;
   file: string;
+  /** A 180k-point prefix of file, for the skyline band on inner pages. */
+  lite: string;
   /** Camera heading in radians; 0 looks north from the south. */
   heading: number;
   /** Point the camera orbits, in metres from the centre of the tile (east, north). */
@@ -28,6 +30,7 @@ export const cities: City[] = [
     label: 'London',
     timeZone: 'Europe/London',
     file: '/cities/london.bin',
+    lite: '/cities/london-lite.bin',
     heading: -0.55,
     focus: [-120, 120],
   },
@@ -36,6 +39,7 @@ export const cities: City[] = [
     label: 'Boston',
     timeZone: 'America/New_York',
     file: '/cities/boston.bin',
+    lite: '/cities/boston-lite.bin',
     heading: -0.6,
     focus: [0, 0],
   },

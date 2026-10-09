@@ -2,8 +2,8 @@
 // src/pages/blog/tags/[tag].astro
 import { getCollection, type CollectionEntry } from 'astro:content';
 import PageLayout from '../../../layouts/PageLayout.astro';
-import PostCard from '../../../components/blog/PostCard.astro';
-import { estimateReadingTime, groupByBaseSlug, parsePostId, slugify, type PostGroup } from '../../../lib/blog';
+import EssayFrames from '../../../components/blog/EssayFrames.astro';
+import { groupByBaseSlug, slugify, type PostGroup } from '../../../lib/blog';
 
 type Group = PostGroup<CollectionEntry<'blog'>>;
 
@@ -11,7 +11,7 @@ export async function getStaticPaths() {
   const all = await getCollection('blog', ({ data }) => !data.draft);
   const groups = groupByBaseSlug(all);
 
-  // Aggregate by tag — tags come from primary post's frontmatter.
+  // Aggregate by tag: tags come from the primary post's frontmatter.
   const tagMap = new Map<string, { displayName: string; groups: Group[] }>();
   for (const g of groups) {
     for (const tag of g.primary.data.tags) {
@@ -35,12 +35,8 @@ interface Props {
   displayName: string;
   groups: Group[];
 }
-const { displayName, groups } = Astro.props as Props;
-
-const availableFor = (g: Group) => ({
-  en: !!g.posts.en,
-  zh: !!g.posts.zh,
-});
+const { displayName, groups } = Astro.props;
+const slugs = groups.map((g) => g.baseSlug);
 ---
 
 <PageLayout
@@ -50,17 +46,7 @@ const availableFor = (g: Group) => ({
   heading={displayName}
   intro={`${groups.length} ${groups.length === 1 ? 'essay' : 'essays'}`}
 >
-  <div class="essay-list border-b border-hairline">
-    {groups.map((g) => (
-      <PostCard
-        post={g.primary as CollectionEntry<'blog'>}
-        baseSlug={g.baseSlug}
-        primaryLang={parsePostId(g.primary.id).lang}
-        available={availableFor(g)}
-        readingTime={estimateReadingTime(((g.primary as CollectionEntry<'blog'>).body) ?? '')}
-      />
-    ))}
-  </div>
+  <EssayFrames slugs={slugs} filter={false} />
   <p class="mt-12">
     <a href="/blog/" class="link-sweep inline-block py-2 font-display text-[13px] uppercase tracking-[0.1em] text-muted [--sweep-offset:4px] hover:text-ink">
       All essays

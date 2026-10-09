@@ -3,13 +3,18 @@
 // Full-screen WebGL2 point cloud of a city from aerial LiDAR. The city rises out of the
 // ground on load, a scan line sweeps across it, and the camera drifts slowly. The city
 // switch and clocks live in the page and are found by data attributes.
+// Links marked data-cloud-exit leave through the cloud: the points scatter like dust, a few
+// catching the orange, then the router navigates. Reduced motion navigates straight away.
+// mode="band" is the same city on inner pages: a low skyline across the top of the page,
+// the city you last looked at on the homepage, rising and scanned the same way.
 interface Props {
   class?: string;
+  mode?: 'hero' | 'band';
 }
-const { class: className } = Astro.props;
+const { class: className, mode = 'hero' } = Astro.props;
 ---
 
-<div class:list={['city-cloud', className]} data-city-cloud>
+<div class:list={['city-cloud', className]} data-city-cloud data-mode={mode}>
   <canvas class="city-canvas" aria-hidden="true"></canvas>
 </div>
 
@@ -32,6 +37,7 @@ const { class: className } = Astro.props;
 </style>
 
 <script>
+  import { navigate } from 'astro:transitions/client';
   import { cities, type City } from '../../data/cities';
 
   const VS = `#version 300 es
@@ -49,6 +55,7 @@ const { class: className } = Astro.props;
   uniform vec2 u_scanDir;
   uniform float u_size;
   uniform float u_gain;
+  uniform float u_burst;
   out vec3 v_color;
 
   float hash(float n) { return fract(sin(n * 12.9898) * 43758.5453); }
@@ -67,6 +74,17 @@ const { class: className } = Astro.props;
     float dist = length(p - u_eye);
     gl_PointSize = u_size * clamp(1500.0 / dist, 0.6, 2.4);
 
+    // Scatter exit: points fly out from the middle of the screen and lift, like dust.
+    float r1 = hash(id * 1.731 + 4.1);
+    float r2 = hash(id * 2.377 + 9.7);
+    if (u_burst > 0.0) {
+      vec2 ndc = gl_Position.xy / gl_Position.w;
+      vec2 dir = normalize(ndc + (vec2(r1, r2) - 0.5) * 0.9 + vec2(0.0001, 0.0001));
+      float b = u_burst * u_burst;
+      gl_Position.xy += (dir * (0.5 + 1.8 * r1) + vec2(0.0, 0.6 * r2)) * b * 1.6 * gl_Position.w;
+      gl_PointSize *= 1.0 + 1.5 * b * r2;
+    }
+
     // Ground stays dim and cool; buildings brighten toward warm white as they rise.
     float h = clamp(above / 120.0, 0.0, 1.0);
     vec3 low = vec3(0.20, 0.25, 0.33);
@@ -76,7 +94,10 @@ const { class: className } = Astro.props;
     float s = dot(p.xy, u_scanDir) - u_scan;
     float band = exp(-s * s / 900.0);
     c = c * fog + vec3(1.0, 0.36, 0.12) * band * (0.35 + 2.2 * h);
-    v_color = c * u_gain * mix(0.12, 1.0, e);
+    // A few points catch the orange as they scatter.
+    c = mix(c, vec3(1.0, 0.36, 0.12) * 1.4, step(0.86, r2) * u_burst);
+    float fade = 1.0 - smoothstep(0.45, 1.0, u_burst);
+    v_color = c * u_gain * mix(0.12, 1.0, e) * fade;
   }
   `;
 
@@ -140,6 +161,7 @@ const { class: className } = Astro.props;
     const root = document.querySelector<HTMLElement>('[data-city-cloud]');
     const canvas = root?.querySelector('canvas');
     if (!root || !canvas) return;
+    const band = root.dataset.mode === 'band';
 
     const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-city-switch] [data-city]'));
     const clocks = Array.from(document.querySelectorAll<HTMLElement>('[data-clock]'));
@@ -161,6 +183,13 @@ const { class: className } = Astro.props;
     const visitorZone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
     let index = visitorZone.startsWith('America/') ? cities.findIndex((c) => c.id === 'boston') : 0;
     if (index < 0) index = 0;
+    // The city you last looked at, so the inner pages show the same one.
+    try {
+      const saved = cities.findIndex((c) => c.id === sessionStorage.getItem('yw-city'));
+      if (saved >= 0) index = saved;
+    } catch {
+      /* storage blocked */
+    }
 
     const markActive = (i: number) => {
       buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.city === cities[i].id)));
@@ -195,7 +224,7 @@ const { class: className } = Astro.props;
     const U = (n: string) => gl.getUniformLocation(program, n);
     const u = {
       vp: U('u_vp'), min: U('u_min'), max: U('u_max'), ground: U('u_ground'), eye: U('u_eye'), rise: U('u_rise'),
-      scan: U('u_scan'), scanDir: U('u_scanDir'), size: U('u_size'), gain: U('u_gain'),
+      scan: U('u_scan'), scanDir: U('u_scanDir'), size: U('u_size'), gain: U('u_gain'), burst: U('u_burst'),
     };
     gl.disable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
@@ -216,7 +245,7 @@ const { class: className } = Astro.props;
       const hit = cache.get(i);
       if (hit) return hit;
       const city = cities[i];
-      const p = fetch(city.file)
+      const p = fetch(band ? city.lite : city.file)
         .then((res) => {
           if (!res.ok) throw new Error('Failed to load ' + city.file);
           return res.arrayBuffer();
@@ -256,7 +285,7 @@ const { class: className } = Astro.props;
           gl.enableVertexAttribArray(2);
           gl.vertexAttribPointer(2, 1, gl.UNSIGNED_BYTE, true, 0, 0);
           gl.bindVertexArray(null);
-          const count = small ? Math.min(total, 220000) : total;
+          const count = small ? Math.min(total, band ? 100000 : 220000) : total;
           return { city, vao, buffers: [pb, sb, hb], count, min, max, ground };
         });
       cache.set(i, p);
@@ -276,7 +305,11 @@ const { class: className } = Astro.props;
     let raf = 0;
     let last = 0;
     let clock = 0;
-    let scanStart = reduce ? -1 : 1.6;
+    let scanStart = reduce ? -1 : band ? 1.2 : 1.6;
+    let onScreen = true;
+    // The way out: how far along the scatter is, and where to go when it ends.
+    let exit: { t: number; href: string; done: boolean } | null = null;
+    let burst = 0;
 
     const draw = () => {
       const rect = canvas.getBoundingClientRect();
@@ -294,16 +327,17 @@ const { class: className } = Astro.props;
 
       const aspect = w / h;
       const portrait = aspect < 1;
-      const elevation = (portrait ? 0.5 : 0.4) + tiltOffset;
+      // The band looks along the skyline from street level; the homepage looks down on it.
+      const elevation = band ? 0.07 + tiltOffset * 0.25 : (portrait ? 0.5 : 0.4) + tiltOffset;
       const heading = current.city.heading + headingOffset + (reduce ? 0 : clock * 0.01);
-      const radius = portrait ? 1250 : 1500 * Math.max(1, 1.25 / aspect);
-      const target: Vec3 = [current.city.focus[0], current.city.focus[1], current.ground + 60];
+      const radius = band ? 2300 : (portrait ? 1250 : 1500 * Math.max(1, 1.25 / aspect)) * (1 - 0.2 * burst);
+      const target: Vec3 = [current.city.focus[0], current.city.focus[1], current.ground + (band ? 30 : 60)];
       const eye: Vec3 = [
         target[0] + radius * Math.cos(elevation) * Math.sin(heading),
         target[1] - radius * Math.cos(elevation) * Math.cos(heading),
         target[2] + radius * Math.sin(elevation),
       ];
-      const fov = portrait ? 58 : 38;
+      const fov = band ? Math.min(30, 70 / Math.max(aspect, 1.6)) : portrait ? 58 : 38;
       const vp = multiply(perspective((fov * Math.PI) / 180, aspect, 20, 9000), lookAt(eye, target, [0, 0, 1]));
 
       let scan = 1e6;
@@ -322,8 +356,9 @@ const { class: className } = Astro.props;
       gl.uniform1f(u.rise, rise);
       gl.uniform1f(u.scan, scan);
       gl.uniform2f(u.scanDir, Math.cos(0.5), Math.sin(0.5));
-      gl.uniform1f(u.size, 1.5 * dpr);
-      gl.uniform1f(u.gain, small ? 0.85 : 0.42);
+      gl.uniform1f(u.size, (band ? (small ? 1.2 : 1.7) : 1.5) * dpr);
+      gl.uniform1f(u.gain, band ? (small ? 0.4 : 0.95) : small ? 0.85 : 0.42);
+      gl.uniform1f(u.burst, burst);
       gl.drawArrays(gl.POINTS, 0, current.count);
       gl.bindVertexArray(null);
     };
@@ -334,10 +369,23 @@ const { class: className } = Astro.props;
       markActive(i);
       root.dataset.ready = '';
       target = 1;
-      if (!reduce) scanStart = clock + 1.6;
+      if (!reduce) scanStart = clock + (band ? 1.2 : 1.6);
+      if (!band) {
+        try {
+          sessionStorage.setItem('yw-city', loaded.city.id);
+        } catch {
+          /* storage blocked */
+        }
+      }
     };
 
     const loop = (now: number) => {
+      // The band stops drawing once it has scrolled away.
+      if (!onScreen) {
+        raf = 0;
+        last = 0;
+        return;
+      }
       raf = requestAnimationFrame(loop);
       const dt = last ? Math.min(0.05, (now - last) / 1000) : 0.016;
       last = now;
@@ -353,6 +401,14 @@ const { class: className } = Astro.props;
       }
       headingOffset += (pointerX * 0.22 - headingOffset) * 0.035;
       tiltOffset += (pointerY * -0.06 - tiltOffset) * 0.035;
+      if (exit) {
+        exit.t += dt;
+        burst = Math.min(1, exit.t / 0.8);
+        if (exit.t >= 0.8 && !exit.done) {
+          exit.done = true;
+          void navigate(exit.href);
+        }
+      }
       draw();
     };
 
@@ -383,6 +439,16 @@ const { class: className } = Astro.props;
       const i = cities.findIndex((c) => c.id === id);
       if (i >= 0) choose(i);
     };
+    const exitLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[data-cloud-exit]'));
+    const onExit = (e: MouseEvent) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      // Reduced motion, or nothing on screen yet: let the router navigate as usual.
+      if (reduce || !current) return;
+      e.preventDefault();
+      if (exit) return;
+      exit = { t: 0, href: (e.currentTarget as HTMLAnchorElement).href, done: false };
+      document.querySelector('.home-hero')?.setAttribute('data-exiting', '');
+    };
 
     load(index)
       .then((loaded) => {
@@ -390,21 +456,33 @@ const { class: className } = Astro.props;
         show(loaded, index);
         if (reduce) draw();
         else raf = requestAnimationFrame(loop);
-        window.setTimeout(() => void load((index + 1) % cities.length), 2500);
+        if (!band) window.setTimeout(() => void load((index + 1) % cities.length), 2500);
       })
       .catch((err) => console.error(err));
+
+    let seen: IntersectionObserver | null = null;
+    if (band && !reduce && 'IntersectionObserver' in window) {
+      seen = new IntersectionObserver(([entry]) => {
+        onScreen = entry.isIntersecting;
+        if (onScreen && !raf && current) raf = requestAnimationFrame(loop);
+      });
+      seen.observe(root);
+    }
 
     if (!reduce) window.addEventListener('pointermove', onPointer, { passive: true });
     window.addEventListener('resize', onResize);
     buttons.forEach((b) => b.addEventListener('click', onClick));
+    exitLinks.forEach((a) => a.addEventListener('click', onExit));
 
     teardown = () => {
       destroyed = true;
       cancelAnimationFrame(raf);
+      seen?.disconnect();
       window.clearInterval(clockTimer);
       window.removeEventListener('pointermove', onPointer);
       window.removeEventListener('resize', onResize);
       buttons.forEach((b) => b.removeEventListener('click', onClick));
+      exitLinks.forEach((a) => a.removeEventListener('click', onExit));
       cache.forEach((p) =>
         p.then((l) => {
           gl.deleteVertexArray(l.vao);

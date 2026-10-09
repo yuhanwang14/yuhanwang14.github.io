@@ -24,8 +24,8 @@ const email = site.emails[0]?.address;
     <div class="home-scrim pointer-events-none absolute inset-0" aria-hidden="true"></div>
 
     <div class="relative z-10 mx-auto flex h-full max-w-[1280px] flex-col justify-between px-6 py-6 md:px-10 md:py-8">
-      <header class="flex items-start justify-between gap-6">
-        <div role="group" aria-label="City" class="rise flex gap-7 [--rise-delay:500ms]" data-city-switch>
+      <header class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+        <div role="group" aria-label="City" class="rise flex gap-7 [--rise-delay:500ms]" data-city-switch data-exit-fade>
           {cities.map((city, i) => (
             <button
               type="button"
@@ -38,10 +38,11 @@ const email = site.emails[0]?.address;
             </button>
           ))}
         </div>
-        <nav aria-label="Primary" class="rise flex gap-7 [--rise-delay:240ms]">
+        <nav aria-label="Primary" class="rise flex gap-6 sm:gap-7 [--rise-delay:240ms]">
           {links.map((link) => (
             <a
               href={link.href}
+              data-cloud-exit
               class="link-sweep inline-block py-1 font-display text-[14px] uppercase tracking-[0.12em] text-[#F1EEE7]/85 [--sweep-offset:0px] hover:text-white focus-visible:text-white"
             >
               {link.label}
@@ -55,11 +56,11 @@ const email = site.emails[0]?.address;
           <h1 class="rise font-display text-[clamp(3.25rem,9vw,7rem)] font-normal leading-[0.92] tracking-[-0.01em]" data-still-on-swap>
             <span class="inline-block" transition:name="site-name" transition:animate="initial">{site.name}<span class="text-[#FF5A1F]">.</span></span>
           </h1>
-          <p class="rise mt-4 font-display text-[clamp(1.25rem,2.6vw,1.9rem)] leading-tight text-[#F1EEE7]/80 [--rise-delay:120ms]">
+          <p class="rise mt-4 font-display text-[clamp(1.25rem,2.6vw,1.9rem)] leading-tight text-[#F1EEE7]/80 [--rise-delay:120ms]" data-exit-fade>
             Founder | Engineer | Exile
           </p>
         </div>
-        <ul class="rise flex flex-wrap items-baseline gap-x-6 gap-y-2 [--rise-delay:360ms]">
+        <ul class="rise flex flex-wrap items-baseline gap-x-6 gap-y-2 [--rise-delay:360ms]" data-exit-fade>
           {social.map((link) => (
             <li>
               <a
@@ -114,5 +115,13 @@ const email = site.emails[0]?.address;
   .home-hero ::selection {
     background: rgb(255 90 31 / 0.35);
     color: #fff;
+  }
+  /* Leaving through the cloud: everything but the name and the nav fades out. Filter, not
+     opacity, because the finished entrance animation still holds opacity. */
+  [data-exit-fade] {
+    transition: filter 320ms ease-out;
+  }
+  .home-hero[data-exiting] [data-exit-fade] {
+    filter: blur(4px) opacity(0);
   }
 </style>

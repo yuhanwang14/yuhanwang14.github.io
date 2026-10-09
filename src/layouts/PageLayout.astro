@@ -1,11 +1,12 @@
 ---
 // src/layouts/PageLayout.astro
-// Inner pages: the same masthead language as the homepage (display name, accent full stop),
-// single column, no sidebar. With horizon, the London skyline from the homepage point cloud
-// sits behind the masthead and the homepage's orange scan line crosses it once on arrival.
+// Inner pages share one masthead. The homepage city, the one you last looked at, runs as a
+// skyline across the top of the page, rising and scanned the way the homepage does. The page
+// title sits small in the lower left corner of the skyline.
 import BaseLayout from './BaseLayout.astro';
 import Navbar from '../components/shared/Navbar.astro';
 import Footer from '../components/shared/Footer.astro';
+import CityCloud from '../components/home/CityCloud.astro';
 
 interface Props {
   title: string;
@@ -13,38 +14,23 @@ interface Props {
   active?: 'home' | 'research' | 'industry' | 'skills' | 'publication' | 'projects' | 'blog';
   heading?: string;
   intro?: string;
-  horizon?: boolean;
 }
-const { title, description, active = 'home', heading, intro, horizon = false } = Astro.props;
+const { title, description, active = 'home', heading, intro } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  {horizon && (
-    <div class="page-horizon" aria-hidden="true" transition:name="page-horizon" transition:animate="initial">
-      <img
-        src="/city/london-horizon-1440.webp"
-        srcset="/city/london-horizon-1440.webp 1440w, /city/london-horizon-2880.webp 2880w"
-        sizes="100vw"
-        width="2880"
-        height="720"
-        alt=""
-        decoding="async"
-      />
-      <div class="page-horizon-scan"><span></span></div>
-    </div>
-  )}
+  <div class="page-band" aria-hidden="true">
+    <CityCloud mode="band" class="absolute inset-0" />
+  </div>
   <Navbar active={active} />
-  <main class="relative z-[1] mx-auto max-w-[1100px] px-6 pt-16 md:pt-24">
+  <main class:list={['relative z-[1] mx-auto max-w-[1280px] px-6 md:px-10', !heading && 'pt-16 md:pt-24']}>
     {heading && (
-      <header class="mb-14 md:mb-20">
-        <h1 class="rise font-display text-[clamp(2.75rem,7vw,5rem)] font-normal leading-[0.95] tracking-[-0.01em] text-ink">
-          {heading}<span class="text-accent">.</span>
-        </h1>
-        {intro && (
-          <p class="rise mt-5 max-w-[40rem] font-display text-[clamp(1.25rem,2.4vw,1.75rem)] leading-snug text-muted [--rise-delay:120ms]">
-            {intro}
-          </p>
-        )}
+      <header class="mast">
+        <div class="mast-text">
+          <h1 class="mast-title">{heading}<span class="mast-stop text-accent">.</span></h1>
+          {intro && <p class="mast-intro">{intro}</p>}
+          <slot name="mast" />
+        </div>
       </header>
     )}
     <slot />

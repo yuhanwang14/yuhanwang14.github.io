@@ -1,5 +1,6 @@
 // src/data/publications.ts
-// Each entry shows a short muted loop made from the paper's own results (public/publications/).
+// Each entry can show a short muted loop made from the paper's own results
+// (public/publications/); without one, the page shows a board with the venue.
 
 export interface PublicationMedia {
   /** Muted, looping clip served from /public. */
@@ -8,6 +9,8 @@ export interface PublicationMedia {
   poster: string;
   width: number;
   height: number;
+  /** One line under the figure saying what the loop shows. */
+  caption?: string;
 }
 
 export interface Publication {
@@ -18,7 +21,7 @@ export interface Publication {
   paperHref?: string;
   /** Copied by the BibTeX button; keep its title and authors in line with the fields above. */
   bibtex?: string;
-  media: PublicationMedia;
+  media?: PublicationMedia;
 }
 
 export const publications: Publication[] = [
@@ -44,6 +47,7 @@ export const publications: Publication[] = [
       poster: '/publications/page4d-recon-poster.webp',
       width: 608,
       height: 342,
+      caption: 'From one street video, PAGE-4D recovers the camera path and a 4D point cloud. The row of taxis is one car over time.',
     },
   },
 ];
