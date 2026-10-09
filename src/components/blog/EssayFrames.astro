@@ -2,7 +2,7 @@
 // src/components/blog/EssayFrames.astro
 // Essays as viewfinder frames: category and date in the top left corner, reading time in the
 // top right, the title large in the lower left. The orange reticle marks the active filter
-// and glides between essays as the pointer moves. The filter reads the URL hash (/blog/#ai),
+// and glides between essays as the pointer moves. The filter reads the URL hash (/blog/#ideas),
 // so a post's category label lands on its view. Tag pages pass the slugs to show and no filter.
 import { getCollection } from 'astro:content';
 import { CATEGORIES, CATEGORY_META, LANG_LABELS, estimateReadingTime, formatDate, groupByBaseSlug, parsePostId, type Lang } from '../../lib/blog';
@@ -195,8 +195,9 @@ const filters = [
 
 <script>
   import { createReticle, type Reticle } from '../../lib/reticle';
+  import { CATEGORIES } from '../../lib/blog';
 
-  const KEYS = ['personal', 'ai'];
+  const KEYS: string[] = CATEGORIES;
   let reticles: Reticle[] = [];
   let filterReticle: Reticle | null = null;
 

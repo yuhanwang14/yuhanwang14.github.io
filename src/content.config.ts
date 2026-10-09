@@ -23,7 +23,7 @@ const blog = defineCollection({
     // Listings show the original, so a Chinese essay stays Chinese on /blog/.
     translation: z.boolean().default(false),
     // Which Blog filter the essay belongs to.
-    category: z.enum(['personal', 'ai']),
+    category: z.enum(['ideas', 'journal', 'academic']),
     tags: z.array(z.string()).default([]),
     coverImage: image().optional(),
   }),
